@@ -1,6 +1,27 @@
 cmake_minimum_required( VERSION 2.8 )
 
-project( aos_designer )
+project( AOS_Designer )
+
+####################################################
+# Dependencies.
+
+# Boost
+set( Boost_USE_STATIC_LIBS        ON )
+set( Boost_USE_MULTITHREADED      ON )
+set( Boost_USE_STATIC_RUNTIME    OFF )
+find_package( Boost REQUIRED COMPONENTS 
+	date_time 
+	filesystem 
+	system
+	chrono
+	thread
+	program_options
+)
+if( NOT Boost_FOUND )
+	message( SEND_ERROR "AOS Designer requires Boost libraries, NOT FOUND!" )
+endif()
+
+include_directories( ${Boost_INCLUDE_DIR} )
 
 # We need Qt as GUI library.
 set( CMAKE_INCLUDE_CURRENT_DIR ON )

@@ -9,7 +9,7 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include "aosl/resource_id.hpp"
+#include <aosl/resource_id.hpp>
 #include "core/resources/ResourcePtr.hpp"
 #include "core/resources/ResourceRef.hpp"
 

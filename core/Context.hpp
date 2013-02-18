@@ -8,7 +8,7 @@
 
 #include "core/SequenceId.hpp"
 #include "core/EditionSessionId.hpp"
-#include "utilcpp/Singleton.hpp"
+#include <utilcpp/Singleton.hpp>
 #include "core/resources/ResourceProvider.hpp"
 
 
