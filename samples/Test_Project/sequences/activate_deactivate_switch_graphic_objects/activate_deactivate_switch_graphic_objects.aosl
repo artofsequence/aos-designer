@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+    AOSL Test : Graphic Activation, Deactivation and Switch
+    =======================================================
+
+    A simple sequence that display an image, another one and remove them after that.
+    Switch a third image at each move.
+
+-->
+
+<sequence xmlns="artofsequence.org/aosl/1.0" 
+	id="test-activate-deactivate-switch-graphic-objects" 
+	name="Test : Activate, Deactivate and Switch graphic objects"
+>
+	
+
+    <library>
+        
+        <resource id="image_character" type="image">./resources/character.png</resource>
+        <resource id="image_landscape" type="image">./resources/landscape.png</resource>
+        <resource id="image_icon" type="image">./resources/icon.png</resource>
+        
+    </library>
+
+    <canvas>
+        <area x="800" y="600" z="0" />
+
+        <objects>
+            <sprite id="background" resource="image_landscape">
+                <graphic></graphic>
+            </sprite>
+            
+            <sprite id="a_character" resource="image_character">
+                <graphic></graphic>
+            </sprite>
+
+            <sprite id="icon" resource="image_icon">
+                <graphic></graphic>
+            </sprite>
+            
+        </objects>
+    </canvas>
+
+    <story begin="stage_0" >
+
+        <navigation>
+            
+        </navigation>
+
+        <moves>
+            
+            <move id="move_0_1" from="stage_0" to="stage_1" >
+                <activate object="background" />
+            </move>
+            
+            <move id="move_1_2" from="stage_1" to="stage_2" >
+                <activate object="a_character" />
+                <switch object="icon" />
+            </move>
+
+            <move id="move_2_3" from="stage_2" to="stage_3" >
+                <deactivate object="a_character" />
+                <switch object="icon" />
+            </move>
+
+            <move id="move_3_4" from="stage_3" to="stage_4" >
+                <deactivate object="background" />
+                <switch object="icon" />
+            </move>
+            
+        </moves>
+
+        <stages>
+            <stage id="stage_0" />
+            <stage id="stage_1" />
+            <stage id="stage_2" />
+            <stage id="stage_3" />
+            <stage id="stage_4" />
+        </stages>
+        
+    </story>
+
+</sequence>

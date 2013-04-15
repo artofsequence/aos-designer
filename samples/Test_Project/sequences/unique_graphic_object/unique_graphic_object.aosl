@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+    AOSL Test : Unique Graphic Object
+    =================================
+
+    A simple sequence with only one graphic object in a unique stage.
+
+-->
+
+<sequence xmlns="artofsequence.org/aosl/1.0" name="Test : Unique Graphic Object" id="test-unique-graphic-object" >
+
+    <library>
+        
+        <resource id="image_character" type="image" >./resources/character.png</resource>
+        
+    </library>
+
+    <canvas>
+        <area x="800" y="600" z="0" />
+
+        <objects>
+            <sprite id="a_character" resource="image_character" active="true">
+                <graphic></graphic>
+            </sprite>
+        </objects>
+    </canvas>
+
+    <story begin="stage_0" >
+
+        <navigation>
+            
+        </navigation>
+        
+        <moves>
+        </moves>
+
+        <stages>
+            <stage id="stage_0" />
+        </stages>
+        
+    </story>
+
+</sequence>

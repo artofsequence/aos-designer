@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+    AOSL Test : A simple loop in the story.
+    =============================================
+
+    A simple sequence with a simple loop in the story.
+
+-->
+
+<sequence xmlns="artofsequence.org/aosl/1.0" 
+					name="Test : A simple loop in the story" 
+					id="test-simple-loop" 
+>
+
+    <library>
+        <resource id="image_character" type="image">./resources/character.png</resource>
+    </library>
+
+    <canvas>
+        <area x="800" y="600" z="0" />
+
+        <objects>
+            <sprite id="a_character" resource="image_character" active="false" />
+        </objects>
+    </canvas>
+
+    <story begin="stage_0" >
+
+        <navigation>
+            
+        </navigation>
+
+        <moves>
+
+					<move id="move_0_1" from="stage_0" to="stage_1" >
+						<activate object="#all" />
+						<transform object="a_character">
+							<absolute>
+								<translation x="100" y="100" />
+							</absolute>
+							<relative>
+								<translation x="10" />
+							</relative>
+						</transform>
+					</move>
+
+					<move id="move_1_A" from="stage_1" to="stage_A" >
+						<switch object="#all" />
+					</move>
+
+					<move id="move_A_B" from="stage_A" to="stage_B" >
+						<switch object="#all" />
+					</move>
+
+					<move id="move_B_1" from="stage_B" to="stage_1" >
+						<switch object="#all" />
+					</move>
+
+					<move id="move_1_2" from="stage_1" to="stage_2" >
+						<activate object="#all" />
+					</move>
+					
+					<move id="move_end" from="#all" to="stage_end" >
+						<deactivate object="#all" />
+					</move>
+
+				</moves>
+
+        <stages>
+            <stage id="stage_0" />
+            <stage id="stage_1" />
+						<stage id="stage_A" />
+						<stage id="stage_B" />
+						<stage id="stage_2" />
+						<stage id="stage_end" />
+        </stages>
+        
+    </story>
+
+</sequence>

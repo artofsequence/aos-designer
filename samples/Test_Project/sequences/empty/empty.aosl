@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+    AOSL Test : Empty
+    =================
+
+    An empty sequence.
+    This is the minimum requirement to build a valid sequence from an aosl file.
+
+-->
+
+<sequence xmlns="artofsequence.org/aosl/1.0" id="test-empty" name="Test : Empty Sequence" >
+
+    <library>
+    </library>
+
+    <canvas color="#0011FF" >
+        <area x="800" y="600" z="0" />
+        <objects>
+            
+        </objects>
+    </canvas>
+
+    <story begin="stage_0" >
+
+        <navigation>
+            
+        </navigation>
+        
+        <moves>
+        </moves>
+
+        <stages>
+            <stage id="stage_0" />
+        </stages>
+        
+    </story>
+
+</sequence>

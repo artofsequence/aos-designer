@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+    AOSL Test : A simple branch in the story.
+    =============================================
+
+    A simple sequence with a simple branch in the story.
+
+-->
+
+<sequence xmlns="artofsequence.org/aosl/1.0" 
+					name="Test : A simple branch in the story" 
+					id="test-simple-branch" 
+>
+
+    <library>
+        <resource id="image_character" type="image">./resources/character.png</resource>
+    </library>
+
+    <canvas>
+        <area x="800" y="600" z="0" />
+
+        <objects>
+            <sprite id="a_character" resource="image_character" active="true">
+                <graphic></graphic>
+            </sprite>
+        </objects>
+    </canvas>
+
+    <story begin="stage_0" >
+
+        <navigation>
+            
+        </navigation>
+
+        <moves>
+
+					<move id="move_0_1A" from="stage_0" to="stage_1A" default="true" >
+						<transform object="a_character">
+							<relative>
+								<translation x="100" y="100" />
+							</relative>
+						</transform>
+					</move>
+
+					<move id="move_0_1B" from="stage_0" to="stage_1B" >
+						<transform object="a_character">
+							<relative>
+								<translation x="200" y="200" />
+							</relative>
+						</transform>
+					</move>
+
+					<move id="move_1_2" from="stage_1A stage_1B" to="stage_2" >
+						<transform object="a_character">
+							<relative>
+								<translation x="-100" y="-100" />
+							</relative>
+						</transform>
+					</move>
+					
+					<move id="move_end" from="#all" to="stage_end" >
+						<deactivate object="#all" />
+					</move>
+
+				</moves>
+
+        <stages>
+            <stage id="stage_0" />
+            <stage id="stage_1A" />
+						<stage id="stage_1B" />
+						<stage id="stage_2" />
+						<stage id="stage_end" />
+        </stages>
+        
+    </story>
+
+</sequence>

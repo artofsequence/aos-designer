@@ -1,0 +1,12 @@
+ <?xml version="1.0" encoding="utf-8"?>
+<project>
+	<name>Test Project</name>
+	<sequences>
+		<sequence>./sequences/activate_deactivate_switch_graphic_objects/activate_deactivate_switch_graphic_objects.aosl</sequence>
+		<sequence>./sequences/empty/empty.aosl</sequence>
+		<sequence>./sequences/unique_graphic_object/unique_graphic_object.aosl</sequence>
+		<sequence>./sequences/unique_graphic_object_one_move/unique_graphic_object_one_move.aosl</sequence>
+		<sequence>./sequences/simple_branch/simple_branch.aosl</sequence>
+		<sequence>./sequences/simple_loop/simple_loop.aosl</sequence>
+	</sequences>
+</project>
