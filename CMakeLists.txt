@@ -6,6 +6,17 @@ project( AOS_Designer )
 # Dependencies.
 
 # Boost
+
+if( WIN32 ) 
+	# On Windows: check that the right boost binaries are set before continuing
+	if( NOT DEFINED BOOST_LIBRARYDIR OR BOOST_LIBRARYDIR STREQUAL "BOOST_LIBRARYDIR-NOT-SET" )
+		set( BOOST_LIBRARYDIR "BOOST_LIBRARYDIR-NOT-SET" CACHE PATH "Location of the Boost library binaries" FORCE )
+		message( FATAL_ERROR "BOOST_LIBRARYDIR is not set. Before continuing, please set it to the correct binary path (depending on if you want to link with 32 or 64bit version)." )
+	endif()
+	
+endif()
+
+
 set( Boost_USE_STATIC_LIBS        ON )
 set( Boost_USE_MULTITHREADED      ON )
 set( Boost_USE_STATIC_RUNTIME    OFF )
