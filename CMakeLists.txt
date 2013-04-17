@@ -66,8 +66,8 @@ set( AOSDESIGNER_BUILD_DIR ${BUILD_DIR}/${AOSDESIGNER_BUILD_MODE} )
 
 # Application header files.
 set( AOSDESIGNER_APPLICATION_HEADERS
-	${AOSDESIGNER_ROOT_DIR}/Application.hpp
-	${AOSDESIGNER_ROOT_DIR}/Paths.hpp
+	${AOSDESIGNER_ROOT_DIR}/application.hpp
+	${AOSDESIGNER_ROOT_DIR}/paths.hpp
 )
 
 #-----------------------------------------------------------------
