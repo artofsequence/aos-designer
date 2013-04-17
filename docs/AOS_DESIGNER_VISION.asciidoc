@@ -1,11 +1,12 @@
+
 # AOS Designer: Vision
+A. Joel Lamotte <klaim@artofsequence.org>
 
 **_WARNING: This document is a work in progress and will evolve a lot until it becomes definitely useful for the community to use. Also please discuss it on the developers mailing list if necessary._**
 
 
 The purpose of this document is to be a reference for the community to understand the vision, objectives and design guidelines that the AOS Designer project should follow, allowing the contributors to follow the mindset in which this tool is built and provide useful contributions.
 
------------------
 
 ## AOS Designer: Objectives
 
@@ -66,7 +67,7 @@ Narratives can be diffused as "one shot" or as series. If a sequence have to be 
 
 It is important for the author to constantly be able to have **immediate feedback** when he is tweaking his creation. The canvas edition view should be instantly updated with changes, but as an editor view, it might not reflect exactly the result. An embedded player (maybe provided with an exporter, see 3.) should be available to the author as a separate view, showing exactly the end result and being immediately updated if the sequence is being modified.
 
------------------
+
 
 Those functionalities are the foundations on which the tool can become *useful*.
 However, this is not enough to make AOS Designer successfully achieve it's purpose.
