@@ -1,0 +1,13 @@
+# AOS Designer: Code Organisation
+
+**_WARNING: This document is a work in progress and will evolve a lot until it becomes definitely useful for the community to use. Also please discuss it on the developers mailing list if necessary._**
+
+The purpose of this document is to be a reference for the community to understand the code organisation, architecture and technical choices taken for AOS Designer, the digital sequence edition tool.
+
+These technical design decisions are all taken in the perspective of our objectives for AOSD that are listed in [this document](AOS-Designer-Vision).
+
+<img src="images/AOS-Designer-Architecture.png"></img>
+
+-----------------
+
+# Technologies
