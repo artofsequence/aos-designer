@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "Application.hpp"
-#include "utilcpp/Log.hpp"
+#include "application.hpp"
+#include "utilcpp/log.hpp"
 
 
 

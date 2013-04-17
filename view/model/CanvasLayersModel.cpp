@@ -1,7 +1,7 @@
-#include "CanvasLayersModel.hpp"
+#include "canvaslayersmodel.hpp"
 
 
-#include "utilcpp/Assert.hpp"
+#include "utilcpp/assert.hpp"
 
 #include "aosl/layer.hpp"
 #include "aosl/canvas.hpp"

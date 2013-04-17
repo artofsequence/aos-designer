@@ -1,5 +1,4 @@
-#include "modelviewbinder.hpp"
-
+#include "storyview.hpp"
 
 namespace aosd
 {
@@ -8,4 +7,5 @@ namespace view
 
 
 }
+
 }

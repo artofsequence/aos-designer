@@ -1,11 +1,11 @@
-#include "LibraryModel.hpp"
+#include "librarymodel.hpp"
 
 #include <algorithm>
 
-#include "core/resources/Resource.hpp"
-#include "core/Library.hpp"
+#include "core/resources/resource.hpp"
+#include "core/library.hpp"
 
-#include "utilcpp/Assert.hpp"
+#include "utilcpp/assert.hpp"
 
 
 namespace aosd

@@ -1,6 +1,6 @@
-#include "LayerObjectsModel.hpp"
+#include "layerobjectsmodel.hpp"
 
-#include "utilcpp/Assert.hpp"
+#include "utilcpp/assert.hpp"
 
 #include "aosl/layer.hpp"
 #include "aosl/object.hpp"

@@ -1,8 +1,8 @@
-#include "CanvasObjectsModel.hpp"
+#include "canvasobjectsmodel.hpp"
 
 #include <algorithm>
 
-#include "utilcpp/Assert.hpp"
+#include "utilcpp/assert.hpp"
 
 
 #include "aosl/object.hpp"

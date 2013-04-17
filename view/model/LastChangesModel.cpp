@@ -1,12 +1,12 @@
-#include "LastChangesModel.hpp"
+#include "lastchangesmodel.hpp"
 
 #include <utility>
 #include <sstream>
 
-#include "utilcpp/Assert.hpp"
+#include "utilcpp/assert.hpp"
 
 #include "aoslcpp/algorithm/find.hpp"
-#include "aoslcpp/StoryPath.hpp"
+#include "aoslcpp/storypath.hpp"
 #include "aosl/canvas.hpp"
 #include "aosl/change.hpp"
 #include "aosl/move.hpp"

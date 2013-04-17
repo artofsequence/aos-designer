@@ -74,26 +74,26 @@ set( AOSDESIGNER_APPLICATION_HEADERS
 
 # Core objects header files.
 set( AOSDESIGNER_CORE_HEADERS
-	${AOSDESIGNER_CORE_DIR}/Context.hpp
-	${AOSDESIGNER_CORE_DIR}/Project.hpp
-	${AOSDESIGNER_CORE_DIR}/Sequence.hpp
-	${AOSDESIGNER_CORE_DIR}/SequenceId.hpp
-	${AOSDESIGNER_CORE_DIR}/ProjectInfos.hpp
-	${AOSDESIGNER_CORE_DIR}/SequenceInfos.hpp
-	${AOSDESIGNER_CORE_DIR}/EditionSession.hpp
-	${AOSDESIGNER_CORE_DIR}/EditionSessionId.hpp
-	${AOSDESIGNER_CORE_DIR}/Library.hpp
+	${AOSDESIGNER_CORE_DIR}/context.hpp
+	${AOSDESIGNER_CORE_DIR}/project.hpp
+	${AOSDESIGNER_CORE_DIR}/sequence.hpp
+	${AOSDESIGNER_CORE_DIR}/sequenceid.hpp
+	${AOSDESIGNER_CORE_DIR}/projectinfos.hpp
+	${AOSDESIGNER_CORE_DIR}/sequenceinfos.hpp
+	${AOSDESIGNER_CORE_DIR}/editionsession.hpp
+	${AOSDESIGNER_CORE_DIR}/editionsessionid.hpp
+	${AOSDESIGNER_CORE_DIR}/library.hpp
 )
 
 # Resources system header files.
 set( AOSDESIGNER_CORE_RESOURCES_HEADERS
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/Resource.hpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourcePtr.hpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourceRef.hpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourceProvider.hpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourceFactory.hpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourceInfo.hpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/URI.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resource.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourceptr.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourceref.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourceprovider.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourcefactory.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourceinfo.hpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/uri.hpp
 )
 
 
@@ -103,59 +103,59 @@ set( AOSDESIGNER_CORE_RESOURCES_HEADERS
 
 # Views header files.
 set( AOSDESIGNER_VIEW_HEADERS
-	${AOSDESIGNER_VIEW_DIR}/ApplicationView.hpp
-	${AOSDESIGNER_VIEW_DIR}/MainWindow.hpp
-	${AOSDESIGNER_VIEW_DIR}/ProjectView.hpp
-	${AOSDESIGNER_VIEW_DIR}/SequenceListView.hpp
-	${AOSDESIGNER_VIEW_DIR}/LibrariesView.hpp
-	${AOSDESIGNER_VIEW_DIR}/ChangesView.hpp
-	${AOSDESIGNER_VIEW_DIR}/ObjectsView.hpp
-	${AOSDESIGNER_VIEW_DIR}/LayersView.hpp
-	${AOSDESIGNER_VIEW_DIR}/ToolboxView.hpp
-	${AOSDESIGNER_VIEW_DIR}/LogView.hpp
-	${AOSDESIGNER_VIEW_DIR}/Dialogs.hpp
-	${AOSDESIGNER_VIEW_DIR}/DesignerActions.hpp
-	${AOSDESIGNER_VIEW_DIR}/EditionToolView.hpp
-	${AOSDESIGNER_VIEW_DIR}/FreeWindow.hpp
-	${AOSDESIGNER_VIEW_DIR}/FreeWindowManager.hpp
+	${AOSDESIGNER_VIEW_DIR}/applicationview.hpp
+	${AOSDESIGNER_VIEW_DIR}/mainwindow.hpp
+	${AOSDESIGNER_VIEW_DIR}/projectview.hpp
+	${AOSDESIGNER_VIEW_DIR}/sequencelistView.hpp
+	${AOSDESIGNER_VIEW_DIR}/librariesview.hpp
+	${AOSDESIGNER_VIEW_DIR}/changesview.hpp
+	${AOSDESIGNER_VIEW_DIR}/objectsview.hpp
+	${AOSDESIGNER_VIEW_DIR}/layersview.hpp
+	${AOSDESIGNER_VIEW_DIR}/toolboxview.hpp
+	${AOSDESIGNER_VIEW_DIR}/logview.hpp
+	${AOSDESIGNER_VIEW_DIR}/dialogs.hpp
+	${AOSDESIGNER_VIEW_DIR}/designeractions.hpp
+	${AOSDESIGNER_VIEW_DIR}/editiontoolview.hpp
+	${AOSDESIGNER_VIEW_DIR}/freewindow.hpp
+	${AOSDESIGNER_VIEW_DIR}/freewindowmanager.hpp
 )   
 
 
 # Dialog header files.
 set( AOSDESIGNER_DIALOG_HEADERS
-	${AOSDESIGNER_DIALOG_DIR}/WelcomeScreen.hpp
-	${AOSDESIGNER_DIALOG_DIR}/NewProjectDialog.hpp
-	${AOSDESIGNER_DIALOG_DIR}/NewSequenceDialog.hpp
-	${AOSDESIGNER_DIALOG_DIR}/NewEditionSessionDialog.hpp
+	${AOSDESIGNER_DIALOG_DIR}/welcomescreen.hpp
+	${AOSDESIGNER_DIALOG_DIR}/newprojectdialog.hpp
+	${AOSDESIGNER_DIALOG_DIR}/newsequencedialog.hpp
+	${AOSDESIGNER_DIALOG_DIR}/neweditionsessiondialog.hpp
 )
 
 # View-model header files.
 set( AOSDESIGNER_VIEW_MODEL_HEADERS
-	${AOSDESIGNER_VIEW_MODEL_DIR}/CanvasObjectsModel.hpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/CanvasLayersModel.hpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/LayerObjectsModel.hpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/LastChangesModel.hpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/LibraryModel.hpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/ModelViewBinder.hpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/canvasobjectsmodel.hpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/canvaslayersmodel.hpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/layerobjectsmodel.hpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/lastchangesmodel.hpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/librarymodel.hpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/modelviewbinder.hpp
 )
 
 
 # Canvas editor views header files.
 set( AOSDESIGNER_VIEW_EDITOR_CANVAS_HEADERS
-	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/CanvasView.hpp
-	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/CanvasGraphicsView.hpp
-	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/CanvasInvisibleObjectsView.hpp
+	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/canvasview.hpp
+	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/canvasgraphicsview.hpp
+	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/canvasinvisibleobjectsview.hpp
 )
 
 # Story editor views header files.
 set( AOSDESIGNER_VIEW_EDITOR_STORY_HEADERS
-	${AOSDESIGNER_VIEW_EDITOR_STORY_DIR}/StoryView.hpp
+	${AOSDESIGNER_VIEW_EDITOR_STORY_DIR}/storyview.hpp
 )
 
 # Editor views header files.
 set( AOSDESIGNER_VIEW_EDITOR_HEADERS
-	${AOSDESIGNER_VIEW_EDITOR_DIR}/EditorManager.hpp
-	${AOSDESIGNER_VIEW_EDITOR_DIR}/Editor.hpp
+	${AOSDESIGNER_VIEW_EDITOR_DIR}/editormanager.hpp
+	${AOSDESIGNER_VIEW_EDITOR_DIR}/editor.hpp
 )
 
 #-----------------------------------------------------------------
@@ -192,86 +192,86 @@ source_group( generated\\moc FILES ${AOSDESIGNER_QOBJECT_HEADERS_MOC} )
 # Application source files.
 set( AOSDESIGNER_APPLICATION_SOURCES
 	${AOSDESIGNER_ROOT_DIR}/main.cpp
-	${AOSDESIGNER_ROOT_DIR}/Application.cpp
-	${AOSDESIGNER_ROOT_DIR}/Paths.cpp
+	${AOSDESIGNER_ROOT_DIR}/application.cpp
+	${AOSDESIGNER_ROOT_DIR}/paths.cpp
 )
 
 
 # Views source files.
 set( AOSDESIGNER_VIEW_SOURCES 
-	${AOSDESIGNER_VIEW_DIR}/ApplicationView.cpp
-	${AOSDESIGNER_VIEW_DIR}/MainWindow.cpp
-	${AOSDESIGNER_VIEW_DIR}/ProjectView.cpp
-	${AOSDESIGNER_VIEW_DIR}/SequenceListView.cpp
-	${AOSDESIGNER_VIEW_DIR}/LibrariesView.cpp
-	${AOSDESIGNER_VIEW_DIR}/LogView.cpp
-	${AOSDESIGNER_VIEW_DIR}/ObjectsView.cpp
-	${AOSDESIGNER_VIEW_DIR}/LayersView.cpp
-	${AOSDESIGNER_VIEW_DIR}/ToolboxView.cpp
-	${AOSDESIGNER_VIEW_DIR}/ChangesView.cpp
-	${AOSDESIGNER_VIEW_DIR}/Dialogs.cpp
-	${AOSDESIGNER_VIEW_DIR}/DesignerActions.cpp
-	${AOSDESIGNER_VIEW_DIR}/EditionToolView.cpp
-	${AOSDESIGNER_VIEW_DIR}/FreeWindowManager.cpp
-	${AOSDESIGNER_VIEW_DIR}/FreeWindow.cpp
+	${AOSDESIGNER_VIEW_DIR}/applicationview.cpp
+	${AOSDESIGNER_VIEW_DIR}/mainWindow.cpp
+	${AOSDESIGNER_VIEW_DIR}/projectview.cpp
+	${AOSDESIGNER_VIEW_DIR}/sequencelistview.cpp
+	${AOSDESIGNER_VIEW_DIR}/librariesview.cpp
+	${AOSDESIGNER_VIEW_DIR}/logview.cpp
+	${AOSDESIGNER_VIEW_DIR}/objectsview.cpp
+	${AOSDESIGNER_VIEW_DIR}/layersview.cpp
+	${AOSDESIGNER_VIEW_DIR}/toolboxview.cpp
+	${AOSDESIGNER_VIEW_DIR}/changesview.cpp
+	${AOSDESIGNER_VIEW_DIR}/dialogs.cpp
+	${AOSDESIGNER_VIEW_DIR}/designeractions.cpp
+	${AOSDESIGNER_VIEW_DIR}/editiontoolview.cpp
+	${AOSDESIGNER_VIEW_DIR}/freewindowmanager.cpp
+	${AOSDESIGNER_VIEW_DIR}/freewindow.cpp
 )   
 
 
 # Dialog source files.
 set( AOSDESIGNER_DIALOG_SOURCES 
-	${AOSDESIGNER_DIALOG_DIR}/WelcomeScreen.cpp
-	${AOSDESIGNER_DIALOG_DIR}/NewProjectDialog.cpp
-	${AOSDESIGNER_DIALOG_DIR}/NewSequenceDialog.cpp
-	${AOSDESIGNER_DIALOG_DIR}/NewEditionSessionDialog.cpp
+	${AOSDESIGNER_DIALOG_DIR}/welcomescreen.cpp
+	${AOSDESIGNER_DIALOG_DIR}/newprojectdialog.cpp
+	${AOSDESIGNER_DIALOG_DIR}/newsequencedialog.cpp
+	${AOSDESIGNER_DIALOG_DIR}/neweditionsessiondialog.cpp
 )
 
 
 # View-model source files.
 set( AOSDESIGNER_VIEW_MODEL_SOURCES 
-	${AOSDESIGNER_VIEW_MODEL_DIR}/CanvasObjectsModel.cpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/CanvasLayersModel.cpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/LayerObjectsModel.cpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/LastChangesModel.cpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/LibraryModel.cpp
-	${AOSDESIGNER_VIEW_MODEL_DIR}/ModelViewBinder.cpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/canvasobjectsmodel.cpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/canvaslayersmodel.cpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/layerobjectsmodel.cpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/lastchangesmodel.cpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/librarymodel.cpp
+	${AOSDESIGNER_VIEW_MODEL_DIR}/modelviewbinder.cpp
 )
 
 # Canvas editor views source files.
 set( AOSDESIGNER_VIEW_EDITOR_CANVAS_SOURCES
-	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/CanvasView.cpp
-	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/CanvasGraphicsView.cpp
-	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/CanvasInvisibleObjectsView.cpp
+	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/canvasview.cpp
+	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/canvasgraphicsView.cpp
+	${AOSDESIGNER_VIEW_EDITOR_CANVAS_DIR}/canvasinvisibleobjectsview.cpp
 )
 
 # Story editor views source files.
 set( AOSDESIGNER_VIEW_EDITOR_STORY_SOURCES
-	${AOSDESIGNER_VIEW_EDITOR_STORY_DIR}/StoryView.cpp
+	${AOSDESIGNER_VIEW_EDITOR_STORY_DIR}/storyview.cpp
 )
 
 
 # Editor views source files.
 set( AOSDESIGNER_VIEW_EDITOR_SOURCES 
-	${AOSDESIGNER_VIEW_EDITOR_DIR}/Editor.cpp
-    ${AOSDESIGNER_VIEW_EDITOR_DIR}/EditorManager.cpp
+	${AOSDESIGNER_VIEW_EDITOR_DIR}/editor.cpp
+    ${AOSDESIGNER_VIEW_EDITOR_DIR}/editormanager.cpp
 )
 	
 #------------------------------------------------------
 
 # Core source files
 set( AOSDESIGNER_CORE_SOURCES
-	${AOSDESIGNER_CORE_DIR}/Context.cpp
-	${AOSDESIGNER_CORE_DIR}/Project.cpp
-	${AOSDESIGNER_CORE_DIR}/Sequence.cpp
-	${AOSDESIGNER_CORE_DIR}/EditionSession.cpp
-	${AOSDESIGNER_CORE_DIR}/EditionSessionId.cpp
-	${AOSDESIGNER_CORE_DIR}/Library.cpp
+	${AOSDESIGNER_CORE_DIR}/context.cpp
+	${AOSDESIGNER_CORE_DIR}/project.cpp
+	${AOSDESIGNER_CORE_DIR}/sequence.cpp
+	${AOSDESIGNER_CORE_DIR}/editionsession.cpp
+	${AOSDESIGNER_CORE_DIR}/editionsessionId.cpp
+	${AOSDESIGNER_CORE_DIR}/library.cpp
 )
 
 # Resources system source files
 set( AOSDESIGNER_CORE_RESOURCES_SOURCES
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/Resource.cpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourceProvider.cpp
-	${AOSDESIGNER_CORE_RESOURCES_DIR}/ResourceFactory.cpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resource.cpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourceprovider.cpp
+	${AOSDESIGNER_CORE_RESOURCES_DIR}/resourcefactory.cpp
 )
 
 #------------------------------------------------------
@@ -298,11 +298,11 @@ source_group( designer\\view\\generated\\rc FILES ${AOSDESIGNER_VIEW_RESOURCES} 
 # UI files
 
 set( AOSDESIGNER_VIEW_UI
-	${AOSDESIGNER_UI_DIR}/MainWindow.ui
-	${AOSDESIGNER_UI_DIR}/WelcomeScreen.ui
-	${AOSDESIGNER_UI_DIR}/NewProjectDialog.ui
-	${AOSDESIGNER_UI_DIR}/NewSequenceDialog.ui
-	${AOSDESIGNER_UI_DIR}/NewEditionSessionDialog.ui
+	${AOSDESIGNER_UI_DIR}/mainwindow.ui
+	${AOSDESIGNER_UI_DIR}/welcomescreen.ui
+	${AOSDESIGNER_UI_DIR}/newprojectdialog.ui
+	${AOSDESIGNER_UI_DIR}/newsequencedialog.ui
+	${AOSDESIGNER_UI_DIR}/neweditionsessiondialog.ui
 )
 
 # UI files need to be processed by Qt wrapper to generate UI headers.
