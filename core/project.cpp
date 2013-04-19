@@ -73,23 +73,21 @@ namespace core
 
 			if( !sequences.empty() )
 			{
-				std::for_each( sequences.begin(), sequences.end(), [&]( const std::pair< std::string, ptree >& sequence_info )
+				for( const auto& sequence_info_it : sequences )
 				{
-					if( sequence_info.first == "sequence" )
+					if( sequence_info_it.first == "sequence" )
 					{
-						const bfs::path sequence_location = sequence_info.second.get_value<std::string>();
+						const bfs::path sequence_location = sequence_info_it.second.get_value<std::string>();
 						add_sequence( std::unique_ptr<Sequence>( new Sequence( *this, sequence_location ) ) );
 
 						UTILCPP_LOG << "Loaded Sequence : " << m_sequences.back()->name() << " [" << m_sequences.back()->id() << "]";
 					}
 					else
 					{
-						UTILCPP_LOG_ERROR << "Found an unknown tag! Should be \"sequence\" instead of \"" << sequence_info.first << "\"";
+						UTILCPP_LOG_ERROR << "Found an unknown tag! Should be \"sequence\" instead of \"" << sequence_info_it.first << "\"";
 					}
 
-
-
-				});
+				}
 			}
 			else
 			{
@@ -108,18 +106,18 @@ namespace core
 
 			if( !edition_sessions.empty() )
 			{
-				std::for_each( edition_sessions.begin(), edition_sessions.end(), [&]( const std::pair< std::string, ptree >& edition_session )
+				for( const auto& edition_session_it : edition_sessions )
 				{
-					if( edition_session.first == "session" )
+					if( edition_session_it.first == "session" )
 					{
 						EditionSessionId session_id;
 						try
 						{
-							 session_id = edition_session.second.get_value<EditionSessionId>();
+							 session_id = edition_session_it.second.get_value<EditionSessionId>();
 						}
 						catch (const boost::exception& e)
 						{
-							UTILCPP_LOG_ERROR << "Failed to interpret edition session id : [" << edition_session.second.get_value<std::string>() << "] : \n" << boost::diagnostic_information(e);
+							UTILCPP_LOG_ERROR << "Failed to interpret edition session id : [" << edition_session_it.second.get_value<std::string>() << "] : \n" << boost::diagnostic_information(e);
 						}
 						
 						if( is_valid( session_id ) )
@@ -147,11 +145,11 @@ namespace core
 						}
 						
 					}
-					else if( edition_session.first != "selected" )
+					else if( edition_session_it.first != "selected" )
 					{
-						UTILCPP_LOG_ERROR << "Found an unknown tag! Should be \"session\" instead of \"" << edition_session.first << "\"";
+						UTILCPP_LOG_ERROR << "Found an unknown tag! Should be \"session\" instead of \"" << edition_session_it.first << "\"";
 					}
-				});
+				}
 
 				// select the last selected session
 				auto selected_session_id = infos.get<EditionSessionId>("project.edition.selected", EditionSessionId_INVALID);
@@ -268,28 +266,30 @@ namespace core
 			return false;
 		}
 
-		std::for_each( m_sequences.begin(), m_sequences.end(), [&]( std::unique_ptr<Sequence>& sequence )
+		for( auto& sequence : m_sequences )
 		{ 
 			sequence->save(); 
-		});
+		}
 
-		std::for_each( m_edit_sessions.begin(), m_edit_sessions.end(), [&]( std::unique_ptr<EditionSession>& edition_session )
+		for( auto& edition_session : m_edit_sessions )
 		{ 
 			const auto& file_path = directory_path() / path::EDITION_SESSION_FILE( edition_session->id() );
 			edition_session->save( file_path ); 
-		});
+		}
 
 		return true;
 	}
 
 	void Project::foreach_sequence( std::function< void ( const Sequence& sequence )> func ) const
 	{
-		std::for_each( m_sequences.begin(), m_sequences.end(), [&]( const std::unique_ptr<Sequence>& a_sequence ){ func(*a_sequence); } );
+		for( const auto& a_sequence : m_sequences )
+			func( *a_sequence );
 	}
 
 	void Project::foreach_edition( std::function< void ( const EditionSession& edition_session )> func ) const
 	{
-		std::for_each( m_edit_sessions.begin(), m_edit_sessions.end(),  [&]( const std::unique_ptr<EditionSession>& a_session ){ func(*a_session); } );
+		for( const auto& a_session : m_edit_sessions )
+			func( *a_session );
 	}
 
 	bool Project::new_sequence( const SequenceInfos& infos )
@@ -380,7 +380,8 @@ namespace core
 		if( m_sequences.empty() )
 			return nullptr;
 
-		auto find_it = std::find_if( m_sequences.begin(), m_sequences.end(), [&]( const std::unique_ptr<Sequence>& sequence ){ return sequence->id() == sequence_id; } );
+		auto find_it = std::find_if( m_sequences.begin(), m_sequences.end()
+			, [&]( const std::unique_ptr<Sequence>& sequence ){ return sequence->id() == sequence_id; } );
 
 		if( find_it != m_sequences.end() )
 			return find_it->get();
@@ -393,7 +394,8 @@ namespace core
 		if( m_edit_sessions.empty() || !is_valid( session_id ) )
 			return nullptr;
 
-		auto find_it = std::find_if( m_edit_sessions.begin(), m_edit_sessions.end(), [&]( const std::unique_ptr<EditionSession>& edition_session ){ return edition_session->id() == session_id; } );
+		auto find_it = std::find_if( m_edit_sessions.begin(), m_edit_sessions.end()
+			, [&]( const std::unique_ptr<EditionSession>& edition_session ){ return edition_session->id() == session_id; } );
 
 		if( find_it != m_edit_sessions.end() )
 			return find_it->get();
@@ -437,10 +439,10 @@ namespace core
 		deselect_edition_session();
 
 		// make sure that the world is notified by the closing of all edition sessions, without deleting them
-		std::for_each( begin(m_edit_sessions), end(m_edit_sessions), [&]( std::unique_ptr<EditionSession>& session )
+		for( auto& session : m_edit_sessions )
 		{
 			emit edition_session_end( *session );
-		});
+		}
 
 		emit edition_end();
 	}

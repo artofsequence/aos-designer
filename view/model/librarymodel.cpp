@@ -65,7 +65,7 @@ namespace view
 		if( !index.isValid() || m_resources.empty() )
 			return QVariant();
 
-		auto resource_ref = m_resources[ index.row() ];
+		auto resource_ref = m_resources[ static_cast<size_t>(index.row()) ];
 		UTILCPP_ASSERT_NOT_NULL( resource_ref.resource() );
 
 		switch( role )

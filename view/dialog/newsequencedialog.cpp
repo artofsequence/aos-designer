@@ -53,7 +53,7 @@ namespace view
 		infos.name = m_ui->edit_name->text().toStdString();
 		infos.location = path::SEQUENCE_FILE( m_ui->edit_codename->text().toStdString() );
 		infos.canvas_width = m_ui->edit_canvas_width->text().toDouble();
-		infos.canvas_height = m_ui->edit_canvas_width->text().toDouble();
+		infos.canvas_height = m_ui->edit_canvas_height->text().toDouble();
 		infos.is_edition_requested = m_ui->check_create_edition->isChecked();
 
 		return infos;

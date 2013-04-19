@@ -39,7 +39,7 @@ namespace core
 		/** Create the sequence by loading informations from the AOSL file at the the provided path.
 			The path have to be 
 		*/
-		Sequence( const Project& project, const boost::filesystem::path sequence_file_path );
+		Sequence( const Project& project, boost::filesystem::path sequence_file_path );
 
 		~Sequence();
 		

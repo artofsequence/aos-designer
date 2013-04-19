@@ -33,9 +33,9 @@ namespace core
 		
 	}
 
-	Sequence::Sequence( const Project& project, const boost::filesystem::path sequence_file_path )
+	Sequence::Sequence( const Project& project, boost::filesystem::path sequence_file_path )
 		: m_project( project )
-		, m_location( sequence_file_path )
+		, m_location( std::move(sequence_file_path) )
 	{
 		xml_schema::Properties properties;
 		properties.schema_location( aosl::AOSL_XML_NAMESPACE_NAME, path::AOSL_XSD_FILE.string() );
@@ -50,10 +50,10 @@ namespace core
 		{
 			UTILCPP_LOG_ERROR << e.what() << "\nDiagnostic : ";
 			
-			std::for_each( e.diagnostics().begin(), e.diagnostics().end(), []( const xsd::cxx::tree::error<char>& err )
+			for( const auto& err : e.diagnostics() )
 			{
 				UTILCPP_LOG_ERROR << "\n " << err;
-			});
+			}
 			
 		}
 		

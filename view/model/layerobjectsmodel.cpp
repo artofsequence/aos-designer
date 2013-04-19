@@ -33,7 +33,7 @@ namespace view
 
 		const auto& object_list = layer.object();
 		
-		std::for_each( object_list.begin(), object_list.end(), [&]( const aosl::Object_ref_element& object_ref )
+		for( const auto& object_ref : object_list )
 		{
 			auto object = aoslcpp::find_object( *canvas, object_ref.id() );
 			if( object )
@@ -45,7 +45,7 @@ namespace view
 				UTILCPP_LOG_ERROR << "Couldn't find object '" << object_ref.id() << "' in the canvas. It was referenced by the layer '" << layer.id() << "'!";
 			}
 			
-		});
+		}
 
 		endResetModel();
 	}
@@ -64,7 +64,7 @@ namespace view
 
 		UTILCPP_ASSERT( !parent.isValid(), "Try to ge the index of child of layer's object but it's forbidden!" );
 
-		return createIndex( row, column, (void*)m_layer_objects[row] );
+		return createIndex( row, column, (void*)m_layer_objects[ static_cast<size_t>(row) ] );
 	}
 
 	QModelIndex LayerObjectsModel::parent( const QModelIndex& index ) const
@@ -83,7 +83,7 @@ namespace view
 		if( !index.isValid() || index.column() > 0 || m_layer_objects.empty() )
 			return QVariant();
 
-		auto object = m_layer_objects[ index.row() ];
+		auto object = m_layer_objects[ static_cast<size_t>( index.row() ) ];
 		UTILCPP_ASSERT_NOT_NULL( object );
 
 		switch( role )

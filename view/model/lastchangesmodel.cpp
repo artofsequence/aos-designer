@@ -34,7 +34,10 @@ namespace view
 				beginResetModel();
 
 				const auto& last_changes = last_move->change();
-				std::for_each( std::begin(last_changes), std::end(last_changes), [&]( const aosl::Change& change ){ m_last_changes.push_back(&change); });
+				for( const auto& change : last_changes )
+				{ 
+					m_last_changes.push_back(&change); 
+				}
 
 				endResetModel();
 			}
@@ -60,7 +63,7 @@ namespace view
 
 		UTILCPP_ASSERT( !parent.isValid(), "Try to ge the index of child of a last change but it's forbidden!" );
 
-		return createIndex( row, column, (void*)m_last_changes[row] );
+		return createIndex( row, column, (void*)m_last_changes[ static_cast<size_t>(row) ] );
 	}
 
 	QModelIndex LastChangesModel::parent( const QModelIndex& index ) const
@@ -78,7 +81,7 @@ namespace view
 		if( !index.isValid() || m_last_changes.empty() )
 			return QVariant();
 
-		auto change = m_last_changes[ index.row() ];
+		auto change = m_last_changes[ static_cast<size_t>(index.row()) ];
 		UTILCPP_ASSERT_NOT_NULL( change );
 
 		const auto element_name = [] ( const ::xml_schema::Type& element ) -> std::string // TODO: make it generic and put in AOSLCPP
@@ -93,7 +96,7 @@ namespace view
 			for( auto it = std::begin( list ), end = std::end( list ); it != end; ++it )
 			{
 				result << *it << ' ';
-			};
+			}
 
 			return result.str();
 		};

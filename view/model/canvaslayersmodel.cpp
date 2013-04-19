@@ -36,7 +36,7 @@ namespace view
 		if( !index.isValid() || index.column() > 0 || m_layers.empty() )
 			return QVariant();
 		
-		auto layer = m_layers[ index.row() ];
+		auto layer = m_layers[ static_cast<size_t>(index.row()) ];
 		UTILCPP_ASSERT_NOT_NULL( layer );
 
 		switch( role )
@@ -70,15 +70,17 @@ namespace view
 		{
 			const auto& layer_list = canvas.layers()->layer();
 
-			std::for_each( layer_list.begin(), layer_list.end(), [&]( const aosl::Layer& layer )
+			for( const auto& layer : layer_list )
 			{
 				m_layers.push_back( &layer );
-			});
+			}
 		}
 
 		if( !m_layers.empty() )
 		{
-			emit dataChanged( createIndex( 0, 0 ), createIndex( m_layers.size() - 1, 0 ) );
+			UTILCPP_ASSERT( m_layers.size() < std::numeric_limits<int>::max(), "Too much layers!" );
+			auto last_layer_idx = static_cast<int>(m_layers.size()) - 1;
+			emit dataChanged( createIndex( 0, 0 ), createIndex( last_layer_idx, 0 ) );
 		}
 		endResetModel();
 		
@@ -91,7 +93,7 @@ namespace view
 
 		UTILCPP_ASSERT( !parent.isValid(), "Try to ge the index of child of layer but there is no child!" );
 
-		return createIndex( row, column, (void*)m_layers[row] );
+		return createIndex( row, column, (void*)m_layers[static_cast<size_t>(row)] );
 	}
 
 	QModelIndex CanvasLayersModel::parent( const QModelIndex& index ) const
@@ -120,7 +122,8 @@ namespace view
 		{
 			return 0;
 		}
-		return m_layers.size();
+		UTILCPP_ASSERT( m_layers.size() < std::numeric_limits<int>::max(), "Too much layers!" );
+		return static_cast<int>( m_layers.size() );
 	}
 
 	int CanvasLayersModel::columnCount( const QModelIndex& parent /*= QModelIndex() */ ) const

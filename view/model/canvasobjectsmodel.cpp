@@ -64,7 +64,7 @@ namespace view
 		{
 			UTILCPP_ASSERT( row < m_root_objects.size(), "Tried to get root object with a wrong index : row = " << row << ", root objects count = " << m_root_objects.size() );
 			//if( row < m_root_objects.size() )
-				return createIndex( row, 0, (void*)m_root_objects[row] );
+				return createIndex( row, 0, (void*)m_root_objects[static_cast<size_t>(row)] );
 			//else
 			//	return QModelIndex();
 		}
@@ -75,7 +75,7 @@ namespace view
 		UTILCPP_ASSERT_NOT_NULL( parent_object->children() );
 		UTILCPP_ASSERT( row < parent_object->children()->object().size(), "Tried to get child object from parent object \""<< parent_object->id() << "\" with a wrong child index : row = " << row << ", root objects count = " << parent_object->children()->object().size() );
 
-		const aosl::Object& child_object = parent_object->children()->object()[ row ];
+		const aosl::Object& child_object = parent_object->children()->object()[ static_cast<size_t>(row) ];
 
 		return createIndex( row, 0, (void*)&child_object );
 	}

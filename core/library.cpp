@@ -40,18 +40,18 @@ namespace core
 
 		const auto& resource_list = library_info.resource();
 		
-		std::for_each( begin(resource_list), end(resource_list), [&]( const aosl::Resource& resource )
+		for( const auto& resource : resource_list )
 		{
 			auto resource_object = Context::instance().resource_provider().get( resource );
 			UTILCPP_ASSERT_NOT_NULL( resource_object ); // TODO : replace by exception?
 			add( resource.id() , resource_object );
-		});
+		}
 
 		const auto& include_list = library_info.include();
 		if( !include_list.empty() )
 		{
 			
-			std::for_each( begin(include_list), end(include_list), [&]( const aosl::Library_include& import_info )
+			for( const auto& import_info : include_list )
 			{
 				// build the library
 				try
@@ -65,7 +65,7 @@ namespace core
 					UTILCPP_LOG_ERROR << "Failed to load library at \"" << import_info.data() << "\" : " << e.what();
 				}
 				
-			});
+			}
 		}
 		
 	}
@@ -73,10 +73,10 @@ namespace core
 	void Library::import( const Library& library )
 	{
 		// TODO : replace by std::copy? does it work with maps?
-		std::for_each( begin(library.m_resource_registry), end(library.m_resource_registry), [&]( std::pair< aosl::Resource_id, ResourcePtr > resource_it )
+		for( auto resource_it : library.m_resource_registry )
 		{
 			add( resource_it.first, resource_it.second );
-		});
+		}
 	}
 
 	void Library::clear()
@@ -119,11 +119,11 @@ namespace core
 
 	void Library::for_each_resource( ResourceFunc func ) const
 	{
-		std::for_each( begin(m_resources), end(m_resources), [&]( const ResourceRef& resource_ref ) 
+		for( const auto& resource_ref : m_resources )
 		{
 			UTILCPP_ASSERT_NOT_NULL( resource_ref.resource() );
 			func( resource_ref );
-		});
+		}
 	}
 
 }
