@@ -8,11 +8,11 @@
 #include <aosdesigner/backend/sequence.hpp>
 #include <aosdesigner/backend/editionsession.hpp>
 #include <aosdesigner/backend/paths.hpp>
-
+#include <aosdesigner/backend/projectinfos.hpp>
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 
@@ -27,23 +27,12 @@ namespace core
 	{
 
 	}
-
-	bool Context::new_project()
-	{
-		ProjectInfos infos = view::request_new_project_infos();
-		
-		if( is_valid( infos ) )
-			return new_project( infos );
-		else 
-			return false;
-	}
-
+	
 	bool Context::new_project( const ProjectInfos& infos )
 	{
-		UTILCPP_ASSERT( is_valid(infos), "Tried to create a new project with invalid informations!" );
+		UTILCPP_ASSERT( is_valid( infos ), "Tried to create a new project with invalid informations!" );
 		
 		std::unique_ptr<Project> project( new Project( infos ) );
-		project->new_sequence();	// create a first sequence
 		project->save();			// save everything
 
 		const bool project_open = open_project( std::move(project) );
@@ -56,22 +45,23 @@ namespace core
 		return true;
 	}
 
-	bool Context::open_project()
-	{
-		auto project_file_path = view::request_project_path();
+	// TODO: FIXME
+	//bool Context::open_project()
+	//{
+	//	auto project_file_path = view::request_project_path();
 
-		if( project_file_path.empty() 
-		||  !( project_file_path.extension() == path::PROJECT_FILE_EXTENSION )
-		)
-		{
-			return false; // THINK : do something else if it failed?
-		}
+	//	if( project_file_path.empty() 
+	//	||  !( project_file_path.extension() == path::PROJECT_FILE_EXTENSION )
+	//	)
+	//	{
+	//		return false; // THINK : do something else if it failed?
+	//	}
 
-		if( is_project_open() ) 
-			close_project(); // TODO : don't continue if the close failed!
-		
-		return open_project( std::unique_ptr<Project>( new Project( project_file_path ) ) );
-	}
+	//	if( is_project_open() ) 
+	//		close_project(); // TODO : don't continue if the close failed!
+	//	
+	//	return open_project( std::unique_ptr<Project>( new Project( project_file_path ) ) );
+	//}
 
 	bool Context::open_project( std::unique_ptr<Project> project )
 	{
@@ -106,20 +96,7 @@ namespace core
 	{
 		return *m_project;
 	}
-
-	bool Context::new_sequence()
-	{
-		if( is_project_open() )
-		{
-			return m_project->new_sequence();
-		}
-
-		// THINK : replace that with an exception?
-		UTILCPP_LOG_ERROR << "Cannot create a new sequence while no project is open!";
-
-		return false;
-	}
-
+	
 
 	bool Context::new_edition( const EditionSessionInfos& session_infos )
 	{
@@ -134,18 +111,6 @@ namespace core
 		return false;
 	}
 
-	bool Context::new_edition()
-	{
-		if( is_project_open() )
-		{
-			return m_project->new_edition();
-		}
-
-		// THINK : replace that with an exception?
-		UTILCPP_LOG_ERROR << "Cannot create a edition session while no project is open!";
-
-		return false;
-	}
 
 	bool Context::save_project()
 	{

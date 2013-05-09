@@ -19,13 +19,13 @@ namespace view
 		
 	}
 
-	void LibraryModel::update( const core::Library& library )
+	void LibraryModel::update( const backend::Library& library )
 	{
 		clear();
 
 		beginResetModel();
 		
-		library.for_each_resource( [&]( core::ResourceRef resource_ref )
+		library.for_each_resource( [&]( backend::ResourceRef resource_ref )
 		{
 			m_resources.push_back( resource_ref );
 		});

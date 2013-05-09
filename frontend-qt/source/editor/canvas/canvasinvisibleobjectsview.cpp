@@ -30,7 +30,7 @@ namespace view
 
 	}
 
-	void CanvasInvisibleObjectsView::update( const aosl::Canvas& canvas, const core::Library& sequence_library, const core::Library& project_library   )
+	void CanvasInvisibleObjectsView::update( const aosl::Canvas& canvas, const backend::Library& sequence_library, const backend::Library& project_library   )
 	{
 
 	}

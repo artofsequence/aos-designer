@@ -4,7 +4,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 	Resource::Resource( const URI& uri, const aosl::Resource_type& type )

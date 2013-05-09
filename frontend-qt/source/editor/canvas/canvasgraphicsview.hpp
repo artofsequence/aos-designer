@@ -17,7 +17,7 @@ namespace aosl
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class Library;
 }
@@ -39,7 +39,7 @@ namespace view
 	public slots:
 
 		void clear();
-		void update( const aosl::Canvas& canvas, const core::Library& sequence_library, const core::Library& project_library  );
+		void update( const aosl::Canvas& canvas, const backend::Library& sequence_library, const backend::Library& project_library  );
 
 	private:
 

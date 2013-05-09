@@ -27,7 +27,7 @@ namespace view
 
 	public slots:
 
-		core::EditionSessionInfos infos() const;
+		backend::EditionSessionInfos infos() const;
 
 	private slots:
 

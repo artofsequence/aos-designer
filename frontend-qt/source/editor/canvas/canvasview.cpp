@@ -28,7 +28,7 @@ namespace view
 
 	}
 
-	void CanvasView::update( const aosl::Canvas& canvas, const core::Library& sequence_library, const core::Library& project_library )
+	void CanvasView::update( const aosl::Canvas& canvas, const backend::Library& sequence_library, const backend::Library& project_library )
 	{
 		m_graphic_view->update( canvas, sequence_library, project_library );
 		m_others_view->update( canvas, sequence_library, project_library );

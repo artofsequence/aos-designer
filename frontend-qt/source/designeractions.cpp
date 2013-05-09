@@ -28,7 +28,7 @@ namespace view
 			QObject::connect( &m_quit, SIGNAL(triggered()), ApplicationView::instance(), SLOT(quit()) );
 		}
 
-		auto* context = &core::Context::instance();
+		auto* context = &backend::Context::instance();
 
 		{
 			auto new_project_tip = QObject::tr("Create a new project. If a project is already open, it will be closed first.");

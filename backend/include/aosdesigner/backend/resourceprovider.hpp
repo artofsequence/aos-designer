@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_RESOURCEPROVIDER_H__
-#define HGUARD_AOSD_CORE_RESOURCEPROVIDER_H__
+#ifndef HGUARD_AOSD_BACKEND_RESOURCEPROVIDER_H__
+#define HGUARD_AOSD_BACKEND_RESOURCEPROVIDER_H__
 #pragma once
 
 #include <map>
@@ -9,7 +9,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	
 	class ResourceProvider

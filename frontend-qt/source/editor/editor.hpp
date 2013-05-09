@@ -19,7 +19,7 @@ namespace aosl
 
 namespace aosd
 {
-namespace core
+namespace backend
 { 
 	class EditionSession; 
 	class Library;
@@ -40,16 +40,16 @@ namespace view
 		Q_OBJECT
 	public:
 		
-		explicit Editor( const core::EditionSession& edition_session );
+		explicit Editor( const backend::EditionSession& edition_session );
 		~Editor();
 
 		QString title() const { return m_title; }
 
-		core::EditionSessionId session_id() const { return m_session_id; }
+		backend::EditionSessionId session_id() const { return m_session_id; }
 
 		bool is_closing() const { return m_is_closing; }
 
-		void update( const aosl::Canvas& canvas, const core::Library& sequence_library, const core::Library& project_library );
+		void update( const aosl::Canvas& canvas, const backend::Library& sequence_library, const backend::Library& project_library );
 		
 
 	private slots:
@@ -61,7 +61,7 @@ namespace view
 		std::unique_ptr<StoryView> m_story_view;
 		
 		QString m_title;
-		core::EditionSessionId m_session_id;
+		backend::EditionSessionId m_session_id;
 
 		bool m_is_closing;
 		

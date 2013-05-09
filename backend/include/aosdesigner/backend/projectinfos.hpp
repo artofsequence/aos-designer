@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_PROJECTINFOS_HPP__
-#define HGUARD_AOSD_CORE_PROJECTINFOS_HPP__
+#ifndef HGUARD_AOSD_BACKEND_PROJECTINFOS_HPP__
+#define HGUARD_AOSD_BACKEND_PROJECTINFOS_HPP__
 #pragma once
 
 #include <string>
@@ -8,7 +8,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	/** Basic informations about a project.
 	*/

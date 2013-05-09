@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_PATHS_HPP__
-#define HGUARD_AOSD_CORE_PATHS_HPP__
+#ifndef HGUARD_AOSD_BACKEND_PATHS_HPP__
+#define HGUARD_AOSD_BACKEND_PATHS_HPP__
 #pragma once
 
 #include <string>

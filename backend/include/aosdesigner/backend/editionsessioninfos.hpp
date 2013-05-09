@@ -1,13 +1,13 @@
-#ifndef HGUARD_AOSD_CORE_EDITIONSESSIONINFOS_HPP__
-#define HGUARD_AOSD_CORE_EDITIONSESSIONINFOS_HPP__
+#ifndef HGUARD_AOSD_BACKEND_EDITIONSESSIONINFOS_HPP__
+#define HGUARD_AOSD_BACKEND_EDITIONSESSIONINFOS_HPP__
 #pragma once
 
 #include <string>
-#include "core/SequenceId.hpp"
+#include <aosdesigner/backend/sequenceid.hpp>
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	struct EditionSessionInfos
 	{

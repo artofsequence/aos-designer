@@ -66,14 +66,14 @@ namespace view
 	}
 
 
-	void MainWindow::react_project_open( const core::Project& project )
+	void MainWindow::react_project_open( const backend::Project& project )
 	{
 		setWindowTitle( tr("%1 - Art Of Sequence").arg( QString::fromStdString( project.name() ), 0 ) );
 
 	}
 
 
-	void MainWindow::react_project_closed( const core::Project& project )
+	void MainWindow::react_project_closed( const backend::Project& project )
 	{
 		setWindowTitle( tr("Art Of Sequence") );
 
@@ -102,10 +102,10 @@ namespace view
 
 	void MainWindow::connect_signals()
 	{
-		auto& context = core::Context::instance();
+		auto& context = backend::Context::instance();
 
-		connect( &context, SIGNAL(project_open(const core::Project&)), this, SLOT(react_project_open(const core::Project&)) );
-		connect( &context, SIGNAL(project_closed(const core::Project&)), this, SLOT(react_project_closed(const core::Project&)) );
+		connect( &context, SIGNAL(project_open(const backend::Project&)), this, SLOT(react_project_open(const backend::Project&)) );
+		connect( &context, SIGNAL(project_closed(const backend::Project&)), this, SLOT(react_project_closed(const backend::Project&)) );
 
 	}
 

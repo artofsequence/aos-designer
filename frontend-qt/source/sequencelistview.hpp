@@ -11,7 +11,7 @@ class QListView;
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class Project;
 	class Sequence;
@@ -33,11 +33,11 @@ namespace view
 
 	private slots:
 
-		void react_project_open( const core::Project& );
-		void react_project_closed( const core::Project& );
+		void react_project_open( const backend::Project& );
+		void react_project_closed( const backend::Project& );
 
-		void react_sequence_created( const core::Sequence& );
-		void react_sequence_deleted( const core::Sequence& );
+		void react_sequence_created( const backend::Sequence& );
+		void react_sequence_deleted( const backend::Sequence& );
 
 	private:
 
@@ -46,17 +46,17 @@ namespace view
 		/** Read the Sequences in the provided project and retrieve their data
 			to be displayed in this widget.
 		*/
-		void read_sequences( const core::Project& project );
+		void read_sequences( const backend::Project& project );
 
 		/** Clear the displayed infos. */
 		void clear();
 
 		void connect_context();
-		void connect_project( const core::Project& project );
-		void disconnect_project( const core::Project& project );
+		void connect_project( const backend::Project& project );
+		void disconnect_project( const backend::Project& project );
 
-		void add_sequence_infos( const core::Sequence& sequence );
-		void remove_sequence_infos( const core::Sequence& sequence );
+		void add_sequence_infos( const backend::Sequence& sequence );
+		void remove_sequence_infos( const backend::Sequence& sequence );
 
 	};
 

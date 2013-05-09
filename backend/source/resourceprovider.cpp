@@ -6,7 +6,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 	ResourcePtr ResourceProvider::get( const ResourceInfo& resource_infos )

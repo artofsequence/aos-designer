@@ -58,10 +58,10 @@ namespace view
 	private slots:
 
 		/** Slot : called when a project have been opened. */
-		void react_project_open( const core::Project& project );
+		void react_project_open( const backend::Project& project );
 
 		/** Slot : called when a project have been closed. */
-		void react_project_closed( const core::Project& project );
+		void react_project_closed( const backend::Project& project );
 
 	private:
 

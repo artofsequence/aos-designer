@@ -55,19 +55,19 @@ namespace view
 			return InfoType();
 	}
 
-	core::ProjectInfos request_new_project_infos()
+	backend::ProjectInfos request_new_project_infos()
 	{
-		return request_infos< core::ProjectInfos, NewProjectDialog >();
+		return request_infos< backend::ProjectInfos, NewProjectDialog >();
 	}
 
-	core::SequenceInfos request_new_sequence_infos()
+	backend::SequenceInfos request_new_sequence_infos()
 	{
-		return request_infos< core::SequenceInfos, NewSequenceDialog >();
+		return request_infos< backend::SequenceInfos, NewSequenceDialog >();
 	}
 
-	core::EditionSessionInfos request_new_edition_session_infos()
+	backend::EditionSessionInfos request_new_edition_session_infos()
 	{
-		return request_infos< core::EditionSessionInfos, NewEditionSessionDialog >();
+		return request_infos< backend::EditionSessionInfos, NewEditionSessionDialog >();
 	}
 
 }

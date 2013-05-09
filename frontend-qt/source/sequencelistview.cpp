@@ -31,9 +31,9 @@ namespace view
 
 	void SequenceListView::connect_context()
 	{
-		auto& context = core::Context::instance();
-		connect( &context, SIGNAL( project_open(const core::Project&)    ) , this, SLOT( react_project_open(const core::Project&)       ) );
-		connect( &context, SIGNAL( project_closed(const core::Project&)  ) , this, SLOT( react_project_closed(const core::Project&)     ) );
+		auto& context = backend::Context::instance();
+		connect( &context, SIGNAL( project_open(const backend::Project&)    ) , this, SLOT( react_project_open(const backend::Project&)       ) );
+		connect( &context, SIGNAL( project_closed(const backend::Project&)  ) , this, SLOT( react_project_closed(const backend::Project&)     ) );
 
 		if( context.is_project_open() )
 		{
@@ -43,23 +43,23 @@ namespace view
 
 	}
 
-	void SequenceListView::connect_project( const core::Project& project )
+	void SequenceListView::connect_project( const backend::Project& project )
 	{
-		connect( &project, SIGNAL( sequence_created(const core::Sequence&)    ) , this, SLOT( react_sequence_created(const core::Sequence&)       ) );
-		connect( &project, SIGNAL( sequence_deleted(const core::Sequence&)    ) , this, SLOT( react_sequence_deleted(const core::Sequence&)       ) );
+		connect( &project, SIGNAL( sequence_created(const backend::Sequence&)    ) , this, SLOT( react_sequence_created(const backend::Sequence&)       ) );
+		connect( &project, SIGNAL( sequence_deleted(const backend::Sequence&)    ) , this, SLOT( react_sequence_deleted(const backend::Sequence&)       ) );
 
 
 		read_sequences( project );
 	}
 
-	void SequenceListView::disconnect_project( const core::Project& project )
+	void SequenceListView::disconnect_project( const backend::Project& project )
 	{
 		disconnect( &project, 0, this, 0 );
 		clear();
 	}
 
 
-	void SequenceListView::add_sequence_infos( const core::Sequence& sequence )
+	void SequenceListView::add_sequence_infos( const backend::Sequence& sequence )
 	{
 		auto sequences_infos = m_string_list.stringList();
 		sequences_infos << QString::fromStdString( sequence.name() );
@@ -68,7 +68,7 @@ namespace view
 	}
 
 
-	void SequenceListView::remove_sequence_infos( const core::Sequence& sequence )
+	void SequenceListView::remove_sequence_infos( const backend::Sequence& sequence )
 	{
 		auto sequences_infos = m_string_list.stringList();
 		sequences_infos.removeAt( sequences_infos.lastIndexOf( QString::fromStdString( sequence.name() ) ) );
@@ -78,11 +78,11 @@ namespace view
 
 
 
-	void SequenceListView::read_sequences( const core::Project& project )
+	void SequenceListView::read_sequences( const backend::Project& project )
 	{
 		QStringList sequences_infos;
 		
-		project.foreach_sequence( [&]( const core::Sequence& sequence )
+		project.foreach_sequence( [&]( const backend::Sequence& sequence )
 		{
 			sequences_infos << QString::fromStdString( sequence.name() );
 		});
@@ -96,23 +96,23 @@ namespace view
 	}
 
 
-	void SequenceListView::react_project_open( const core::Project& project )
+	void SequenceListView::react_project_open( const backend::Project& project )
 	{
 		connect_project( project );
 	}
 
-	void SequenceListView::react_project_closed( const core::Project& project )
+	void SequenceListView::react_project_closed( const backend::Project& project )
 	{
 		disconnect_project( project );
 	}
 
 
-	void SequenceListView::react_sequence_created( const core::Sequence& sequence )
+	void SequenceListView::react_sequence_created( const backend::Sequence& sequence )
 	{
 		add_sequence_infos( sequence );
 	}
 
-	void SequenceListView::react_sequence_deleted( const core::Sequence& sequence )
+	void SequenceListView::react_sequence_deleted( const backend::Sequence& sequence )
 	{
 		remove_sequence_infos( sequence );
 	}

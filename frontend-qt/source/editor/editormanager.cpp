@@ -15,10 +15,10 @@ namespace view
 	EditorManager::EditorManager( FreeWindowManager& window_manager )
 		: m_window_manager( window_manager )
 	{
-		auto& context = core::Context::instance();
+		auto& context = backend::Context::instance();
 
-		connect( &context, SIGNAL(project_open(const core::Project&)), this, SLOT(react_project_open(const core::Project&)) );
-		connect( &context, SIGNAL(project_closed(const core::Project&)), this, SLOT(react_project_closed(const core::Project&)) );
+		connect( &context, SIGNAL(project_open(const backend::Project&)), this, SLOT(react_project_open(const backend::Project&)) );
+		connect( &context, SIGNAL(project_closed(const backend::Project&)), this, SLOT(react_project_closed(const backend::Project&)) );
 
 	}
 
@@ -38,31 +38,31 @@ namespace view
 		m_editor_registry.clear();
 	}
 
-	void EditorManager::react_project_open( const core::Project& project )
+	void EditorManager::react_project_open( const backend::Project& project )
 	{
-		connect( &project, SIGNAL(edition_session_begin(const core::EditionSession&)), this, SLOT(react_edition_session_begin(const core::EditionSession&)) );
-		connect( &project, SIGNAL(edition_session_end(const core::EditionSession&)), this, SLOT(react_edition_session_end(const core::EditionSession&)), Qt::QueuedConnection );
+		connect( &project, SIGNAL(edition_session_begin(const backend::EditionSession&)), this, SLOT(react_edition_session_begin(const backend::EditionSession&)) );
+		connect( &project, SIGNAL(edition_session_end(const backend::EditionSession&)), this, SLOT(react_edition_session_end(const backend::EditionSession&)), Qt::QueuedConnection );
 
-		connect( &project, SIGNAL(sequence_created(const core::Sequence&)), this, SLOT(react_sequence_created(const core::Sequence&)) );
-		connect( &project, SIGNAL(sequence_deleted(const core::Sequence&)), this, SLOT(react_sequence_deleted(const core::Sequence&)), Qt::QueuedConnection );
+		connect( &project, SIGNAL(sequence_created(const backend::Sequence&)), this, SLOT(react_sequence_created(const backend::Sequence&)) );
+		connect( &project, SIGNAL(sequence_deleted(const backend::Sequence&)), this, SLOT(react_sequence_deleted(const backend::Sequence&)), Qt::QueuedConnection );
 
 		const auto* initial_session_selection = project.selected_edition_session();
 
-		project.foreach_edition( [&]( const core::EditionSession& edition_session ) 
+		project.foreach_edition( [&]( const backend::EditionSession& edition_session ) 
 		{
 			add_editor( edition_session );
 		});
 
 		if( initial_session_selection )
 		{
-			core::Context::instance().select_edition_session( initial_session_selection->id() );
+			backend::Context::instance().select_edition_session( initial_session_selection->id() );
 			select_editor( initial_session_selection->id() );
 		}
 
 	}
 
 
-	void EditorManager::react_project_closed( const core::Project& project )
+	void EditorManager::react_project_closed( const backend::Project& project )
 	{
 		disconnect( &project, 0, this, 0 );
 
@@ -71,29 +71,29 @@ namespace view
 	}
 
 
-	void EditorManager::react_edition_session_begin( const core::EditionSession& edition_session )
+	void EditorManager::react_edition_session_begin( const backend::EditionSession& edition_session )
 	{
 		add_editor( edition_session );
 	}
 
-	void EditorManager::react_edition_session_end( const core::EditionSession& edition_session )
+	void EditorManager::react_edition_session_end( const backend::EditionSession& edition_session )
 	{
 		remove_editor( edition_session );
 	}
 
 
-	void EditorManager::react_sequence_created( const core::Sequence& sequence )
+	void EditorManager::react_sequence_created( const backend::Sequence& sequence )
 	{
 
 	}
 
-	void EditorManager::react_sequence_deleted( const core::Sequence& sequence )
+	void EditorManager::react_sequence_deleted( const backend::Sequence& sequence )
 	{
 
 	}
 
 
-	void EditorManager::select_editor( core::EditionSessionId session_id )
+	void EditorManager::select_editor( backend::EditionSessionId session_id )
 	{
 		auto editor = find_editor( session_id );
 		if( editor )
@@ -102,7 +102,7 @@ namespace view
 		}
 	}
 
-	Editor* EditorManager::find_editor( core::EditionSessionId session_id )
+	Editor* EditorManager::find_editor( backend::EditionSessionId session_id )
 	{
 		auto editor_it = m_editor_registry.find( session_id );
 		if( editor_it != m_editor_registry.end() )
@@ -112,7 +112,7 @@ namespace view
 		
 	}
 
-	void EditorManager::add_editor( const core::EditionSession& edition_session )
+	void EditorManager::add_editor( const backend::EditionSession& edition_session )
 	{
 		auto editor = std::unique_ptr<Editor>( new Editor( edition_session ) );
 		m_window_manager.add_window( *editor );
@@ -120,12 +120,12 @@ namespace view
 		m_editor_registry.insert( std::make_pair( edition_session.id(), std::move( editor ) ) );
 	}
 
-	void EditorManager::remove_editor( const core::EditionSession& edition_session )
+	void EditorManager::remove_editor( const backend::EditionSession& edition_session )
 	{
 		remove_editor( edition_session.id() );
 	}
 
-	void EditorManager::remove_editor( core::EditionSessionId session_id )
+	void EditorManager::remove_editor( backend::EditionSessionId session_id )
 	{
 		// TODO : do it in one search instead of two
 		auto editor = find_editor( session_id );

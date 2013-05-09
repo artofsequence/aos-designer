@@ -33,14 +33,14 @@ namespace view
 
 	}
 
-	void CanvasGraphicsView::update( const aosl::Canvas& canvas, const core::Library& sequence_library, const core::Library& project_library   )
+	void CanvasGraphicsView::update( const aosl::Canvas& canvas, const backend::Library& sequence_library, const backend::Library& project_library   )
 	{
 		aoslcpp::for_each_object_depth( canvas, [&]( const aosl::Object& object )
 		{
 			if( object.resource() )
 			{
 				auto resource_id = aosl::Resource_id(*object.resource());
-				core::ResourcePtr resource = sequence_library.find( resource_id );
+				backend::ResourcePtr resource = sequence_library.find( resource_id );
 				if( !resource )
 				{
 					resource = project_library.find( resource_id );

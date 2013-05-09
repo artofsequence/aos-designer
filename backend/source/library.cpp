@@ -9,7 +9,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 	Library::Library()

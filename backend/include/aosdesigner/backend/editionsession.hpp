@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_EDITIONSESSION_HPP__
-#define HGUARD_AOSD_CORE_EDITIONSESSION_HPP__
+#ifndef HGUARD_AOSD_BACKEND_EDITIONSESSION_HPP__
+#define HGUARD_AOSD_BACKEND_EDITIONSESSION_HPP__
 #pragma once
 
 #include <functional>
@@ -14,7 +14,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class Project;
 	class Sequence;

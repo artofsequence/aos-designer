@@ -41,7 +41,7 @@ namespace view
 		m_layer_objects_view->setModel( nullptr );
 	}
 
-	void LayersView::connect_edition( const core::EditionSession& edition_session )
+	void LayersView::connect_edition( const backend::EditionSession& edition_session )
 	{
 		// first load the layer list
 		bool has_model = m_layer_model_binder.load( edition_session.id() );
@@ -53,18 +53,18 @@ namespace view
 		
 	}
 
-	void LayersView::disconnect_edition( const core::EditionSession& edition_session )
+	void LayersView::disconnect_edition( const backend::EditionSession& edition_session )
 	{
 		m_layer_model_binder.unload();
 		m_layer_objects_model->clear();
 	}
 
-	void LayersView::begin_edition_session( const core::EditionSession& edition_session )
+	void LayersView::begin_edition_session( const backend::EditionSession& edition_session )
 	{
 		m_layer_model_binder.add( std::unique_ptr<QAbstractItemModel>( new CanvasLayersModel( edition_session.canvas() ) ), edition_session.id() );
 	}
 
-	void LayersView::end_edition_session( const core::EditionSession& edition_session )
+	void LayersView::end_edition_session( const backend::EditionSession& edition_session )
 	{
 		m_layer_model_binder.remove( edition_session.id() );
 	}

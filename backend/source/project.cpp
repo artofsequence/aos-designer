@@ -15,11 +15,12 @@
 #include <aosdesigner/backend/sequenceinfos.hpp>
 #include <aosdesigner/backend/sequence.hpp>
 #include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editionsessioninfos.hpp>
 #include <aosdesigner/backend/paths.hpp>
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 	Project::Project( const ProjectInfos& infos )
@@ -309,18 +310,6 @@ namespace core
 		return true;
 	}
 
-	bool Project::new_sequence()
-	{
-		// request the new sequence infos
-		const SequenceInfos infos = view::request_new_sequence_infos();
-
-		// create and register the sequence
-		if( is_valid( infos ) ) 
-			return new_sequence( infos );
-		else 
-			return false;
-
-	}
 
 	bool Project::new_edition( const EditionSessionInfos& session_infos )
 	{
@@ -339,17 +328,6 @@ namespace core
 		return false;
 	}
 
-	bool Project::new_edition()
-	{
-		// request the new edition session
-		const EditionSessionInfos infos = view::request_new_edition_session_infos();
-
-		// create and register the sequence
-		if( is_valid( infos ) ) 
-			return new_edition( infos );
-		else 
-			return false;
-	}
 
 
 	void Project::add_sequence( std::unique_ptr<Sequence> sequence )

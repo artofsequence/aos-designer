@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_PROJECT_HPP__
-#define HGUARD_AOSD_CORE_PROJECT_HPP__
+#ifndef HGUARD_AOSD_BACKEND_PROJECT_HPP__
+#define HGUARD_AOSD_BACKEND_PROJECT_HPP__
 #pragma once
 
 #include <memory>
@@ -13,7 +13,7 @@
 
 namespace aosd 
 { 
-namespace core 
+namespace backend 
 {
 	class Sequence;
 	class EditionSession;
@@ -74,14 +74,8 @@ namespace core
 		/** Create a new "empty" sequence with provided informations. */
 		bool new_sequence( const SequenceInfos& infos );
 		
-		/** Request informations to the user and use them to create a new sequence. */
-		bool new_sequence();
-
 		/** Create an edition session for the referenced sequence. **/
 		bool new_edition( const EditionSessionInfos& session_infos );
-
-		/** Request informations to the user and use them to create a new edition session. */
-		bool new_edition();
 
 		/** Delete an edition session of the project. */
 		bool delete_edition( EditionSessionId session_id );
@@ -108,10 +102,10 @@ namespace core
 	// signals:
 
 		/** Signal : a new sequence have been created. **/
-		void sequence_created( const core::Sequence& sequence );
+		void sequence_created( const backend::Sequence& sequence );
 
 		/** Signal : a sequence have been requested to be destroyed. **/
-		void sequence_deleted( const core::Sequence& sequence );
+		void sequence_deleted( const backend::Sequence& sequence );
 
 		/** Signal : at least one edition session is open now. */
 		void edition_begin();
@@ -120,22 +114,22 @@ namespace core
 		void edition_end();
 
 		/** Signal : an edition session have been created. **/
-		void edition_session_created( const core::EditionSession& edition_session );
+		void edition_session_created( const backend::EditionSession& edition_session );
 		
 		/** Signal : an edition session have been deleted. **/
-		void edition_session_deleted( const core::EditionSession& edition_session );
+		void edition_session_deleted( const backend::EditionSession& edition_session );
 
 		/** Signal : an edition session have began. **/
-		void edition_session_begin( const core::EditionSession& edition_session );
+		void edition_session_begin( const backend::EditionSession& edition_session );
 
 		/** Signal : an edition session will be ended. **/
-		void edition_session_end( const core::EditionSession& edition_session );
+		void edition_session_end( const backend::EditionSession& edition_session );
 
 		/** Signal : an edition session have been selected. **/
-		void edition_selected( const core::EditionSession& edition_session );
+		void edition_selected( const backend::EditionSession& edition_session );
 		
 		/** Signal : an edition session have been deselected. **/
-		void edition_deselected( const core::EditionSession& edition_session );
+		void edition_deselected( const backend::EditionSession& edition_session );
 
 		
 		

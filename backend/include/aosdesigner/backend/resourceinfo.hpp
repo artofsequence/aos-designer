@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_RESOURCEINFO_HPP__
-#define HGUARD_AOSD_CORE_RESOURCEINFO_HPP__
+#ifndef HGUARD_AOSD_BACKEND_RESOURCEINFO_HPP__
+#define HGUARD_AOSD_BACKEND_RESOURCEINFO_HPP__
 #pragma once
 
 #include <aosdesigner/backend/uri.hpp>
@@ -7,7 +7,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class ResourceInfo
 	{

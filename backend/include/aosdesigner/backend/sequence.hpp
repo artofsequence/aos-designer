@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_SEQUENCE_HPP__
-#define HGUARD_AOSD_CORE_SEQUENCE_HPP__
+#ifndef HGUARD_AOSD_BACKEND_SEQUENCE_HPP__
+#define HGUARD_AOSD_BACKEND_SEQUENCE_HPP__
 #pragma once
 
 #include <string>
@@ -19,7 +19,7 @@ namespace aosl
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class Project;
 

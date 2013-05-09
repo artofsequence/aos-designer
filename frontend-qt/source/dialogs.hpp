@@ -31,13 +31,13 @@ namespace view
 	void show_welcome_screen();
 
 	/** Show the dialog to create a new project. */
-	core::ProjectInfos request_new_project_infos();
+	backend::ProjectInfos request_new_project_infos();
 
 	/** Show the dialog to create a new sequence. */
-	core::SequenceInfos request_new_sequence_infos();
+	backend::SequenceInfos request_new_sequence_infos();
 
 	/** Show the dialog to create a new edition session. */
-	core::EditionSessionInfos request_new_edition_session_infos();
+	backend::EditionSessionInfos request_new_edition_session_infos();
 
 }
 }

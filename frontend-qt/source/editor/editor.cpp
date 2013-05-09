@@ -16,7 +16,7 @@ namespace aosd
 {
 namespace view
 {
-	Editor::Editor( const  core::EditionSession& edition_session )
+	Editor::Editor( const  backend::EditionSession& edition_session )
 		: m_canvas_view( new CanvasView )
 		, m_story_view( new StoryView )
 		, m_title( QString::fromStdString( edition_session.name() ) )
@@ -32,7 +32,7 @@ namespace view
 				
 		UTILCPP_LOG << "Created Editor view for edition session \"" << m_title.toStdString() << "\"";
 
-		const auto& project = core::Context::instance().current_project();
+		const auto& project = backend::Context::instance().current_project();
 		auto sequence = project.find_sequence( edition_session.sequence_id() );
 		update( edition_session.canvas(), sequence->library(), project.library() );
 
@@ -52,7 +52,7 @@ namespace view
 		m_is_closing = true;
 
 		// the user did close the window : delete the associated session id
-		if( core::Context::instance().delete_edition( m_session_id ) )
+		if( backend::Context::instance().delete_edition( m_session_id ) )
 		{
 			QSplitter::closeEvent( closeEvent );
 		}
@@ -70,19 +70,19 @@ namespace view
 	{
 		UTILCPP_ASSERT_NOT_NULL( event );
 		
-		auto selected_edittion_session = core::Context::instance().selected_edition_session();
+		auto selected_edittion_session = backend::Context::instance().selected_edition_session();
 		if( selected_edittion_session
 		&&	selected_edittion_session->id() != this->session_id()
 		)
 		{
-			core::Context::instance().select_edition_session( this->session_id() );
+			backend::Context::instance().select_edition_session( this->session_id() );
 		}
 		
 
 		QSplitter::focusInEvent( event );
 	}
 
-	void Editor::update( const aosl::Canvas& canvas, const core::Library& sequence_library, const core::Library& project_library )
+	void Editor::update( const aosl::Canvas& canvas, const backend::Library& sequence_library, const backend::Library& project_library )
 	{
 		m_canvas_view->update( canvas, sequence_library, project_library );
 	}

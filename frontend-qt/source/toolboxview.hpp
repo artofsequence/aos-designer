@@ -21,10 +21,10 @@ namespace view
 
 	private:
 
-		void begin_edition_session( const core::EditionSession& edition_session ){}
-		void end_edition_session( const core::EditionSession& edition_session ){}
-		void connect_edition( const core::EditionSession& edition_session );
-		void disconnect_edition( const core::EditionSession& edition_session );
+		void begin_edition_session( const backend::EditionSession& edition_session ){}
+		void end_edition_session( const backend::EditionSession& edition_session ){}
+		void connect_edition( const backend::EditionSession& edition_session );
+		void disconnect_edition( const backend::EditionSession& edition_session );
 
 	};
 

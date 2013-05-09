@@ -10,7 +10,7 @@ class QTabWidget;
 
 namespace aosd
 {
-	namespace core { class Project; }
+	namespace backend { class Project; }
 
 namespace view
 {
@@ -31,8 +31,8 @@ namespace view
 	
 	private slots:
 
-		void react_project_open( const core::Project& );
-		void react_project_closed( const core::Project& );
+		void react_project_open( const backend::Project& );
+		void react_project_closed( const backend::Project& );
 
 	private:
 		

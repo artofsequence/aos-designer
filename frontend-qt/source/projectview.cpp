@@ -21,10 +21,10 @@ namespace view
 
 		m_tabs->addTab( new SequenceListView(), tr("Sequences") );
 
-		auto& context = core::Context::instance();
+		auto& context = backend::Context::instance();
 
-		connect( &context, SIGNAL(project_open( const core::Project& )),		this, SLOT( react_project_open(const core::Project&) ) );
-		connect( &context, SIGNAL(project_closed( const core::Project& )),		this, SLOT( react_project_closed(const core::Project&) ) );
+		connect( &context, SIGNAL(project_open( const backend::Project& )),		this, SLOT( react_project_open(const backend::Project&) ) );
+		connect( &context, SIGNAL(project_closed( const backend::Project& )),		this, SLOT( react_project_closed(const backend::Project&) ) );
 
 	}
 
@@ -33,14 +33,14 @@ namespace view
 
 	}
 
-	void ProjectView::react_project_open( const core::Project& project )
+	void ProjectView::react_project_open( const backend::Project& project )
 	{
 		setWindowTitle( "Project : " + QString::fromStdString( project.name() ) );
 		setVisible( true );
 		setEnabled( true );
 	}
 
-	void ProjectView::react_project_closed( const core::Project& )
+	void ProjectView::react_project_closed( const backend::Project& )
 	{
 		setWindowTitle( tr("Project") );
 		setVisible( false );

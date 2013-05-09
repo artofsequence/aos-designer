@@ -5,7 +5,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 	static const EditionSessionId EditionSessionId_INVALID = to_string( boost::uuids::nil_generator()() );

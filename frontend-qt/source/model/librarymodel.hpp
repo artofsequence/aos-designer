@@ -9,7 +9,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class Library;
 	class Resource;
@@ -24,7 +24,7 @@ namespace view
 
 		LibraryModel();
 
-		void update( const core::Library& library );
+		void update( const backend::Library& library );
 		void clear();
 
 		QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
@@ -42,7 +42,7 @@ namespace view
 
 		
 
-		std::vector< core::ResourceRef > m_resources;
+		std::vector< backend::ResourceRef > m_resources;
 
 	};
 

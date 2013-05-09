@@ -13,7 +13,7 @@ class QSplitter;
 namespace aosd
 {
 
-namespace core
+namespace backend
 {
 	class Sequence;
 }
@@ -40,17 +40,17 @@ namespace view
 		std::unique_ptr<QTreeView> m_project_library_view;
 
 		std::unique_ptr<LibraryModel> m_project_library_model;
-		ModelViewBinder<core::SequenceId> m_sequence_model_view_binder;
+		ModelViewBinder<backend::SequenceId> m_sequence_model_view_binder;
 		
 
-		void begin_edition_session( const core::EditionSession& edition_session );
-		void end_edition_session( const core::EditionSession& edition_session );
-		void connect_edition( const core::EditionSession& edition_session );
-		void disconnect_edition( const core::EditionSession& edition_session );
-		void connect_project( const core::Project& project );
-		void disconnect_project( const core::Project& project );
+		void begin_edition_session( const backend::EditionSession& edition_session );
+		void end_edition_session( const backend::EditionSession& edition_session );
+		void connect_edition( const backend::EditionSession& edition_session );
+		void disconnect_edition( const backend::EditionSession& edition_session );
+		void connect_project( const backend::Project& project );
+		void disconnect_project( const backend::Project& project );
 
-		void add_sequence_library( const core::Sequence& sequence );
+		void add_sequence_library( const backend::Sequence& sequence );
 		
 
 	};

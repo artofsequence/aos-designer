@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_SEQUENCEINFOS_HPP__
-#define HGUARD_AOSD_CORE_SEQUENCEINFOS_HPP__
+#ifndef HGUARD_AOSD_BACKEND_SEQUENCEINFOS_HPP__
+#define HGUARD_AOSD_BACKEND_SEQUENCEINFOS_HPP__
 #pragma once
 
 #include <string>
@@ -7,7 +7,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	
 	struct SequenceInfos

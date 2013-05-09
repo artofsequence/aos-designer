@@ -25,7 +25,7 @@ namespace view
 		~NewProjectDialog();
 
 		/** Provide the basic informations about the project described by the user. */
-		core::ProjectInfos infos();
+		backend::ProjectInfos infos();
 
 	private slots:
 

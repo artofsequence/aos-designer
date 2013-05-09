@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_CORE_LIBRARY_HPP__
-#define HGUARD_AOSD_CORE_LIBRARY_HPP__
+#ifndef HGUARD_AOSD_BACKEND_LIBRARY_HPP__
+#define HGUARD_AOSD_BACKEND_LIBRARY_HPP__
 #pragma once
 
 #include <functional>
@@ -20,7 +20,7 @@ namespace aosl
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	namespace bfs = boost::filesystem;
 

@@ -1,12 +1,12 @@
-#ifndef HGUARD_AOSD_CORE_RESOURCEPTR_H__
-#define HGUARD_AOSD_CORE_RESOURCEPTR_H__
+#ifndef HGUARD_AOSD_BACKEND_RESOURCEPTR_H__
+#define HGUARD_AOSD_BACKEND_RESOURCEPTR_H__
 #pragma once
 
 #include <memory>
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 	class Resource;
 
