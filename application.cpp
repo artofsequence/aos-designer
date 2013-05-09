@@ -10,7 +10,7 @@
 namespace aosd
 {
 	Application::Application( int &argc, char **argv )
-		: m_context( new core::Context() )
+		: m_context( new backend::Context() )
 		, m_view( new view::ApplicationView( argc, argv ) )
 	{
 		UTILCPP_LOG << "New AOS Designer session start!";

@@ -7,7 +7,7 @@
 
 namespace aosd
 {
-	namespace core { class Context; }
+	namespace backend { class Context; }
 	namespace view { class ApplicationView; }
 
 	/** Root object of this application.
@@ -27,7 +27,7 @@ namespace aosd
 
 		
 		/// Current context informations of the application : opened project, opened sequence, etc.
-		std::unique_ptr<core::Context> m_context;
+		std::unique_ptr<backend::Context> m_context;
 		
 		/// Application view.
 		std::unique_ptr<view::ApplicationView> m_view;
