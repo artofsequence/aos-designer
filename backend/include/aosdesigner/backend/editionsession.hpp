@@ -4,7 +4,6 @@
 
 #include <functional>
 #include <boost/filesystem/path.hpp>
-#include <qobject>
 
 #include "core/sequenceid.hpp"
 #include "core/editionsessionid.hpp"
@@ -26,9 +25,7 @@ namespace core
 	/** Informations about an edition session of a sequence.
 	*/
 	class EditionSession
-		: public QObject
 	{
-		Q_OBJECT
 	public:
 
 		/** Constructor : create a new edition session.
@@ -56,18 +53,11 @@ namespace core
 		const aosl::Story& story() const { return m_interpreter->story(); }
 		const aoslcpp::StoryPath& path() const { return m_interpreter->path(); }
 		
-	public slots:
+	// public slots:
 
 		/** Save this edition session state in a file at the provided path. */
 		void save( const bfs::path& file_path );
-		
-
-	signals:
-
-		
-	private slots:
-
-
+	
 	private:
 
 		std::unique_ptr<aoslcpp::SequenceInterpreter> m_interpreter;

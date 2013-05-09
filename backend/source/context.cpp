@@ -84,7 +84,7 @@ namespace core
 
 		m_project.swap( std::move( project ) );
 
-		emit project_open( current_project() );
+		/* TODO: emit */ project_open( current_project() );
 		return true;
 	}
 
@@ -93,7 +93,7 @@ namespace core
 		if( is_project_open() )
 		{
 			m_project->close();
-			emit project_closed( *m_project );
+			/* TODO: emit */ project_closed( *m_project );
 			m_project.reset();
 		}
 		

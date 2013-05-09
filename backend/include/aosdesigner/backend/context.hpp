@@ -3,7 +3,6 @@
 #pragma once
 
 #include <memory>
-#include <QObject>
 
 
 #include "core/sequenceid.hpp"
@@ -27,10 +26,8 @@ namespace core
 		like the current project to work on and the open sequence.
 	*/
 	class Context
-		: public QObject
-		, public util::Singleton< Context >
+		: public util::Singleton< Context >
 	{
-		Q_OBJECT
 	public:
 
 		Context();
@@ -48,7 +45,7 @@ namespace core
 		ResourceProvider& resource_provider() { return m_resource_provider; }
 		
 
-	public slots:
+	// public slots:
 
 		/** Create a new empty project by asking details to the user and set it as the current project.
 			If there was already a project open, it will be closed first.
@@ -100,7 +97,7 @@ namespace core
 		/** Select the referred edition session. */
 		void select_edition_session( EditionSessionId session_id );
 		
-	signals:
+	// signals:
 
 		/** Signal : a project have been open. */
 		void project_open( const core::Project& project );

@@ -297,7 +297,7 @@ namespace core
 		auto sequence = new Sequence( *this, infos );
 		
 		add_sequence( std::unique_ptr<Sequence>( sequence ) );
-		emit sequence_created( *sequence );
+		/* TODO: emit */ sequence_created( *sequence );
 
 		if( infos.is_edition_requested )
 		{
@@ -330,7 +330,7 @@ namespace core
 		if( sequence )
 		{
 			auto session = std::unique_ptr< EditionSession >( new EditionSession( *this, *sequence, session_infos.name ) );
-			emit edition_session_created( *session ); // notify the world!
+			/* TODO: emit */ edition_session_created( *session ); // notify the world!
 
 			add_edition( std::move(session) );
 
@@ -368,10 +368,10 @@ namespace core
 
 		m_edit_sessions.push_back( std::move( edition ) );
 
-		emit edition_session_begin( *m_edit_sessions.back() );
+		/* TODO: emit */ edition_session_begin( *m_edit_sessions.back() );
 
 		if( is_edition_begin )
-			emit edition_begin();
+			/* TODO: emit */ edition_begin();
 
 	}
 
@@ -415,11 +415,11 @@ namespace core
 
 			if( previous_selected_session )
 			{
-				emit edition_deselected( *previous_selected_session );
+				/* TODO: emit */ edition_deselected( *previous_selected_session );
 			}
 
 			UTILCPP_LOG << "Selected session [" << m_selected_session->id() << "] \"" << m_selected_session->name() << "\"";
-			emit edition_selected( *selected_edition_session() );
+			/* TODO: emit */ edition_selected( *selected_edition_session() );
 		}
 
 	}
@@ -428,7 +428,7 @@ namespace core
 	{
 		if( m_selected_session )
 		{
-			emit edition_deselected( *m_selected_session );
+			/* TODO: emit */ edition_deselected( *m_selected_session );
 			m_selected_session = nullptr;
 		}
 
@@ -441,10 +441,10 @@ namespace core
 		// make sure that the world is notified by the closing of all edition sessions, without deleting them
 		for( auto& session : m_edit_sessions )
 		{
-			emit edition_session_end( *session );
+			/* TODO: emit */ edition_session_end( *session );
 		}
 
-		emit edition_end();
+		/* TODO: emit */ edition_end();
 	}
 
 	bool Project::delete_edition( EditionSessionId session_id )
@@ -482,8 +482,8 @@ namespace core
 			}
 			
 			// now notify the world about the end of this session
-			emit edition_session_end( *edition_session );
-			emit edition_session_deleted( *edition_session );
+			/* TODO: emit */ edition_session_end( *edition_session );
+			/* TODO: emit */ edition_session_deleted( *edition_session );
 
 			const auto session_name = edition_session->name();
 
@@ -495,7 +495,7 @@ namespace core
 			UTILCPP_LOG << "Edition session \"" << session_name << "\" have been destroyed and removed from the Project";
 
 			if( m_edit_sessions.empty() )
-				emit edition_end();
+				/* TODO: emit */ edition_end();
 
 			return true;
 		}

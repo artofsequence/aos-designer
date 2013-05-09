@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <boost/filesystem/path.hpp>
-#include <qobject>
 #include "core/sequenceid.hpp"
 #include "core/editionsessionid.hpp"
 #include "core/library.hpp"
@@ -27,9 +26,7 @@ namespace core
 
 	*/
 	class Project
-		: public QObject
 	{
-		Q_OBJECT
 	public:
 				
 		/** Create a project from basic informations. */
@@ -65,7 +62,7 @@ namespace core
 		const EditionSession* selected_edition_session() const { return m_selected_session; }
 
 		
-	public slots:
+	//public slots:
 
 		/** Change the project's file location to the provided one. */
 		void relocate( const bfs::path& new_filepath );
@@ -107,7 +104,7 @@ namespace core
 		/** Close this project. */
 		void close();
 
-	signals:
+	// signals:
 
 		/** Signal : a new sequence have been created. **/
 		void sequence_created( const core::Sequence& sequence );
