@@ -6,9 +6,10 @@
 #include <string>
 #include <vector>
 #include <boost/filesystem/path.hpp>
-#include "core/sequenceid.hpp"
-#include "core/editionsessionid.hpp"
-#include "core/library.hpp"
+
+#include <aosdesigner/backend/sequenceid.hpp>
+#include <aosdesigner/backend/editionsessionid.hpp>
+#include <aosdesigner/backend/library.hpp>
 
 namespace aosd 
 { 

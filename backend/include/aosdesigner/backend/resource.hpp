@@ -5,8 +5,9 @@
 #include <string>
 
 #include <boost/noncopyable.hpp>
-#include "aosl/resource_type.hpp"
-#include "core/resources/URI.hpp"
+#include <aosl/resource_type.hpp>
+
+#include <aosdesigner/backend/uri.hpp>
 
 namespace aosd
 {

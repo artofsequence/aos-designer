@@ -2,8 +2,8 @@
 #define HGUARD_AOSD_CORE_RESOURCEREF_HPP__
 #pragma once
 
-#include "core/resources/resourceptr.hpp"
-#include "aosl/resource_id.hpp"
+#include <aosdesigner/backend/resourceptr.hpp>
+#include <aosl/resource_id.hpp>
 
 namespace aosd
 {

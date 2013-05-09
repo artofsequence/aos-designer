@@ -1,13 +1,13 @@
-#include "resourcefactory.hpp"
+#include <aosdesigner/backend/resourcefactory.hpp>
 
 #include <functional>
 #include <map>
 
-#include "utilcpp/assert.hpp"
-#include "aosl/resource_type.hpp"
+#include <utilcpp/assert.hpp>
+#include <aosl/resource_type.hpp>
 
-#include "resourceptr.hpp"
-#include "resource.hpp"
+#include <aosdesigner/backend/resourceptr.hpp>
+#include <aosdesigner/backend/resource.hpp>
 
 namespace aosd
 {

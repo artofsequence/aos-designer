@@ -1,4 +1,4 @@
-#include "core/editionsession.hpp"
+#include <aosdesigner/backend/editionsession.hpp>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -7,13 +7,16 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include "utilcpp/assert.hpp"
-#include "utilcpp/log.hpp"
+#include <utilcpp/assert.hpp>
+#include <utilcpp/log.hpp>
 
-#include "core/sequence.hpp"
-#include "core/project.hpp"
-#include "aoslcpp/sequenceinterpreter.hpp"
-#include "paths.hpp"
+#include <aoslcpp/sequenceinterpreter.hpp>
+
+#include <aosdesigner/backend/sequence.hpp>
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/paths.hpp>
+
+
 
 namespace aosd
 {

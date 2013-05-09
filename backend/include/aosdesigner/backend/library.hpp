@@ -10,8 +10,8 @@
 #include <boost/filesystem/path.hpp>
 
 #include <aosl/resource_id.hpp>
-#include "core/resources/resourceptr.hpp"
-#include "core/resources/resourceref.hpp"
+#include <aosdesigner/backend/resourceptr.hpp>
+#include <aosdesigner/backend/resourceref.hpp>
 
 namespace aosl
 {

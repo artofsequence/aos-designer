@@ -1,18 +1,16 @@
-#include "library.hpp"
+#include <aosdesigner/backend/library.hpp>
 
+#include <utilcpp/assert.hpp>
 
-#include "core/context.hpp"
-#include "core/resources/resource.hpp"
-#include "aosl/library.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/resource.hpp>
+#include <aosl/library.hpp>
 
-#include "utilcpp/assert.hpp"
 
 namespace aosd
 {
 namespace core
 {
-
-
 
 	Library::Library()
 	{

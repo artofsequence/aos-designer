@@ -5,12 +5,12 @@
 #include <functional>
 #include <boost/filesystem/path.hpp>
 
-#include "core/sequenceid.hpp"
-#include "core/editionsessionid.hpp"
-#include "aoslcpp/sequenceinterpreter.hpp"
-#include "aosl/aosl_forward.hpp"
-#include "aoslcpp/algorithm/for_each.hpp"
+#include <aosl/aosl_forward.hpp>
+#include <aoslcpp/sequenceinterpreter.hpp>
+#include <aoslcpp/algorithm/for_each.hpp>
 
+#include <aosdesigner/backend/sequenceid.hpp>
+#include <aosdesigner/backend/editionsessionid.hpp>
 
 namespace aosd
 {

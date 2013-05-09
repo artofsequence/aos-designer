@@ -6,10 +6,10 @@
 #include <memory>
 #include <boost/optional.hpp>
 
-#include "core/sequenceid.hpp"
-#include "core/sequenceinfos.hpp"
-#include "core/library.hpp"
-#include "aoslcpp/sequenceinterpreter.hpp"
+#include <aosdesigner/backend/sequenceid.hpp>
+#include <aosdesigner/backend/sequenceinfos.hpp>
+#include <aosdesigner/backend/library.hpp>
+#include <aoslcpp/sequenceinterpreter.hpp>
 
 namespace aosl
 {

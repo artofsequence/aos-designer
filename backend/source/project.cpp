@@ -1,4 +1,4 @@
-#include "core/project.hpp"
+#include <aosdesigner/backend/project.hpp>
 
 #include <algorithm>
 
@@ -9,14 +9,13 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
-#include "core/projectinfos.hpp"
-#include "core/sequenceinfos.hpp"
-#include "core/sequence.hpp"
-#include "core/editionsession.hpp"
-#include "view/dialogs.hpp"
-#include "paths.hpp"
+#include <aosdesigner/backend/projectinfos.hpp>
+#include <aosdesigner/backend/sequenceinfos.hpp>
+#include <aosdesigner/backend/sequence.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/paths.hpp>
 
 namespace aosd
 {

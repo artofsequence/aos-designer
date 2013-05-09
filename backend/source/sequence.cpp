@@ -1,4 +1,4 @@
-#include "core/sequence.hpp"
+#include <aosdesigner/backend/sequence.hpp>
 
 #include <string>
 
@@ -6,14 +6,13 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
-#include "aosl/aosl.hpp"
-#include "aoslcpp/algorithm/edition.hpp"
+#include <aosl/aosl.hpp>
+#include <aoslcpp/algorithm/edition.hpp>
 
-#include "core/project.hpp"
-
-#include "paths.hpp"
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/paths.hpp>
 
 namespace aosd
 {

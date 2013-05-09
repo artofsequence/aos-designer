@@ -3,9 +3,9 @@
 #pragma once
 
 #include <map>
-#include "resourceptr.hpp"
-#include "ResourceInfo.hpp"
-#include "aosl/resource.hpp"
+#include <aosdesigner/backend/resourceptr.hpp>
+#include <aosdesigner/backend/resourceinfo.hpp>
+#include <aosl/resource.hpp>
 
 namespace aosd
 {

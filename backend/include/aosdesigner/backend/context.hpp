@@ -4,12 +4,11 @@
 
 #include <memory>
 
-
-#include "core/sequenceid.hpp"
-#include "core/editionsessionid.hpp"
 #include <utilcpp/singleton.hpp>
-#include "core/resources/resourceprovider.hpp"
 
+#include <aosdesigner/backend/sequenceid.hpp>
+#include <aosdesigner/backend/editionsessionid.hpp>
+#include <aosdesigner/backend/resourceprovider.hpp>
 
 namespace aosd
 {
