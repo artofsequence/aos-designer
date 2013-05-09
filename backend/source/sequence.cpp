@@ -16,7 +16,7 @@
 
 namespace aosd
 {
-namespace core
+namespace backend
 {
 
 	Sequence::Sequence( const Project& project, const SequenceInfos& infos )
