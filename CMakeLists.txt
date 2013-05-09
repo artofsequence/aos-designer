@@ -19,10 +19,8 @@ set( AOSDESIGNER_BUILD_DIR ${BUILD_DIR}/${AOSDESIGNER_BUILD_MODE} )
 
 set( AOSDESIGNER_SOURCES
 	${AOSDESIGNER_ROOT_DIR}/application.hpp
-	${AOSDESIGNER_ROOT_DIR}/paths.hpp
 	${AOSDESIGNER_ROOT_DIR}/main.cpp
 	${AOSDESIGNER_ROOT_DIR}/application.cpp
-	${AOSDESIGNER_ROOT_DIR}/paths.cpp
 )
 
 ###################################################
