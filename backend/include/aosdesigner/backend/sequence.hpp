@@ -6,6 +6,7 @@
 #include <memory>
 #include <boost/optional.hpp>
 
+#include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/sequenceid.hpp>
 #include <aosdesigner/backend/sequenceinfos.hpp>
 #include <aosdesigner/backend/library.hpp>
@@ -26,7 +27,7 @@ namespace backend
 
 	/** A full Sequence as defined in AOSL.
 	*/
-	class Sequence
+	class AOSD_BACKEND_API Sequence
 	{
 	public:
 

@@ -7,6 +7,7 @@
 #include <vector>
 #include <boost/filesystem/path.hpp>
 
+#include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/sequenceid.hpp>
 #include <aosdesigner/backend/editionsessionid.hpp>
 #include <aosdesigner/backend/library.hpp>
@@ -26,7 +27,7 @@ namespace backend
 	/** Contains a set of Sequences and common informations applied to all those Sequences.
 
 	*/
-	class Project
+	class AOSD_BACKEND_API Project
 	{
 	public:
 				
@@ -134,6 +135,8 @@ namespace backend
 		
 		
 	private:
+		Project( const Project& ); // = delete;
+		Project& operator=( const Project& ); // = delete;
 
 		/// Sequences for this project.
 		std::vector<std::unique_ptr< Sequence >> m_sequences;

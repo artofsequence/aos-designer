@@ -10,6 +10,8 @@
 #include <boost/filesystem/path.hpp>
 
 #include <aosl/resource_id.hpp>
+
+#include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/resourceptr.hpp>
 #include <aosdesigner/backend/resourceref.hpp>
 
@@ -26,7 +28,7 @@ namespace backend
 
 	/** Library of resources.
 	**/
-	class Library
+	class AOSD_BACKEND_API Library
 	{
 	public:
 
