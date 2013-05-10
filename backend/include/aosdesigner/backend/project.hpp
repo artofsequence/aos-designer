@@ -16,12 +16,13 @@ namespace aosd
 { 
 namespace backend 
 {
+	class Context;
 	class Sequence;
 	class EditionSession;
 	struct ProjectInfos;
 	struct SequenceInfos;
 	struct EditionSessionInfos;
-
+	
 	namespace bfs = boost::filesystem;
 
 	/** Contains a set of Sequences and common informations applied to all those Sequences.
@@ -32,12 +33,14 @@ namespace backend
 	public:
 				
 		/** Create a project from basic informations. */
-		explicit Project( const ProjectInfos& infos );
+		explicit Project( Context& context, const ProjectInfos& infos );
 
 		/** Load a project from a provided project file location. */
-		explicit Project( const bfs::path& project_file_path );
+		explicit Project( Context& context, const bfs::path& project_file_path );
 
 		~Project();
+
+		Context& context() const { return const_cast<Project&>(*this).m_context; }
 
 		/// Path of the file that contain all the project's informations.
 		bfs::path location() const { return m_location; }
@@ -137,6 +140,8 @@ namespace backend
 	private:
 		Project( const Project& ); // = delete;
 		Project& operator=( const Project& ); // = delete;
+
+		Context& m_context;
 
 		/// Sequences for this project.
 		std::vector<std::unique_ptr< Sequence >> m_sequences;

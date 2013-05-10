@@ -23,19 +23,23 @@ namespace aosd
 namespace backend
 {
 
-	Project::Project( const ProjectInfos& infos )
-		: m_location( infos.location )
+	Project::Project( Context& context, const ProjectInfos& infos )
+		: m_context( context )
+		, m_location( infos.location )
 		, m_name( infos.name )
 		, m_directory_path( infos.location.parent_path() )
 		, m_selected_session( nullptr )
+		, m_library( m_context )
 	{
 		UTILCPP_ASSERT( is_valid(infos), "Tried to construct a Project with invalid project infos!" );
 	}
 
-	Project::Project( const bfs::path& project_file_path )
-		: m_location( project_file_path )
+	Project::Project( Context& context, const bfs::path& project_file_path )
+		: m_context( context )
+		, m_location( project_file_path )
 		, m_directory_path( project_file_path.parent_path() )
 		, m_selected_session( nullptr )
+		, m_library( m_context )
 	{
 		UTILCPP_ASSERT( !project_file_path.empty(), "Tried to construct a Project at an empty path!" );
 		UTILCPP_ASSERT( bfs::is_regular_file( m_location ), "Tried to create a project with an invalid file path! Path : " << m_location )

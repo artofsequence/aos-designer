@@ -4,8 +4,6 @@
 
 #include <memory>
 
-#include <utilcpp/singleton.hpp>
-
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/sequenceid.hpp>
 #include <aosdesigner/backend/editionsessionid.hpp>
@@ -26,7 +24,6 @@ namespace backend
 		like the current project to work on and the open sequence.
 	*/
 	class AOSD_BACKEND_API Context
-		: public util::Singleton< Context >
 	{
 	public:
 

@@ -24,6 +24,7 @@ namespace backend
 		, m_name( infos.name )
 		, m_location( infos.location )
 		, m_sequence( aoslcpp::make_empty_sequence( infos.name, infos.canvas_width, infos.canvas_height ) )
+		, m_library( m_project.context() )
 	{
 		if( m_sequence )
 		{
@@ -35,6 +36,7 @@ namespace backend
 	Sequence::Sequence( const Project& project, boost::filesystem::path sequence_file_path )
 		: m_project( project )
 		, m_location( std::move(sequence_file_path) )
+		, m_library( m_project.context() )
 	{
 		xml_schema::Properties properties;
 		properties.schema_location( aosl::AOSL_XML_NAMESPACE_NAME, path::AOSL_XSD_FILE.string() );

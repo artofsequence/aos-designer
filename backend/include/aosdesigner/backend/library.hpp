@@ -24,6 +24,8 @@ namespace aosd
 {
 namespace backend
 {
+	class Context;
+
 	namespace bfs = boost::filesystem;
 
 	/** Library of resources.
@@ -32,9 +34,9 @@ namespace backend
 	{
 	public:
 
-		Library();
-		explicit Library( const aosl::Library& library_info );
-		explicit Library( const bfs::path& file_path );
+		explicit Library( Context& context );
+		explicit Library( Context& context, const aosl::Library& library_info );
+		explicit Library( Context& context, const bfs::path& file_path );
 		~Library();
 
 		/** Update the content of the library. **/
@@ -53,6 +55,10 @@ namespace backend
 		void for_each_resource( ResourceFunc func ) const;
 		
 	private:
+		Library( const Library& ); // = delete;
+		Library& operator=( const Library& ); // = delete;
+
+		Context& m_context;
 
 		std::map< aosl::Resource_id,  ResourcePtr > m_resource_registry;
 
