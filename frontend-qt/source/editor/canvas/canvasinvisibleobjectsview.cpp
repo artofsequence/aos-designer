@@ -2,8 +2,8 @@
 
 #include <QGraphicsScene>
 
-#include "core/library.hpp"
-#include "aosl/canvas.hpp"
+#include <aosdesigner/backend/library.hpp>
+#include <aosl/canvas.hpp>
 
 namespace aosd
 {

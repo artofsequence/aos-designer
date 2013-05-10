@@ -1,11 +1,11 @@
 #include "editormanager.hpp"
 
-#include "core/project.hpp"
-#include "core/context.hpp"
-#include "core/editionsession.hpp"
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
 
-#include "view/editor/editor.hpp"
-#include "view/freewindowmanager.hpp"
+#include "editor.hpp"
+#include "../freewindowmanager.hpp"
 
 namespace aosd
 {

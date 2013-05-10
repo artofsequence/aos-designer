@@ -6,10 +6,10 @@
 #include <map>
 #include <QMainWindow>
 
-#include "core/editionsessionid.hpp"
-#include "view/designeractions.hpp"
-#include "view/editor/editormanager.hpp"
-#include "view/freewindowmanager.hpp"
+#include <aosdesigner/backend/editionsessionid.hpp>
+#include "designeractions.hpp"
+#include "editor/editormanager.hpp"
+#include "freewindowmanager.hpp"
 
 class QMdiArea;
 

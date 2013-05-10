@@ -3,9 +3,9 @@
 #pragma once
 
 #include <memory>
-#include "view/editiontoolview.hpp"
-#include "view/model/modelviewbinder.hpp"
-#include "core/sequenceid.hpp"
+#include "editiontoolview.hpp"
+#include "model/modelviewbinder.hpp"
+#include <aosdesigner/backend/sequenceid.hpp>
 
 class QTreeView;
 class QSplitter;

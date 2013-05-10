@@ -4,10 +4,10 @@
 
 #include <map>
 #include <memory>
-#include "core/editionsessionid.hpp"
-#include "view/editiontoolview.hpp"
-#include "view/model/modelviewbinder.hpp"
-#include "view/model/canvasobjectsmodel.hpp"
+#include <aosdesigner/backend/editionsessionid.hpp>
+#include "editiontoolview.hpp"
+#include "model/modelviewbinder.hpp"
+#include "model/canvasobjectsmodel.hpp"
 
 class QTreeView;
 

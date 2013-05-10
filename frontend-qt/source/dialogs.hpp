@@ -4,9 +4,9 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include "core/projectinfos.hpp"
-#include "core/sequenceinfos.hpp"
-#include "core/editionsessioninfos.hpp"
+#include <aosdesigner/backend/projectinfos.hpp>
+#include <aosdesigner/backend/sequenceinfos.hpp>
+#include <aosdesigner/backend/editionsessioninfos.hpp>
 
 namespace aosd
 {

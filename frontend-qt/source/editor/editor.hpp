@@ -6,7 +6,7 @@
 #include <string>
 #include <QSplitter>
 
-#include "core/editionsessionid.hpp"
+#include <aosdesigner/backend/editionsessionid.hpp>
 
 class QSplitter;
 class QDockWidget;

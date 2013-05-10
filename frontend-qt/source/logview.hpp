@@ -6,7 +6,7 @@
 #include <QDockWidget>
 #include <QListView>
 
-#include "utilcpp/log.hpp"
+#include <utilcpp/log.hpp>
 
 
 class QTextEdit;

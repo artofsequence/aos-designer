@@ -1,10 +1,11 @@
-#include "view/projectview.hpp"
+#include "projectview.hpp"
 
 #include <QTabWidget>
 
-#include "view/sequencelistview.hpp"
-#include "core/context.hpp"
-#include "core/project.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/project.hpp>
+
+#include "sequencelistview.hpp"
 
 namespace aosd
 {

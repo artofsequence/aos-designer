@@ -9,7 +9,7 @@
 #include <QMenu>
 
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
 namespace aosd
 {

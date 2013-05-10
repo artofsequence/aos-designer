@@ -1,10 +1,10 @@
 #include "canvaslayersmodel.hpp"
 
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
-#include "aosl/layer.hpp"
-#include "aosl/canvas.hpp"
+#include <aosl/layer.hpp>
+#include <aosl/canvas.hpp>
 
 namespace aosd
 {

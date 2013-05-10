@@ -5,7 +5,7 @@
 #include <memory>
 #include <QDialog>
 
-#include "core/projectinfos.hpp"
+#include <aosdesigner/backend/projectinfos.hpp>
 
 namespace Ui { class NewProjectDialog; }
 

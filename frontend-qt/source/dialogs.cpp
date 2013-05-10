@@ -1,12 +1,12 @@
-#include "view/dialogs.hpp"
+#include "dialogs.hpp"
 
 #include <QFileDialog>
 #include <QObject>
 
-#include "view/dialog/welcomescreen.hpp"
-#include "view/dialog/newprojectdialog.hpp"
-#include "view/dialog/newsequencedialog.hpp"
-#include "view/dialog/neweditionsessiondialog.hpp"
+#include "dialog/welcomescreen.hpp"
+#include "dialog/newprojectdialog.hpp"
+#include "dialog/newsequencedialog.hpp"
+#include "dialog/neweditionsessiondialog.hpp"
 #include "paths.hpp"
 
 namespace aosd

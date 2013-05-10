@@ -1,9 +1,9 @@
-#include "view/applicationview.hpp"
+#include "applicationview.hpp"
 
 #include <QTimer>
 
-#include "view/mainwindow.hpp"
-#include "view/designeractions.hpp"
+#include "mainwindow.hpp"
+#include "designeractions.hpp"
 
 namespace aosd
 {

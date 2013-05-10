@@ -1,11 +1,11 @@
 #include "layerobjectsmodel.hpp"
 
-#include "utilcpp/assert.hpp"
-
-#include "aosl/layer.hpp"
-#include "aosl/object.hpp"
-#include "aosl/canvas.hpp"
-#include "aoslcpp/algorithm/find.hpp"
+#include <utilcpp/assert.hpp>
+		 
+#include <aosl/layer.hpp>
+#include <aosl/object.hpp>
+#include <aosl/canvas.hpp>
+#include <aoslcpp/algorithm/find.hpp>
 
 namespace aosd
 {

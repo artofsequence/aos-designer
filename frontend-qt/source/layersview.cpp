@@ -1,14 +1,14 @@
 #include "layersview.hpp"
 
-#include "utilcpp/log.hpp"
+#include <utilcpp/log.hpp>
 
 #include <QSplitter>
 #include <QTreeView>
 
-#include "aosl/layer.hpp"
-#include "core/editionsession.hpp"
-#include "view/model/canvaslayersmodel.hpp"
-#include "view/model/layerobjectsmodel.hpp"
+#include <aosl/layer.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
+#include "model/canvaslayersmodel.hpp"
+#include "model/layerobjectsmodel.hpp"
 
 namespace aosd
 {

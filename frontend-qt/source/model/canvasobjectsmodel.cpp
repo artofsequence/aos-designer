@@ -2,11 +2,10 @@
 
 #include <algorithm>
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
-
-#include "aosl/object.hpp"
-#include "aosl/canvas.hpp"
+#include <aosl/object.hpp>
+#include <aosl/canvas.hpp>
 
 namespace aosd
 {

@@ -6,7 +6,7 @@
 #include <vector>
 #include <QAbstractItemModel>
 
-#include "aoslcpp/algorithm/iterator.hpp"
+#include <aoslcpp/algorithm/iterator.hpp>
 
 namespace aosl
 {
