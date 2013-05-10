@@ -48,6 +48,7 @@ set( AOSD_BACKEND_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source )
 # Header files.
 
 set( AOSD_BACKEND_ROOT_HEADERS
+	${AOSD_BACKEND_HEADER_DIR}/api.hpp
 	${AOSD_BACKEND_HEADER_DIR}/context.hpp
 	${AOSD_BACKEND_HEADER_DIR}/project.hpp
 	${AOSD_BACKEND_HEADER_DIR}/sequence.hpp
@@ -131,6 +132,9 @@ include_directories(
 	${AOSLCPP_INCLUDE_DIRS}
 	${UTILCPP_INCLUDE_DIR}
 )
+
+# Symbol import/export: this project code will export symbols, while 
+add_definitions( -DAOSD_BACKEND_EXPORT )
 
 add_library( aosdesigner-backend SHARED ${AOSD_BACKEND_ALL_FILES} )
 target_link_libraries( aosdesigner-backend
