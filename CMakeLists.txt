@@ -8,6 +8,7 @@ add_subdirectory( frontend-qt ) # TODO: make it optional
 #####################################################
 # Sub-directories.
 set( AOSDESIGNER_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
+set( AOSDESIGNER_SOURCES_DIR ${AOSDESIGNER_ROOT_DIR}/aosdesigner )
 
 # Current build mode
 set( AOSDESIGNER_BUILD_MODE "$(Configuration)" ) #until I find a cross-platform way to get the configuration...
@@ -18,9 +19,9 @@ set( AOSDESIGNER_BUILD_DIR ${BUILD_DIR}/${AOSDESIGNER_BUILD_MODE} )
 #####################################################
 
 set( AOSDESIGNER_SOURCES
-	${AOSDESIGNER_ROOT_DIR}/application.hpp
-	${AOSDESIGNER_ROOT_DIR}/main.cpp
-	${AOSDESIGNER_ROOT_DIR}/application.cpp
+	${AOSDESIGNER_SOURCES_DIR}/application.hpp
+	${AOSDESIGNER_SOURCES_DIR}/main.cpp
+	${AOSDESIGNER_SOURCES_DIR}/application.cpp
 )
 
 ###################################################
