@@ -4,8 +4,8 @@
 #include <aosdesigner/backend/context.hpp>
 #include <aosdesigner/backend/editionsession.hpp>
 
-#include "editor.hpp"
-#include "../freewindowmanager.hpp"
+#include "editor/editor.hpp"
+#include "freewindowmanager.hpp"
 
 namespace aosd
 {
