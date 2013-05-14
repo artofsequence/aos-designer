@@ -20,8 +20,7 @@ namespace backend
 	class EditionSession;
 	struct EditionSessionInfos;
 
-	/** Singleton that hold the current context of the application, 
-		like the current project to work on and the open sequence.
+	/** TODO: MISSING DOCUMENTATION
 	*/
 	class AOSD_BACKEND_API Context
 	{
