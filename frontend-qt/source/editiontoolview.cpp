@@ -1,8 +1,10 @@
 #include "editiontoolview.hpp"
 
-#include "core/context.hpp"
-#include "core/project.hpp"
-#include "core/editionsession.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
+
+#include <utilcpp/assert.hpp>
 
 namespace aosd
 {

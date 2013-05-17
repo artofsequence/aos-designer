@@ -6,7 +6,7 @@
 #include <memory>
 #include <QAbstractItemView>
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
 
 namespace aosd

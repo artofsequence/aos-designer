@@ -1,9 +1,11 @@
-#include "view/designeractions.hpp"
+#include "designeractions.hpp"
 
 #include <QString>
 #include <QMenuBar>
-#include "view/applicationview.hpp"
-#include "core/context.hpp"
+
+#include <aosdesigner/backend/context.hpp>
+
+#include "applicationview.hpp"
 
 namespace aosd
 {

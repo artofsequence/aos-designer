@@ -32,7 +32,7 @@ namespace backend
 	{
 		UTILCPP_ASSERT( is_valid( infos ), "Tried to create a new project with invalid informations!" );
 		
-		std::unique_ptr<Project> project( new Project( infos ) );
+		std::unique_ptr<Project> project( new Project( *this, infos ) );
 		project->save();			// save everything
 
 		const bool project_open = open_project( std::move(project) );
@@ -131,7 +131,7 @@ namespace backend
 		{
 			auto project_location = m_project->location();
 			close_project();
-			return open_project( std::unique_ptr<Project>( new Project( project_location ) ) );
+			return open_project( std::unique_ptr<Project>( new Project( *this, project_location ) ) );
 		}
 
 		// THINK : replace that with an exception?

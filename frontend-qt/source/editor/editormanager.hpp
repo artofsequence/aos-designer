@@ -6,7 +6,7 @@
 #include <memory>
 #include <QObject>
 
-#include "core/editionsessionid.hpp"
+#include <aosdesigner/backend/editionsessionid.hpp>
 
 
 namespace aosd

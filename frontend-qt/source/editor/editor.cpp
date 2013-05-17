@@ -1,16 +1,16 @@
 #include "editor.hpp"
 
-#include "utilcpp/log.hpp"
+#include <utilcpp/log.hpp>
 
 #include <QCloseEvent>
 #include <QPushButton>
 
-#include "view/editor/canvas/canvasview.hpp"
-#include "view/editor/story/storyview.hpp"
-#include "core/context.hpp"
-#include "core/project.hpp"
-#include "core/sequence.hpp"
-#include "core/editionsession.hpp"
+#include "editor/canvas/canvasview.hpp"
+#include "editor/story/storyview.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/sequence.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
 
 namespace aosd
 {

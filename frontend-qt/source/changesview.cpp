@@ -2,8 +2,8 @@
 
 #include <QTreeView>
 
-#include "core/editionsession.hpp"
-#include "view/model/lastchangesmodel.hpp"
+#include <aosdesigner/backend/editionsession.hpp>
+#include "model/lastchangesmodel.hpp"
 
 namespace aosd
 {

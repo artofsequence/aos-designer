@@ -3,12 +3,12 @@
 #include <QSplitter>
 #include <QTreeView>
 
-#include "core/context.hpp"
-#include "core/project.hpp"
-#include "core/sequence.hpp"
-#include "core/editionsession.hpp"
-#include "core/sequence.hpp"
-#include "view/model/librarymodel.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/sequence.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/sequence.hpp>
+#include "model/librarymodel.hpp"
 
 namespace aosd
 {

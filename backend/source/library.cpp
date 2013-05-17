@@ -12,17 +12,20 @@ namespace aosd
 namespace backend
 {
 
-	Library::Library()
+	Library::Library( Context& context )
+		: m_context( context )
 	{
 
 	}
 
-	Library::Library( const aosl::Library& library_info )
+	Library::Library( Context& context, const aosl::Library& library_info )
+		: m_context( context )
 	{
 		update( library_info );
 	}
 
-	Library::Library( const bfs::path& file_path )
+	Library::Library( Context& context, const bfs::path& file_path )
+		: m_context( context )
 	{
 		UTILCPP_NOT_IMPLEMENTED_YET;
 	}
@@ -40,7 +43,7 @@ namespace backend
 		
 		for( const auto& resource : resource_list )
 		{
-			auto resource_object = Context::instance().resource_provider().get( resource );
+			auto resource_object = m_context.resource_provider().get( resource );
 			UTILCPP_ASSERT_NOT_NULL( resource_object ); // TODO : replace by exception?
 			add( resource.id() , resource_object );
 		}
@@ -55,7 +58,7 @@ namespace backend
 				try
 				{
 					auto import_path = bfs::path( import_info.data() );
-					auto library_to_import = std::unique_ptr<Library>( new Library( import_path ) );
+					auto library_to_import = std::unique_ptr<Library>( new Library( m_context, import_path ) );
 					import( *library_to_import );
 				}
 				catch( const std::exception& e )

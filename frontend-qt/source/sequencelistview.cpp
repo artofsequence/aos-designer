@@ -1,12 +1,12 @@
-#include "view/sequencelistview.hpp"
+#include "sequencelistview.hpp"
 
 #include <QListView>
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
-#include "core/context.hpp"
-#include "core/project.hpp"
-#include "core/sequence.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/sequence.hpp>
 
 namespace aosd
 {

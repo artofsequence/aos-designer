@@ -5,7 +5,7 @@
 #include <map>
 #include <memory>
 
-#include "view/freewindow.hpp"
+#include "freewindow.hpp"
 
 class QWidget;
 class QMdiArea;

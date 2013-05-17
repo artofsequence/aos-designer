@@ -3,7 +3,7 @@
 #pragma once
 
 #include <QToolBox>
-#include "view/editiontoolview.hpp"
+#include "editiontoolview.hpp"
 
 namespace aosd
 {

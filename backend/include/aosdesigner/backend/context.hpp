@@ -4,8 +4,7 @@
 
 #include <memory>
 
-#include <utilcpp/singleton.hpp>
-
+#include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/sequenceid.hpp>
 #include <aosdesigner/backend/editionsessionid.hpp>
 #include <aosdesigner/backend/resourceprovider.hpp>
@@ -21,11 +20,9 @@ namespace backend
 	class EditionSession;
 	struct EditionSessionInfos;
 
-	/** Singleton that hold the current context of the application, 
-		like the current project to work on and the open sequence.
+	/** TODO: MISSING DOCUMENTATION
 	*/
-	class Context
-		: public util::Singleton< Context >
+	class AOSD_BACKEND_API Context
 	{
 	public:
 

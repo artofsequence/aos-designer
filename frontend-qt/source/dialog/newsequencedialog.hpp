@@ -5,7 +5,7 @@
 #include <memory>
 #include <QDialog>
 
-#include "core/sequenceinfos.hpp"
+#include <aosdesigner/backend/sequenceinfos.hpp>
 
 namespace Ui { class NewSequenceDialog; }
 

@@ -4,9 +4,11 @@
 
 #include <memory>
 #include <QModelIndex>
-#include "view/editiontoolview.hpp"
-#include "view/model/modelviewbinder.hpp"
-#include "core/editionsessionid.hpp"
+
+#include <aosdesigner/backend/editionsessionid.hpp>
+
+#include "editiontoolview.hpp"
+#include "model/modelviewbinder.hpp"
 
 class QTreeView;
 class QSplitter;

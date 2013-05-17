@@ -5,19 +5,20 @@
 
 #include "ui_mainwindow.h"
 
-#include "core/context.hpp"
-#include "core/project.hpp"
-#include "core/sequence.hpp"
-#include "core/editionsession.hpp"
-#include "view/projectview.hpp"
-#include "view/librariesview.hpp"
-#include "view/changesview.hpp"
-#include "view/objectsview.hpp"
-#include "view/layersview.hpp"
-#include "view/toolboxview.hpp"
-#include "view/logview.hpp"
-#include "view/editor/editor.hpp"
-#include "view/designeractions.hpp"
+#include <aosdesigner/backend/context.hpp>
+#include <aosdesigner/backend/project.hpp>
+#include <aosdesigner/backend/sequence.hpp>
+#include <aosdesigner/backend/editionsession.hpp>
+
+#include "projectview.hpp"
+#include "librariesview.hpp"
+#include "changesview.hpp"
+#include "objectsview.hpp"
+#include "layersview.hpp"
+#include "toolboxview.hpp"
+#include "logview.hpp"
+#include "editor/editor.hpp"
+#include "designeractions.hpp"
 
 namespace aosd
 {

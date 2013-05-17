@@ -2,13 +2,15 @@
 
 #include <QGraphicsScene>
 
-#include "utilcpp/log.hpp"
+#include <utilcpp/log.hpp>
 
-#include "aosl/object.hpp"
-#include "aosl/canvas.hpp"
-#include "aoslcpp/algorithm/for_each.hpp"
+#include <aosdesigner/backend/library.hpp>
 
-#include "core/library.hpp"
+#include <aosl/object.hpp>
+#include <aosl/canvas.hpp>
+#include <aoslcpp/algorithm/for_each.hpp>
+
+
 
 namespace aosd
 {

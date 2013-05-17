@@ -2,10 +2,10 @@
 
 #include <algorithm>
 
-#include "core/resources/resource.hpp"
-#include "core/library.hpp"
+#include <aosdesigner/backend/resource.hpp>
+#include <aosdesigner/backend/library.hpp>
 
-#include "utilcpp/assert.hpp"
+#include <utilcpp/assert.hpp>
 
 
 namespace aosd

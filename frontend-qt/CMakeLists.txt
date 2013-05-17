@@ -5,6 +5,21 @@ project( aosdesigner-frontend-qt )
 ####################################################
 # Dependencies.
 
+
+set( Boost_USE_STATIC_LIBS        ON )
+set( Boost_USE_MULTITHREADED      ON )
+set( Boost_USE_STATIC_RUNTIME    OFF )
+find_package( Boost REQUIRED COMPONENTS 
+	filesystem 
+	system
+)
+if( NOT Boost_FOUND )
+	message( SEND_ERROR "AOS Designer requires Boost libraries, NOT FOUND!" )
+endif()
+
+include_directories( ${Boost_INCLUDE_DIR} )
+
+
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC ON )
 find_package( Qt5Widgets REQUIRED )
@@ -243,7 +258,9 @@ set( AOSD_FRONTENDQT_ALL_FILES
 )
 
 include_directories( 
-	${AOSDESIGNER_BACKEND_INCLUDE_DIR}
+	${AOSD_BACKEND_INCLUDE_DIR}
+	${AOSD_FRONTENDQT_SOURCE_DIR}
+	${AOSD_FRONTENDQT_INCLUDE_DIR}
 	${AOSLCPP_INCLUDE_DIRS}
 	${UTILCPP_INCLUDE_DIR}
 )

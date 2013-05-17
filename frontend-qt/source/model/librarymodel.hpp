@@ -5,7 +5,7 @@
 #include <vector>
 #include <QAbstractItemModel>
 
-#include "core/resources/resourceref.hpp"
+#include <aosdesigner/backend/resourceref.hpp>
 
 namespace aosd
 {
