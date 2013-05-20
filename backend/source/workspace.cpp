@@ -6,7 +6,8 @@ namespace aosd {
 namespace backend {
 
 	
-	Workspace::Workspace()
+	Workspace::Workspace( TaskExecutor& executor )
+		: m_executor( executor )
 	{
 
 	}
