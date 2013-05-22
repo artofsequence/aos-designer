@@ -51,6 +51,7 @@ set( AOSD_BACKEND_ROOT_HEADERS
 	${AOSD_BACKEND_HEADER_DIR}/api.hpp
 	${AOSD_BACKEND_HEADER_DIR}/workspace.hpp
 	${AOSD_BACKEND_HEADER_DIR}/taskexecutor.hpp
+	${AOSD_BACKEND_HEADER_DIR}/id.hpp
 	${AOSD_BACKEND_HEADER_DIR}/event.hpp	
 	${AOSD_BACKEND_HEADER_DIR}/context.hpp
 	${AOSD_BACKEND_HEADER_DIR}/project.hpp
@@ -88,7 +89,8 @@ set( AOSD_BACKEND_HEADERS
 # Source files.
 
 set( AOSD_BACKEND_ROOT_SOURCES
-	${AOSD_BACKEND_SOURCE_DIR}/workspace.cpp	
+	${AOSD_BACKEND_SOURCE_DIR}/id.cpp
+	${AOSD_BACKEND_SOURCE_DIR}/workspace.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/context.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/project.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/sequence.cpp
