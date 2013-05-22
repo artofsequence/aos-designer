@@ -9,13 +9,11 @@
 #include <aoslcpp/sequenceinterpreter.hpp>
 #include <aoslcpp/algorithm/for_each.hpp>
 
-#include <aosdesigner/backend/sequenceid.hpp>
-#include <aosdesigner/backend/editionsessionid.hpp>
+#include <aosdesigner/backend/id.hpp>
 
-namespace aosd
-{
-namespace backend
-{
+namespace aosd {
+namespace backend {
+
 	class Project;
 	class Sequence;
 	

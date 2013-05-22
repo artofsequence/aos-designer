@@ -8,8 +8,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <aosdesigner/backend/api.hpp>
-#include <aosdesigner/backend/sequenceid.hpp>
-#include <aosdesigner/backend/editionsessionid.hpp>
+#include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/library.hpp>
 
 namespace aosd 

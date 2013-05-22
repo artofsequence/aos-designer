@@ -3,7 +3,7 @@
 #pragma once
 
 #include <string>
-#include <aosdesigner/backend/sequenceid.hpp>
+#include <aosdesigner/backend/id.hpp>
 
 namespace aosd
 {
@@ -17,9 +17,9 @@ namespace backend
 
 	inline bool is_valid( const EditionSessionInfos& infos )
 	{
-		return !(	infos.sequence_id.empty()
-			||	infos.name.empty()
-			);
+		return is_valid( infos.sequence_id )
+			&& !infos.name.empty()
+			;
 	}
 
 }

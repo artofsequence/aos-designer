@@ -28,7 +28,7 @@ namespace backend
 	{
 		if( m_sequence )
 		{
-			m_id = m_sequence->id();
+			m_id = to_id<Sequence>(m_sequence->id());
 		}
 		
 	}
@@ -61,14 +61,14 @@ namespace backend
 		if( m_sequence )
 		{
 			m_name = m_sequence->name();
-			m_id = m_sequence->id();
+			m_id = to_id<Sequence>(m_sequence->id());
 
 			m_library.update( m_sequence->library() );
 		}
 		else
 		{
 			m_name = "UNREADABLE SEQUENCE";
-			m_id = "";
+			m_id = SequenceId::INVALID;
 		}
 
 	}

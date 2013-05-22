@@ -128,7 +128,7 @@ namespace backend
 						{
 							try
 							{
-								const bfs::path session_file_location = directory_path() / path::EDITION_SESSION_FILE( session_id );
+								const bfs::path session_file_location = directory_path() / path::EDITION_SESSION_FILE( to_string(session_id) );
 								auto session = std::unique_ptr<EditionSession>( new EditionSession( *this, session_file_location ) );
 								if( session->is_valid() )
 								{
@@ -156,7 +156,7 @@ namespace backend
 				}
 
 				// select the last selected session
-				auto selected_session_id = infos.get<EditionSessionId>("project.edition.selected", EditionSessionId_INVALID);
+				auto selected_session_id = infos.get<EditionSessionId>("project.edition.selected", EditionSessionId::INVALID);
 				if( is_valid( selected_session_id ) )
 				{
 					UTILCPP_LOG << "Loaded session to select (if available) : [" << selected_session_id << "]";
@@ -277,7 +277,7 @@ namespace backend
 
 		for( auto& edition_session : m_edit_sessions )
 		{ 
-			const auto& file_path = directory_path() / path::EDITION_SESSION_FILE( edition_session->id() );
+			const auto& file_path = directory_path() / path::EDITION_SESSION_FILE( to_string( edition_session->id() ) );
 			edition_session->save( file_path ); 
 		}
 

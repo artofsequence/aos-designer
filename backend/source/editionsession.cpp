@@ -18,17 +18,14 @@
 
 
 
-namespace aosd
-{
-namespace backend
-{
+namespace aosd {
+namespace backend {
 	
-
 	EditionSession::EditionSession( const Project& project, const Sequence& sequence, const std::string& name )
 		: m_sequence( &sequence )
 		, m_project( project )
 		, m_interpreter( sequence.make_interpreter() )
-		, m_id( to_string( boost::uuids::random_generator()() ) )
+		, m_id( make_id<EditionSession>() )
 		, m_sequence_id( sequence.id() )
 		, m_name( name )
 	{
@@ -38,7 +35,7 @@ namespace backend
 	EditionSession::EditionSession( const Project& project, const bfs::path& file_path )
 		: m_project( project )
 		, m_sequence( nullptr )
-		, m_id( EditionSessionId_INVALID )
+		, m_id( EditionSessionId::INVALID )
 		, m_save_filepath( file_path )
 	{
 		using namespace boost::property_tree;
@@ -59,8 +56,8 @@ namespace backend
 			m_id = infos.get<EditionSessionId>( "edition_session.id" );
 			m_name = infos.get<std::string>( "edition_session.name" );
 
-			m_sequence_id = infos.get<SequenceId>( "edition_session.sequence", "NONE" );
-			if( !m_sequence_id.empty() && m_sequence_id != "NONE" )
+			m_sequence_id = infos.get<SequenceId>( "edition_session.sequence" );
+			if( m_sequence_id.is_valid() )
 			{
 				m_sequence = project.find_sequence( m_sequence_id );
 				if( m_sequence )
@@ -100,7 +97,7 @@ namespace backend
 		// write the sequence id
 		infos.put( "edition_session.id", id() );
 		infos.put( "edition_session.name", name() );
-		infos.put( "edition_session.sequence", m_sequence ? m_sequence->id() : "NONE" );
+		infos.put( "edition_session.sequence", m_sequence ? m_sequence->id() : SequenceId::INVALID );
 
 		// write the path taken in the sequence
 		if( m_interpreter )
@@ -129,5 +126,4 @@ namespace backend
 
 	
 
-}
-}
+}}

@@ -56,7 +56,6 @@ set( AOSD_BACKEND_ROOT_HEADERS
 	${AOSD_BACKEND_HEADER_DIR}/context.hpp
 	${AOSD_BACKEND_HEADER_DIR}/project.hpp
 	${AOSD_BACKEND_HEADER_DIR}/sequence.hpp
-	${AOSD_BACKEND_HEADER_DIR}/sequenceid.hpp
 	${AOSD_BACKEND_HEADER_DIR}/projectinfos.hpp
 	${AOSD_BACKEND_HEADER_DIR}/sequenceinfos.hpp
 	${AOSD_BACKEND_HEADER_DIR}/library.hpp
@@ -65,7 +64,6 @@ set( AOSD_BACKEND_ROOT_HEADERS
 
 set( AOSD_BACKEND_EDITION_HEADERS
 	${AOSD_BACKEND_HEADER_DIR}/editionsession.hpp
-	${AOSD_BACKEND_HEADER_DIR}/editionsessionid.hpp
 	${AOSD_BACKEND_HEADER_DIR}/editionsessioninfos.hpp
 )
 
@@ -100,7 +98,6 @@ set( AOSD_BACKEND_ROOT_SOURCES
 
 set( AOSD_BACKEND_EDITION_SOURCES
 	${AOSD_BACKEND_SOURCE_DIR}/editionsession.cpp
-	${AOSD_BACKEND_SOURCE_DIR}/editionsessionId.cpp
 )
 
 set( AOSD_BACKEND_RESOURCE_SOURCES
