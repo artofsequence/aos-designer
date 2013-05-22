@@ -9,13 +9,15 @@
 namespace aosd {
 namespace backend {
 
+
+	typedef boost::uuids::uuid IdValueType;
+
 	template< class T >
 	class Id
-	{
+	{	
 	public:
 		
-		typedef Id<T>				ThisType;
-		typedef boost::uuids::uuid	ValueType;
+		typedef Id<T> ThisType;
 
 		static const ThisType INVALID;			///< Invalid id.
 
@@ -23,22 +25,28 @@ namespace backend {
 		Id() : m_value( INVALID.value() ) {}
 
 		/// Constructor converting from an internal value.
-		Id( ValueType value ) : m_value( std::move(value) ) {}
+		Id( IdValueType value ) : m_value( std::move(value) ) {}
 		
 		/// Destruction of an id mark it as invalid to make sure it's
 		~Id(){ *this = INVALID; }
 
-		const ValueType& value() const { return m_value; }
-		operator ValueType () const { return m_value; }
-
+		const IdValueType& value() const { return m_value; }
+		operator IdValueType () const { return m_value; }
+		
 	private:
 
-		ValueType m_value;
+		IdValueType m_value;
 
 	};
 
+	namespace detail
+	{ 
+		IdValueType null_id(); 
+		IdValueType generate_random_id();
+	}
+
 	template< class T >
-	const Id<T> Id<T>::INVALID = boost::uuids::nil_uuid();
+	const Id<T> Id<T>::INVALID = detail::null_id();
 
 	template< class T >
 	bool operator==( const Id<T>&left, const Id<T>& right ) { return left.value() == right.value(); }
@@ -92,12 +100,20 @@ namespace backend {
 	template< class T >
 	Id<T> make_id()
 	{
-		Id<T>::ValueType generate_random_id();
-
 		const auto new_id = Id<T>( generate_random_id() );
 		UTILCPP_ASSERT( is_valid(new_id), "Generated an invalid id for type " << typeid(T).name() );
 		return new_id;
 	}
+
+
+
+	class Project;
+	class Sequence;
+	class EditionSession;
+
+	typedef Id<Project> ProjectId;
+	typedef Id<Sequence> SequenceId;
+	typedef Id<EditionSession> EditionSessionId;
 
 	
 }}
