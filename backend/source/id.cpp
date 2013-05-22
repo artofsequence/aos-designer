@@ -10,7 +10,6 @@ namespace backend {
 
 	namespace {
 		boost::mutex id_gen_mutex;
-
 	}
 
 namespace detail {

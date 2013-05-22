@@ -6,6 +6,8 @@
 
 #include <utilcpp/assert.hpp>
 
+#include <aosdesigner/backend/api.hpp>
+
 namespace aosd {
 namespace backend {
 
@@ -41,8 +43,8 @@ namespace backend {
 
 	namespace detail
 	{ 
-		IdValueType null_id(); 
-		IdValueType generate_random_id();
+		AOSD_BACKEND_API IdValueType null_id(); 
+		AOSD_BACKEND_API IdValueType generate_random_id();
 	}
 
 	template< class T >
