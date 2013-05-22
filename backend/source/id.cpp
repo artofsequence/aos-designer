@@ -14,11 +14,6 @@ namespace backend {
 
 namespace detail {
 	
-	IdValueType null_id()
-	{
-		return boost::uuids::nil_uuid();
-	}
-
 	IdValueType generate_random_id()
 	{
 		static boost::uuids::random_generator generator;

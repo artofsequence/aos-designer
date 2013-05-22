@@ -3,10 +3,14 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/nil_generator.hpp>
+#include <boost/uuid/string_generator.hpp>
 
 #include <utilcpp/assert.hpp>
+#include <aosl/unique_id.hpp>
 
 #include <aosdesigner/backend/api.hpp>
+
 
 namespace aosd {
 namespace backend {
@@ -34,6 +38,8 @@ namespace backend {
 
 		const IdValueType& value() const { return m_value; }
 		operator IdValueType () const { return m_value; }
+
+		bool is_valid() const { return *this != INVALID; }
 		
 	private:
 
@@ -41,14 +47,10 @@ namespace backend {
 
 	};
 
-	namespace detail
-	{ 
-		AOSD_BACKEND_API IdValueType null_id(); 
-		AOSD_BACKEND_API IdValueType generate_random_id();
-	}
+	
 
 	template< class T >
-	const Id<T> Id<T>::INVALID = detail::null_id();
+	const Id<T> Id<T>::INVALID = boost::uuids::nil_uuid();;
 
 	template< class T >
 	bool operator==( const Id<T>&left, const Id<T>& right ) { return left.value() == right.value(); }
@@ -69,20 +71,41 @@ namespace backend {
 	bool operator>=( const Id<T>&left, const Id<T>& right ) { return left.value() >= right.value(); }
 	
 	template< class T >
-	bool is_valid( const Id<T>& id ) { return id != Id<T>::INVALID; }
+	bool is_valid( const Id<T>& id ) { return id.is_valid(); }
 	
 	template< class T >
-	std::string to_string( const Id<T>& id ) 
-	{ 
-		using namespace std; 
-		return to_string(id.value()); 
+	std::string to_string( const Id<T>& id )
+	{
+		return to_string( id.value() ); 
 	}
 
 	template< class T >
-	std::string to_bytes( const Id<T>& id ) 
+	std::string to_bytes( const Id<T>& id )
+	{
+		using namespace std;
+		return std::string( begin(id.value()), end(id.value) ); 
+	}
+
+	template< class T >
+	Id<T> to_id( const std::string& id_value ) 
 	{ 
-		using namespace std; 
-		return std::string( begin(id.value()), end(id.value()) );  
+		return boost::uuids::string_generator()( id_value );
+	}
+
+	template< class T >
+	std::ostream& operator<<( std::ostream& output, const Id<T>& id )
+	{
+		output << id.value();
+		return output;
+	}
+
+	template< class T >
+	std::istream& operator>>( std::istream& input, Id<T>& id )
+	{
+		IdValueType id_value;
+		input >> id_value;
+		id = id_value;
+		return input;
 	}
 
 	template< class T >
@@ -95,6 +118,11 @@ namespace backend {
 	template< class T >
 	size_t tbb_hasher( const Id<T>& id ) { using namespace boost::uuids; return hash_value(id); }
 	
+	namespace detail
+	{ 
+		AOSD_BACKEND_API IdValueType generate_random_id();
+	}
+
 	/** Generate a new id.
 		This is thread-safe. 
 		The new id will be generated randomly as a UUID.
@@ -102,11 +130,10 @@ namespace backend {
 	template< class T >
 	Id<T> make_id()
 	{
-		const auto new_id = Id<T>( generate_random_id() );
+		const auto new_id = Id<T>( detail::generate_random_id() );
 		UTILCPP_ASSERT( is_valid(new_id), "Generated an invalid id for type " << typeid(T).name() );
 		return new_id;
 	}
-
 
 
 	class Project;
