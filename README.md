@@ -14,7 +14,19 @@ If you want to develop for this project, [check the wiki for setup](https://gith
 
 ### Dependencies
 
- * [AOSLCPP](https://github.com/artofsequence/aosl-cpp): library to read, write and interpret AOSL data.
- * [UtilCPP](https://github.com/artofsequence/utilcpp): some useful C++ tools.
- * [Qt5](http://qt-project.org): default UI library, used only for the visual parts.
- * [Boost](http://boost.org): To complete the standard C++ library.
+Both back-end and front-end implementations are using:
+
+ * [Boost](http://boost.org): to complete the standard C++ library;
+ * [AOSLCPP](https://github.com/artofsequence/aosl-cpp): library to read, write and interpret AOSL data;
+ * [UtilCPP](https://github.com/artofsequence/utilcpp): some useful C++ tools;
+ * [Google Test](https://code.google.com/p/googletest/): unit tests;
+ 
+
+The back-end also relies on:
+
+ * [Intel TBB](http://threadingbuildingblocks.org): concurrent containers and other concurrency tools;
+
+The default front-end relies on Qt:
+
+ * [Qt5](http://qt-project.org): used for GUI implementation;
+ 
