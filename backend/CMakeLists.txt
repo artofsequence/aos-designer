@@ -34,6 +34,13 @@ endif()
 
 include_directories( ${Boost_INCLUDE_DIR} )
 
+# TBB
+
+if( NOT DEFINED TBB_INCLUDE_DIRS )
+	set( TBB_INCLUDE_DIRS "TBB_INCLUDE_DIRS-NOT-SET" CACHE PATH "Location of the Intel TBB include directory." FORCE )
+	message( FATAL_ERROR "AOS Designer back-end requires Intel TBB but it's include directory 'TBB_INCLUDE_DIRS' was NOT FOUND!\nMake sure the 'tbb' target library is available too!" )
+endif()
+
 #####################################################
 # Directories.
 
@@ -146,6 +153,7 @@ target_link_libraries( aosdesigner-backend
 	utilcpp
 	aoslcpp
 )
+add_dependencies( aosdesigner-backend tbb )
 
 # We need the AOSL definition file in the build directory
 add_custom_command( TARGET aosdesigner-backend POST_BUILD 
