@@ -41,6 +41,8 @@ if( NOT DEFINED TBB_INCLUDE_DIRS )
 	message( FATAL_ERROR "AOS Designer back-end requires Intel TBB but it's include directory 'TBB_INCLUDE_DIRS' was NOT FOUND!\nMake sure the 'tbb' target library is available too!" )
 endif()
 
+include_directories( ${TBB_INCLUDE_DIRS} )
+
 #####################################################
 # Directories.
 
@@ -59,6 +61,7 @@ set( AOSD_BACKEND_ROOT_HEADERS
 	${AOSD_BACKEND_HEADER_DIR}/id.hpp
 	${AOSD_BACKEND_HEADER_DIR}/event.hpp
 	${AOSD_BACKEND_HEADER_DIR}/eventdispatcher.hpp
+	${AOSD_BACKEND_HEADER_DIR}/workqueue.hpp
 	${AOSD_BACKEND_HEADER_DIR}/workspace.hpp
 	${AOSD_BACKEND_HEADER_DIR}/taskexecutor.hpp
 	${AOSD_BACKEND_HEADER_DIR}/context.hpp
