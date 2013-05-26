@@ -10,7 +10,7 @@ See Art Of Sequence: http//artofsequence.org
 AOSD uses AOSL to define digital stories, to allow any kind of sequence to be created.
 It also works with exporters which will generate other formats for different interpreters.
 
-If you want to develop for this project, [check the wiki for setup](https://github.com/artofsequence/aos-designer/wiki/).
+If you want to develop for this project, [check this document for setup](https://github.com/artofsequence/aos-all/wiki/Development-Setup).
 
 ### Dependencies
 
