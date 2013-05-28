@@ -168,3 +168,6 @@ add_custom_command( TARGET aosdesigner-backend POST_BUILD
 		${AOSDESIGNER_BUILD_MODE}
 		${AOSDESIGNER_BUILD_DIR}
 )
+
+# Tests
+add_subdirectory( test )
