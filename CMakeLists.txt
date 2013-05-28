@@ -24,8 +24,11 @@ else() # We assume that other compilers will have GCC interface/
 	 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
 endif()
 
-#Force Boost.Thread V4 use for all projects, including dependencies.
+# Force Boost.Thread V4 use for all projects, including dependencies.
 add_definitions( -DBOOST_THREAD_VERSION=4 )
+
+# Use UtilCPP CMake modules
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${UTILCPP_CMAKE_DIR} )
 
 set( AOSDESIGNER_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
 
