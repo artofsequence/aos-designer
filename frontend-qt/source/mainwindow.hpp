@@ -6,7 +6,7 @@
 #include <map>
 #include <QMainWindow>
 
-#include <aosdesigner/backend/editionsessionid.hpp>
+#include <aosdesigner/backend/id.hpp>
 #include "designeractions.hpp"
 #include "editor/editormanager.hpp"
 #include "freewindowmanager.hpp"

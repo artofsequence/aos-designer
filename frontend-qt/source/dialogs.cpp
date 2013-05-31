@@ -7,7 +7,7 @@
 #include "dialog/newprojectdialog.hpp"
 #include "dialog/newsequencedialog.hpp"
 #include "dialog/neweditionsessiondialog.hpp"
-#include "paths.hpp"
+#include <aosdesigner/backend/paths.hpp>
 
 namespace aosd
 {

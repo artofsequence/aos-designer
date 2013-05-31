@@ -5,7 +5,7 @@
 #include <memory>
 #include <QModelIndex>
 
-#include <aosdesigner/backend/editionsessionid.hpp>
+#include <aosdesigner/backend/id.hpp>
 
 #include "editiontoolview.hpp"
 #include "model/modelviewbinder.hpp"

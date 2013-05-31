@@ -5,7 +5,7 @@
 #include <memory>
 #include "editiontoolview.hpp"
 #include "model/modelviewbinder.hpp"
-#include <aosdesigner/backend/sequenceid.hpp>
+#include <aosdesigner/backend/id.hpp>
 
 class QTreeView;
 class QSplitter;
