@@ -4,6 +4,8 @@ include( utilcpp_projects )
 
 UTILCPP_MAKE_TEST_FOR( aosdesigner-backend 
 	SOURCES 
-	id.cpp
-	workqueue.cpp
+		id.cpp
+		workqueue.cpp
+	DEPENDENCIES
+		tbb
 )
