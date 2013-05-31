@@ -6,7 +6,13 @@ project( aosdesigner-backend )
 # Dependencies.
 
 # Boost
-UTILCPP_USE_BOOST()
+UTILCPP_USE_BOOST(
+	system
+	date_time
+	chrono
+	thread
+	filesystem
+)
 
 # TBB
 
@@ -117,7 +123,7 @@ UTILCPP_MAKE_LIBRARY( aosdesigner-backend SHARED
 	INCLUDE_DIRS
 		${AOSD_BACKEND_INCLUDE_DIR}
 		${AOSLCPP_INCLUDE_DIRS}
-		${UTILCPP_INCLUDE_DIR}
+		${TBB_INCLUDE_DIRS}
 	LINK_TARGETS
 		aoslcpp
 	DEPENDENCIES

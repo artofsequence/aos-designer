@@ -23,3 +23,4 @@ set( AOSDESIGNER_BUILD_DIR ${BUILD_DIR}/${AOSDESIGNER_BUILD_MODE} )
 add_subdirectory( backend )
 add_subdirectory( frontend-qt ) # TODO: make it optional
 add_subdirectory( aosdesigner )
+
