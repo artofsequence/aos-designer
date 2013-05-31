@@ -5,19 +5,10 @@ project( aosdesigner-frontend-qt )
 ####################################################
 # Dependencies.
 
-
-set( Boost_USE_STATIC_LIBS        ON )
-set( Boost_USE_MULTITHREADED      ON )
-set( Boost_USE_STATIC_RUNTIME    OFF )
-find_package( Boost REQUIRED COMPONENTS 
-	filesystem 
+UTILCPP_USE_BOOST(
 	system
+	filesystem
 )
-if( NOT Boost_FOUND )
-	message( SEND_ERROR "AOS Designer requires Boost libraries, NOT FOUND!" )
-endif()
-
-include_directories( ${Boost_INCLUDE_DIR} )
 
 
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
@@ -227,7 +218,6 @@ source_group( "\\frontendqt\\_generated\\ui" FILES ${AOSD_FRONTENDQT_GENERATED_H
 ###################################################
 
 # Additional groups
-source_group( "\\_cmake" FILES CMakeLists.txt )
 source_group( "\\frontendqt\\" FILES ${AOSD_FRONTENDQT_ROOT_HEADERS} ${AOSD_FRONTENDQT_ROOT_SOURCES} )
 source_group( "\\frontendqt\\dialog" FILES ${AOSD_FRONTENDQT_DIALOG_HEADERS} ${AOSDESIGNER_DIALOG_SOURCES} )
 source_group( "\\frontendqt\\model" FILES ${AOSD_FRONTENDQT_MODEL_HEADERS} ${AOSD_FRONTENDQT_MODEL_SOURCES} )
@@ -253,24 +243,20 @@ set( AOSD_FRONTENDQT_ALL_SOURCES
 # All the files of the project.
 set( AOSD_FRONTENDQT_ALL_FILES 
 	${AOSD_FRONTENDQT_ALL_SOURCES} 
-	${AOSD_FRONTENDQT_ALL_HEADERS} 
-	CMakeLists.txt
+	${AOSD_FRONTENDQT_ALL_HEADERS}
 )
 
-include_directories( 
-	${AOSD_BACKEND_INCLUDE_DIR}
-	${AOSD_FRONTENDQT_SOURCE_DIR}
-	${AOSD_FRONTENDQT_INCLUDE_DIR}
-	${AOSLCPP_INCLUDE_DIRS}
-	${UTILCPP_INCLUDE_DIR}
-)
-
-add_library( aosdesigner-frontend-qt SHARED ${AOSD_FRONTENDQT_ALL_FILES} )
-target_link_libraries( aosdesigner-frontend-qt
-	${Boost_LIBRARIES}
-	aosdesigner-backend
-	utilcpp 
-	aoslcpp
+UTILCPP_MAKE_LIBRARY( aosdesigner-frontend-qt SHARED
+	SOURCES
+		${AOSD_FRONTENDQT_ALL_FILES}
+	INCLUDE_DIRS
+		${AOSD_BACKEND_INCLUDE_DIR}
+		${AOSD_FRONTENDQT_SOURCE_DIR}
+		${AOSD_FRONTENDQT_INCLUDE_DIR}
+		${AOSLCPP_INCLUDE_DIRS}
+	LINK_TARGETS
+		aosdesigner-backend
+		aoslcpp
 )
 
 qt5_use_modules( aosdesigner-frontend-qt Widgets )
