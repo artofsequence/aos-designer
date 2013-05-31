@@ -141,5 +141,9 @@ add_custom_command( TARGET aosdesigner-backend POST_BUILD
 		${AOSDESIGNER_BUILD_DIR}
 )
 
-# Tests
-add_subdirectory( test )
+# Add the test projects if wanted
+option( AOSD_BACKEND_ENABLE_TESTS "Enable generating test projects for this project." OFF )
+
+if( AOSD_BACKEND_ENABLE_TESTS OR AOSD_ENABLE_ALL_TESTS )
+	add_subdirectory( test )
+endif()

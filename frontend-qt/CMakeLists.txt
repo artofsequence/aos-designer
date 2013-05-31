@@ -266,3 +266,11 @@ add_custom_command( TARGET aosdesigner-frontend-qt POST_BUILD
 		${AOSDESIGNER_BUILD_MODE} 
 		${AOSDESIGNER_BUILD_DIR} 
 )
+
+# Add the test projects if wanted
+option( AOSD_FRONTEND_QT_ENABLE_TESTS "Enable generating test projects for this project." OFF )
+if( AOSD_FRONTEND_QT_ENABLE_TESTS OR AOSD_ENABLE_ALL_TESTS )
+	add_subdirectory( test )
+endif()
+
+

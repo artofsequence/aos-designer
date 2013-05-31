@@ -17,6 +17,8 @@ set( AOSDESIGNER_BUILD_MODE "$(Configuration)" ) #until I find a cross-platform 
 # Target build dir
 set( AOSDESIGNER_BUILD_DIR ${BUILD_DIR}/${AOSDESIGNER_BUILD_MODE} )
 
+option( AOSD_ENABLE_ALL_TESTS "Enable all AOS Designer projects tests." OFF )
+
 #####################################################
 # Projects.
 
