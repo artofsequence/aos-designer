@@ -83,6 +83,36 @@ TEST( Test_EventDispatcher, simple_disconnections )
 
 
 
+TEST( Test_EventDispatcher, simple_source_observation )
+{
+	int all_observations_count = 0;
+	int a_observation_count = 0;
+	int b_observation_count = 0;
+
+	SequenceId id_a = make_id<Sequence>();
+	SequenceId id_b = make_id<Sequence>();
+
+	EventDispatcher dispatcher;
+	dispatcher.connect<event::SequenceAdded>( [&]{ ++all_observations_count; } );
+	dispatcher.connect<event::SequenceAdded>( id_a, [&]{ ++a_observation_count; } );
+	dispatcher.connect<event::SequenceAdded>( id_b, [&]{ ++b_observation_count; } );	
+
+	dispatcher.publish( id_a, event::SequenceAdded() );
+	ASSERT_EQ( all_observations_count, 1 );
+	ASSERT_EQ( a_observation_count, 1 );
+	ASSERT_EQ( b_observation_count, 0 );
+
+	dispatcher.publish( id_b, event::SequenceAdded() );
+	ASSERT_EQ( all_observations_count, 2 );
+	ASSERT_EQ( a_observation_count, 1 );
+	ASSERT_EQ( b_observation_count, 1 );
+
+	dispatcher.publish( event::SequenceAdded() );
+	ASSERT_EQ( all_observations_count, 3 );
+	ASSERT_EQ( a_observation_count, 1 );
+	ASSERT_EQ( b_observation_count, 1 );
+}
+
 TEST( Test_EventDispatcher, simple_use_2_threads )
 {
 	bool project_is_open = false;
@@ -164,3 +194,4 @@ TEST( Test_EventDispatcher, parrallel_connections )
 	observer_thread.join();
 	check_thread.join();
 }
+

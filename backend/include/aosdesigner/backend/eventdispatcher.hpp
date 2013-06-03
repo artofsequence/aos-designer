@@ -28,10 +28,10 @@ namespace backend {
 			m_event_queue.push( [=]{ dispatch( event );	} );			
 		}
 
-		template< class EventType, class SubjectType >
-		void publish( Id<SubjectType> subject_id,  EventType event )
+		template< class EventType, class SourceType >
+		void publish( Id<SourceType> source_id,  EventType event )
 		{
-			m_event_queue.push( [=]{ dispatch( subject_id, event );	} );
+			m_event_queue.push( [=]{ dispatch( source_id, event );	} );
 		}
 
 		void dispatch()
@@ -46,11 +46,11 @@ namespace backend {
 			return observers->connect( std::forward<ObserverType>(observer) );
 		}
 
-		template< class EventType, class SubjectType, class ObserverType >
-		Connection connect( Id<SubjectType> subject_id, ObserverType&& observer )
+		template< class EventType, class SourceType, class ObserverType >
+		Connection connect( Id<SourceType> source_id, ObserverType&& observer )
 		{
 			auto observers = find_or_create_observers<EventType>();
-			return observers->connect( subject_id, std::forward<ObserverType>(observer) );
+			return observers->connect( source_id, std::forward<ObserverType>(observer) );
 		}
 
 	private:
@@ -75,10 +75,31 @@ namespace backend {
 		class EventObservers : public ObserverGroup
 		{
 			static const EventType* dummy() { return nullptr; }
+			typedef boost::signals2::signal< void( EventType )> Signal;
 
-			typedef tbb::concurrent_unordered_map< IdValueType, boost::signals2::signal< void( EventType )> > SpecificSignalIndex;
-			SpecificSignalIndex m_specifics_signals;
-			boost::signals2::signal< void( EventType )> m_global_signal;
+			class SignalSlot // this is because concurrent_unordered_map can't accept move-only types like signal
+			{ 
+				std::shared_ptr<Signal> signal;
+				
+			public:
+				SignalSlot() : signal( std::make_shared<Signal>() ) {}
+				
+				void operator()( const EventType& e ) 
+				{ 
+					auto& s = *signal;
+					s( e );
+				}
+
+				template< class ObserverType >
+				Connection connect( ObserverType&& observer )
+				{
+					return signal->connect( std::forward<ObserverType>( observer ) );
+				}
+			};
+			typedef tbb::concurrent_unordered_map< IdValueType, SignalSlot > SourceSignalIndex;
+
+			SourceSignalIndex m_specifics_signals;
+			Signal m_global_signal;
 			
 		public:
 
@@ -87,9 +108,9 @@ namespace backend {
 				m_global_signal( event );
 			}
 
-			void dispatch( const IdValueType& subject_id, const EventType& event )
+			void dispatch( const IdValueType& source_id, const EventType& event )
 			{
-				auto find_it = m_specifics_signals.find( subject_id );
+				auto find_it = m_specifics_signals.find( source_id );
 				if( find_it != end(m_specifics_signals) )
 				{
 					find_it->second( event );
@@ -109,14 +130,14 @@ namespace backend {
 				return m_global_signal.connect( [=]( const EventType& ){ observer(); } );
 			}
 
-			template< class SubjectType, class ObserverType >
-			auto connect( const Id<SubjectType>& id, ObserverType&& observer ) -> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
+			template< class SourceType, class ObserverType >
+			auto connect( const Id<SourceType>& id, ObserverType&& observer ) -> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
 			{
 				return m_specifics_signals[id.value()].connect( std::forward<ObserverType>(observer) );
 			}
 
-			template< class SubjectType, class ObserverType >
-			auto connect( const Id<SubjectType>& id, ObserverType observer ) -> typename std::conditional< true, Connection, decltype( observer() ) >::type
+			template< class SourceType, class ObserverType >
+			auto connect( const Id<SourceType>& id, ObserverType observer ) -> typename std::conditional< true, Connection, decltype( observer() ) >::type
 			{
 				return m_specifics_signals[id.value()].connect( [=]( const EventType& ){ observer(); } );
 			}
@@ -135,12 +156,12 @@ namespace backend {
 		}
 
 		template< class SubjectId, class EventType >
-		void dispatch( const Id<SubjectId>& subject_id, const EventType& event )
+		void dispatch( const Id<SubjectId>& source_id, const EventType& event )
 		{
 			auto observers = find_observers<EventType>();
 			if( observers )
 			{
-				observers->dispatch( subject_id, event );
+				observers->dispatch( source_id, event );
 			}			
 		}
 
