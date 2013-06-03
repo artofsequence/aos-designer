@@ -165,8 +165,7 @@ namespace std
 
 namespace tbb
 {
-	template<>
-	size_t tbb_hasher( const aosd::backend::IdValueType& id )
+	inline size_t tbb_hasher( const aosd::backend::IdValueType& id )
 	{ 
 		using namespace boost::uuids;
 		return hash_value( id );
