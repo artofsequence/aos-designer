@@ -9,6 +9,7 @@
 #include <utilcpp/assert.hpp>
 #include <aosdesigner/backend/workqueue.hpp>
 
+
 namespace aosd {
 namespace backend {
 
@@ -18,11 +19,12 @@ namespace backend {
 	{
 	public:
 		typedef boost::signals2::connection Connection;		
+		typedef boost::signals2::scoped_connection ScopedConnection;
 
 		EventDispatcher(){} // = default
 
 		template< class EventType >
-		void publish( EventType event )
+		void push( EventType event )
 		{
 			m_event_queue.push( [=]{
 				dispatch( event );
@@ -39,7 +41,7 @@ namespace backend {
 		Connection connect( ObserverType&& observer )
 		{
 			auto observers = find_or_create_observers<EventType>();
-			return observers.connect( std::forward<ObserverType>(observer) );
+			return observers->connect( std::forward<ObserverType>(observer) );
 		}
 
 	private:
@@ -63,7 +65,10 @@ namespace backend {
 		template< class EventType >
 		class EventObservers : public ObserverGroup
 		{
+			static const EventType* dummy() { return nullptr; }
+
 			boost::signals2::signal< void( EventType )> m_signal;
+			
 		public:
 			void dispatch( const EventType& event )
 			{
@@ -71,10 +76,17 @@ namespace backend {
 			}
 
 			template< class ObserverType >
-			Connection connect( ObserverType&& observer )
+			auto connect( ObserverType&& observer ) -> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
 			{
 				return m_signal.connect( std::forward<ObserverType>(observer) );
 			}
+
+			template< class ObserverType >
+			auto connect( ObserverType observer ) -> typename std::conditional< true, Connection, decltype( observer() ) >::type
+			{
+				return m_signal.connect( [=]( const EventType&){ observer(); } );
+			}
+
 		};
 
 		template< class EventType >
@@ -101,7 +113,7 @@ namespace backend {
 		std::shared_ptr<EventObservers<EventType>> create_observer_group()
 		{
 			auto new_group = std::make_shared<EventObservers<EventType>>();
-			auto insert_info = m_observers_index.insert( std::make_pair( typeid(EventType), new_group ) );
+			auto insert_info = m_observers_index.insert( std::make_pair( std::type_index(typeid(EventType)), new_group ) );
 			UTILCPP_ASSERT( insert_info.second == true, "Tried to register a new observer group but there is already an observer group! Type: " 
 				<< typeid(EventType).name() );
 			return std::static_pointer_cast< EventObservers<EventType> >( insert_info.first->second );
@@ -112,7 +124,7 @@ namespace backend {
 		{
 			auto observers = find_observers<EventType>();
 			if( !observers )
-				observers = create_observer_group();
+				observers = create_observer_group<EventType>();
 			UTILCPP_ASSERT_NOT_NULL( observers );
 			return observers;
 		}
@@ -121,5 +133,15 @@ namespace backend {
 	};
 
 }}
+
+namespace tbb
+{
+	template<>
+	size_t tbb_hasher( const std::type_index& idx )
+	{ 
+		return std::hash<std::type_index>()( idx );
+	}
+
+}
 
 #endif
