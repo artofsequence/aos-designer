@@ -108,16 +108,6 @@ namespace backend {
 		return input;
 	}
 
-	template< class T >
-	size_t hash_value( const Id<T>& id ) 
-	{ 
-		using namespace boost::uuids;
-		return hash_value(id.value()); 
-	}
-
-	template< class T >
-	size_t tbb_hasher( const Id<T>& id ) { using namespace boost::uuids; return hash_value(id); }
-	
 	namespace detail
 	{ 
 		AOSD_BACKEND_API IdValueType generate_random_id();
@@ -157,9 +147,37 @@ namespace std
 		size_t operator()(const aosd::backend::Id<T> & id ) const
 		{
 			using namespace boost::uuids;
+			return hash_value( id.value() );
+		}
+	};
+
+	template <> 
+	struct hash< aosd::backend::IdValueType >
+	{
+		size_t operator()(const aosd::backend::IdValueType & id ) const
+		{
+			using namespace boost::uuids;
 			return hash_value( id );
 		}
 	};
 }
+
+
+namespace tbb
+{
+	template<>
+	size_t tbb_hasher( const aosd::backend::IdValueType& id )
+	{ 
+		using namespace boost::uuids;
+		return hash_value( id );
+	}
+
+	template< class T >
+	size_t tbb_hasher( const aosd::backend::Id<T>& id )
+	{ 
+		return tbb_hasher( id.value() );
+	}
+}
+
 
 #endif

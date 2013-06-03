@@ -5,6 +5,9 @@
 #include <fstream>
 #include <cstdio>
 #include <unordered_map>
+
+#include <tbb/concurrent_unordered_map.h>
+
 #include <aosdesigner/backend/id.hpp>
 
 
@@ -33,7 +36,7 @@ TEST( Test_Id, generated_ids_are_unique )
 {
 	IntId k = make_id<int>();
 	IntId l = make_id<int>();
-	
+
 	ASSERT_TRUE( is_valid( k ) );
 	ASSERT_TRUE( is_valid( l ) );
 	ASSERT_NE( k, l );
@@ -41,18 +44,56 @@ TEST( Test_Id, generated_ids_are_unique )
 
 TEST( Test_Id, can_be_used_as_index )
 {
-	std::map< IntId, IntId > id_map;
-	id_map[ make_id<int>() ] = make_id<int>();
-	auto find_it = id_map.find( make_id<int>() );
-	id_map.clear();
+	{
+		std::map< IntId, IntId > id_map;
+		id_map[ make_id<int>() ] = make_id<int>();
+		auto find_it = id_map.find( make_id<int>() );
+		id_map.clear();
+	}
+	
+	{
+		std::map< IdValueType, IntId > id_value_map;
+		id_value_map[ make_id<int>() ] = make_id<int>();
+		auto find_it = id_value_map.find( make_id<int>() );
+		id_value_map.clear();
+	}
+	
 }
 
 TEST( Test_Id, can_be_used_as_hashed_index )
 {
-	std::unordered_map< IntId, IntId > id_map;
-	id_map[ make_id<int>() ] = make_id<int>();
-	auto find_it = id_map.find( make_id<int>() );
-	id_map.clear();
+	{
+		std::unordered_map< IntId, IntId > id_map;
+		id_map[ make_id<int>() ] = make_id<int>();
+		auto find_it = id_map.find( make_id<int>() );
+		id_map.clear();
+	}
+	
+	{
+		std::unordered_map< IdValueType, IntId > id_value_map;
+		id_value_map[ make_id<int>() ] = make_id<int>();
+		auto find_it = id_value_map.find( make_id<int>() );
+		id_value_map.clear();
+	}
+	
+}
+
+TEST( Test_Id, can_be_used_as_tbb_hashed_index )
+{
+	{
+		tbb::concurrent_unordered_map< IntId, IntId > id_map;
+		id_map[ make_id<int>() ] = make_id<int>();
+		auto find_it = id_map.find( make_id<int>() );
+		id_map.clear();
+	}
+	
+	{
+		tbb::concurrent_unordered_map< IdValueType, IntId > id_value_map;
+		id_value_map[ make_id<int>() ] = make_id<int>();
+		auto find_it = id_value_map.find( make_id<int>() );
+		id_value_map.clear();
+	}
+	
 }
 
 TEST( Test_Id, text_serialization )
@@ -79,7 +120,7 @@ TEST( Test_Id, byte_serialization )
 		fout >> l;
 	}
 	remove( file_name );
-	
+
 	ASSERT_EQ( k, l );
 }
 
@@ -87,7 +128,7 @@ TEST( Test_Id, byte_serialization )
 TEST( Test_Id, check_lot_of_ids )
 {
 	std::vector<IntId> ids( 1000 );
-	
+
 	for( auto& id : ids )
 		ASSERT_FALSE( is_valid(id) );
 
@@ -112,5 +153,5 @@ TEST( Test_Id, check_lot_of_ids )
 			ASSERT_NE( id, other_id );
 		}
 	}
-	
+
 }
