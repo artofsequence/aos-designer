@@ -24,12 +24,9 @@ namespace backend {
 		EventDispatcher(){} // = default
 
 		template< class EventType >
-		void push( EventType event )
+		void publish( EventType event )
 		{
-			m_event_queue.push( [=]{
-				dispatch( event );
-			});
-			
+			m_event_queue.push( [=]{ dispatch( event );	} );			
 		}
 
 		void dispatch()

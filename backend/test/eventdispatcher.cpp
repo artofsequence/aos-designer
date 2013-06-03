@@ -20,7 +20,7 @@ TEST( Test_EventDispatcher, simple_use )
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( session_began );
 
-	dispatcher.push( event::ProjectOpen() );
+	dispatcher.publish( event::ProjectOpen() );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( session_began );
 
@@ -28,7 +28,7 @@ TEST( Test_EventDispatcher, simple_use )
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( session_began );
 
-	dispatcher.push( event::SessionBegin() );
+	dispatcher.publish( event::SessionBegin() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( session_began );
 
@@ -50,7 +50,7 @@ TEST( Test_EventDispatcher, simple_disconnections )
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( session_began );
 
-	dispatcher.push( event::ProjectOpen() );
+	dispatcher.publish( event::ProjectOpen() );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( session_began );
 
@@ -59,13 +59,13 @@ TEST( Test_EventDispatcher, simple_disconnections )
 	ASSERT_FALSE( session_began );
 
 	connect_a.disconnect();
-	dispatcher.push( event::ProjectOpen() );
+	dispatcher.publish( event::ProjectOpen() );
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( session_began );
 
 
-	dispatcher.push( event::SessionBegin() );
+	dispatcher.publish( event::SessionBegin() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( session_began );
 
@@ -73,7 +73,7 @@ TEST( Test_EventDispatcher, simple_disconnections )
 	ASSERT_TRUE( project_is_open );
 	ASSERT_TRUE( session_began );
 
-	dispatcher.push( event::SessionBegin() );
+	dispatcher.publish( event::SessionBegin() );
 	connect_b.disconnect();
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
@@ -98,9 +98,9 @@ TEST( Test_EventDispatcher, simple_use_2_threads )
 
 	auto event_publisher_thread = boost::thread::thread( [&]{
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
-		dispatcher.push( event::ProjectOpen() );
+		dispatcher.publish( event::ProjectOpen() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
-		dispatcher.push( event::SessionBegin() );
+		dispatcher.publish( event::SessionBegin() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(300) );
 		publishing_ended = true;
 	});
@@ -126,7 +126,7 @@ TEST( Test_EventDispatcher, parrallel_connections )
 		while( counter < 100 )
 		{
 			boost::this_thread::sleep_for( boost::chrono::milliseconds(8) );
-			dispatcher.push( event::ProjectOpen() );
+			dispatcher.publish( event::ProjectOpen() );
 			dispatcher.dispatch();
 		}
 	});
