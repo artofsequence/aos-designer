@@ -26,7 +26,7 @@ TEST( Test_Id, default_id_is_invalid )
 
 TEST( Test_Id, generated_id_is_valid )
 {
-	IntId k = make_id<int>();
+	IntId k = make_new_id<int>();
 	ASSERT_TRUE( k.is_valid() );
 	ASSERT_TRUE( is_valid( k ) );
 }
@@ -34,8 +34,8 @@ TEST( Test_Id, generated_id_is_valid )
 
 TEST( Test_Id, generated_ids_are_unique )
 {
-	IntId k = make_id<int>();
-	IntId l = make_id<int>();
+	IntId k = make_new_id<int>();
+	IntId l = make_new_id<int>();
 
 	ASSERT_TRUE( is_valid( k ) );
 	ASSERT_TRUE( is_valid( l ) );
@@ -46,15 +46,15 @@ TEST( Test_Id, can_be_used_as_index )
 {
 	{
 		std::map< IntId, IntId > id_map;
-		id_map[ make_id<int>() ] = make_id<int>();
-		auto find_it = id_map.find( make_id<int>() );
+		id_map[ make_new_id<int>() ] = make_new_id<int>();
+		auto find_it = id_map.find( make_new_id<int>() );
 		id_map.clear();
 	}
 	
 	{
 		std::map< IdValueType, IntId > id_value_map;
-		id_value_map[ make_id<int>() ] = make_id<int>();
-		auto find_it = id_value_map.find( make_id<int>() );
+		id_value_map[ make_new_id<int>() ] = make_new_id<int>();
+		auto find_it = id_value_map.find( make_new_id<int>() );
 		id_value_map.clear();
 	}
 	
@@ -64,15 +64,15 @@ TEST( Test_Id, can_be_used_as_hashed_index )
 {
 	{
 		std::unordered_map< IntId, IntId > id_map;
-		id_map[ make_id<int>() ] = make_id<int>();
-		auto find_it = id_map.find( make_id<int>() );
+		id_map[ make_new_id<int>() ] = make_new_id<int>();
+		auto find_it = id_map.find( make_new_id<int>() );
 		id_map.clear();
 	}
 	
 	{
 		std::unordered_map< IdValueType, IntId > id_value_map;
-		id_value_map[ make_id<int>() ] = make_id<int>();
-		auto find_it = id_value_map.find( make_id<int>() );
+		id_value_map[ make_new_id<int>() ] = make_new_id<int>();
+		auto find_it = id_value_map.find( make_new_id<int>() );
 		id_value_map.clear();
 	}
 	
@@ -82,15 +82,15 @@ TEST( Test_Id, can_be_used_as_tbb_hashed_index )
 {
 	{
 		tbb::concurrent_unordered_map< IntId, IntId > id_map;
-		id_map[ make_id<int>() ] = make_id<int>();
-		auto find_it = id_map.find( make_id<int>() );
+		id_map[ make_new_id<int>() ] = make_new_id<int>();
+		auto find_it = id_map.find( make_new_id<int>() );
 		id_map.clear();
 	}
 	
 	{
 		tbb::concurrent_unordered_map< IdValueType, IntId > id_value_map;
-		id_value_map[ make_id<int>() ] = make_id<int>();
-		auto find_it = id_value_map.find( make_id<int>() );
+		id_value_map[ make_new_id<int>() ] = make_new_id<int>();
+		auto find_it = id_value_map.find( make_new_id<int>() );
 		id_value_map.clear();
 	}
 	
@@ -98,7 +98,7 @@ TEST( Test_Id, can_be_used_as_tbb_hashed_index )
 
 TEST( Test_Id, text_serialization )
 {
-	auto k = make_id<int>();
+	auto k = make_new_id<int>();
 	std::string text = to_string(k);
 	auto l = to_id<int>( text );
 	ASSERT_EQ( k, l );
@@ -108,7 +108,7 @@ TEST( Test_Id, byte_serialization )
 {
 	static const auto file_name = "test.test";
 
-	auto k = make_id<int>();
+	auto k = make_new_id<int>();
 	decltype(k) l;
 
 	{
@@ -134,7 +134,7 @@ TEST( Test_Id, check_lot_of_ids )
 
 	for( auto& id : ids )
 	{
-		id = make_id<int>();
+		id = make_new_id<int>();
 		ASSERT_TRUE( is_valid(id) );
 	}
 

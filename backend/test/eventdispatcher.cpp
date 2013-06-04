@@ -89,8 +89,8 @@ TEST( Test_EventDispatcher, simple_source_observation )
 	int a_observation_count = 0;
 	int b_observation_count = 0;
 
-	SequenceId id_a = make_id<Sequence>();
-	SequenceId id_b = make_id<Sequence>();
+	SequenceId id_a = make_new_id<Sequence>();
+	SequenceId id_b = make_new_id<Sequence>();
 
 	EventDispatcher dispatcher;
 	dispatcher.connect<event::SequenceAdded>( [&]{ ++all_observations_count; } );

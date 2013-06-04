@@ -25,7 +25,7 @@ namespace backend {
 		: m_sequence( &sequence )
 		, m_project( project )
 		, m_interpreter( sequence.make_interpreter() )
-		, m_id( make_id<EditionSession>() )
+		, m_id( make_new_id<EditionSession>() )
 		, m_sequence_id( sequence.id() )
 		, m_name( name )
 	{

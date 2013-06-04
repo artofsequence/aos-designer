@@ -118,7 +118,7 @@ namespace backend {
 		The new id will be generated randomly as a UUID.
 	*/
 	template< class T >
-	Id<T> make_id()
+	Id<T> make_new_id()
 	{
 		const auto new_id = Id<T>( detail::generate_random_id() );
 		UTILCPP_ASSERT( is_valid(new_id), "Generated an invalid id for type " << typeid(T).name() );
