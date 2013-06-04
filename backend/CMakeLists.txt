@@ -30,51 +30,51 @@ include_directories( ${TBB_INCLUDE_DIRS} )
 set( AOSD_BACKEND_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include )
 set( AOSD_BACKEND_INCLUDE_DIR ${AOSD_BACKEND_INCLUDE_DIR} PARENT_SCOPE )
 
-set( AOSD_BACKEND_HEADER_DIR ${AOSD_BACKEND_INCLUDE_DIR}/aosdesigner/backend )
+set( AOSD_BACKEND_API_DIR ${AOSD_BACKEND_INCLUDE_DIR}/aosdesigner/backend )
 set( AOSD_BACKEND_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source )
 
 #####################################################
-# Header files.
+# API Header files.
 
-set( AOSD_BACKEND_ROOT_HEADERS
-	${AOSD_BACKEND_HEADER_DIR}/id.hpp
-	${AOSD_BACKEND_HEADER_DIR}/event.hpp
-	${AOSD_BACKEND_HEADER_DIR}/eventdispatcher.hpp
-	${AOSD_BACKEND_HEADER_DIR}/workqueue.hpp
-	${AOSD_BACKEND_HEADER_DIR}/workspace.hpp
-	${AOSD_BACKEND_HEADER_DIR}/taskexecutor.hpp
-	${AOSD_BACKEND_HEADER_DIR}/context.hpp
-	${AOSD_BACKEND_HEADER_DIR}/project.hpp
-	${AOSD_BACKEND_HEADER_DIR}/sequence.hpp
-	${AOSD_BACKEND_HEADER_DIR}/projectinfos.hpp
-	${AOSD_BACKEND_HEADER_DIR}/sequenceinfos.hpp
-	${AOSD_BACKEND_HEADER_DIR}/library.hpp
-	${AOSD_BACKEND_HEADER_DIR}/paths.hpp
+set( AOSD_BACKEND_API_ROOT_HEADERS
+	${AOSD_BACKEND_API_DIR}/id.hpp
+	${AOSD_BACKEND_API_DIR}/event.hpp
+	${AOSD_BACKEND_API_DIR}/eventdispatcher.hpp
+	${AOSD_BACKEND_API_DIR}/workqueue.hpp
+	${AOSD_BACKEND_API_DIR}/workspace.hpp
+	${AOSD_BACKEND_API_DIR}/taskexecutor.hpp
+	${AOSD_BACKEND_API_DIR}/context.hpp
+	${AOSD_BACKEND_API_DIR}/project.hpp
+	${AOSD_BACKEND_API_DIR}/sequence.hpp
+	${AOSD_BACKEND_API_DIR}/projectinfos.hpp
+	${AOSD_BACKEND_API_DIR}/sequenceinfos.hpp
+	${AOSD_BACKEND_API_DIR}/library.hpp
+	${AOSD_BACKEND_API_DIR}/paths.hpp
 )
 
-set( AOSD_BACKEND_EDITION_HEADERS
-	${AOSD_BACKEND_HEADER_DIR}/editionsession.hpp
-	${AOSD_BACKEND_HEADER_DIR}/editionsessioninfos.hpp
+set( AOSD_BACKEND_API_EDITION_HEADERS
+	${AOSD_BACKEND_API_DIR}/editionsession.hpp
+	${AOSD_BACKEND_API_DIR}/editionsessioninfos.hpp
 )
 
-set( AOSD_BACKEND_RESOURCE_HEADERS
-	${AOSD_BACKEND_HEADER_DIR}/resource.hpp
-	${AOSD_BACKEND_HEADER_DIR}/resourceptr.hpp
-	${AOSD_BACKEND_HEADER_DIR}/resourceref.hpp
-	${AOSD_BACKEND_HEADER_DIR}/resourceprovider.hpp
-	${AOSD_BACKEND_HEADER_DIR}/resourcefactory.hpp
-	${AOSD_BACKEND_HEADER_DIR}/resourceinfo.hpp
-	${AOSD_BACKEND_HEADER_DIR}/uri.hpp
+set( AOSD_BACKEND_API_RESOURCE_HEADERS
+	${AOSD_BACKEND_API_DIR}/resource.hpp
+	${AOSD_BACKEND_API_DIR}/resourceptr.hpp
+	${AOSD_BACKEND_API_DIR}/resourceref.hpp
+	${AOSD_BACKEND_API_DIR}/resourceprovider.hpp
+	${AOSD_BACKEND_API_DIR}/resourcefactory.hpp
+	${AOSD_BACKEND_API_DIR}/resourceinfo.hpp
+	${AOSD_BACKEND_API_DIR}/uri.hpp
 )
 
-set( AOSD_BACKEND_HEADERS
-	${AOSD_BACKEND_ROOT_HEADERS}
-	${AOSD_BACKEND_EDITION_HEADERS}
-	${AOSD_BACKEND_RESOURCE_HEADERS}
+set( AOSD_BACKEND_API_HEADERS
+	${AOSD_BACKEND_API_ROOT_HEADERS}
+	${AOSD_BACKEND_API_EDITION_HEADERS}
+	${AOSD_BACKEND_API_RESOURCE_HEADERS}
 )
 
 #####################################################
-# Source files.
+# All non-api source/header files.
 
 set( AOSD_BACKEND_ROOT_SOURCES
 	${AOSD_BACKEND_SOURCE_DIR}/id.cpp
@@ -105,20 +105,23 @@ set( AOSD_BACKEND_SOURCES
 #####################################################
 # Files groups.
 
-source_group( "\\backend" FILES ${AOSD_BACKEND_ROOT_HEADERS} ${AOSD_BACKEND_ROOT_SOURCES} )
-source_group( "\\backend\\edition" FILES ${AOSD_BACKEND_EDITION_HEADERS} ${AOSD_BACKEND_EDITION_SOURCES} )
-source_group( "\\backend\\resource" FILES ${AOSD_BACKEND_RESOURCE_HEADERS} ${AOSD_BACKEND_RESOURCE_SOURCES} )
+source_group( "\\backend_api" FILES ${AOSD_BACKEND_API_ROOT_HEADERS} )
+source_group( "\\backend_api\\edition" FILES ${AOSD_BACKEND_API_EDITION_HEADERS} )
+source_group( "\\backend_api\\resource" FILES ${AOSD_BACKEND_API_RESOURCE_HEADERS} )
+source_group( "\\backend_sources" FILES ${AOSD_BACKEND_ROOT_SOURCES} )
+source_group( "\\backend_sources\\edition" FILES ${AOSD_BACKEND_EDITION_SOURCES} )
+source_group( "\\backend_sources\\resource" FILES ${AOSD_BACKEND_RESOURCE_SOURCES} )
 
 ####################################################
 # Bind them all together.
 
 UTILCPP_MAKE_LIBRARY( aosdesigner-backend SHARED
 	API_HEADERS_DIR
-		${AOSD_BACKEND_HEADER_DIR}
+		${AOSD_BACKEND_API_DIR}
 	API_DEFINE
 		AOSD_BACKEND_API
 	SOURCES
-		${AOSD_BACKEND_HEADERS} 
+		${AOSD_BACKEND_API_HEADERS} 
 		${AOSD_BACKEND_SOURCES}
 	INCLUDE_DIRS
 		${AOSD_BACKEND_INCLUDE_DIR}
