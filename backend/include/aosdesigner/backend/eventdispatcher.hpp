@@ -47,7 +47,7 @@ namespace backend {
 		}
 
 		template< class EventType, class SourceType, class ObserverType >
-		Connection connect( Id<SourceType> source_id, ObserverType&& observer )
+		Connection connect( const Id<SourceType>& source_id, ObserverType&& observer )
 		{
 			auto observers = find_or_create_observers<EventType>();
 			return observers->connect( source_id, std::forward<ObserverType>(observer) );
