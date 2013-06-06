@@ -20,7 +20,7 @@ namespace view
 		setSelectionMode( QAbstractItemView::SingleSelection );
 		setEditTriggers( QAbstractItemView::NoEditTriggers ); // TODO : allow edition but then report the Sequence name change in the Project.Sequence.
 		
-		// the model informations
+		// the model information
 		setModel( &m_string_list );
 
 		// connect to context signals
@@ -59,35 +59,35 @@ namespace view
 	}
 
 
-	void SequenceListView::add_sequence_infos( const backend::Sequence& sequence )
+	void SequenceListView::add_sequence_info( const backend::Sequence& sequence )
 	{
-		auto sequences_infos = m_string_list.stringList();
-		sequences_infos << QString::fromStdString( sequence.name() );
+		auto sequences_info = m_string_list.stringList();
+		sequences_info << QString::fromStdString( sequence.name() );
 
-		m_string_list.setStringList( sequences_infos );
+		m_string_list.setStringList( sequences_info );
 	}
 
 
-	void SequenceListView::remove_sequence_infos( const backend::Sequence& sequence )
+	void SequenceListView::remove_sequence_info( const backend::Sequence& sequence )
 	{
-		auto sequences_infos = m_string_list.stringList();
-		sequences_infos.removeAt( sequences_infos.lastIndexOf( QString::fromStdString( sequence.name() ) ) );
+		auto sequences_info = m_string_list.stringList();
+		sequences_info.removeAt( sequences_info.lastIndexOf( QString::fromStdString( sequence.name() ) ) );
 
-		m_string_list.setStringList( sequences_infos );
+		m_string_list.setStringList( sequences_info );
 	}
 
 
 
 	void SequenceListView::read_sequences( const backend::Project& project )
 	{
-		QStringList sequences_infos;
+		QStringList sequences_info;
 		
 		project.foreach_sequence( [&]( const backend::Sequence& sequence )
 		{
-			sequences_infos << QString::fromStdString( sequence.name() );
+			sequences_info << QString::fromStdString( sequence.name() );
 		});
 
-		m_string_list.setStringList( sequences_infos );
+		m_string_list.setStringList( sequences_info );
 	}
 
 	void SequenceListView::clear()
@@ -109,12 +109,12 @@ namespace view
 
 	void SequenceListView::react_sequence_created( const backend::Sequence& sequence )
 	{
-		add_sequence_infos( sequence );
+		add_sequence_info( sequence );
 	}
 
 	void SequenceListView::react_sequence_deleted( const backend::Sequence& sequence )
 	{
-		remove_sequence_infos( sequence );
+		remove_sequence_info( sequence );
 	}
 
 

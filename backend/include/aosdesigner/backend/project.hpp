@@ -17,22 +17,22 @@ namespace backend
 {
 	class Context;
 	class Sequence;
-	class EditionSession;
-	struct ProjectInfos;
-	struct SequenceInfos;
-	struct EditionSessionInfos;
+	class Editor;
+	struct ProjectInfo;
+	struct SequenceInfo;
+	struct EditorInfo;
 	
 	namespace bfs = boost::filesystem;
 
-	/** Contains a set of Sequences and common informations applied to all those Sequences.
+	/** Contains a set of Sequences and common information applied to all those Sequences.
 
 	*/
 	class AOSD_BACKEND_API Project
 	{
 	public:
 				
-		/** Create a project from basic informations. */
-		explicit Project( Context& context, const ProjectInfos& infos );
+		/** Create a project from basic information. */
+		explicit Project( Context& context, const ProjectInfo& info );
 
 		/** Load a project from a provided project file location. */
 		explicit Project( Context& context, const bfs::path& project_file_path );
@@ -41,7 +41,7 @@ namespace backend
 
 		Context& context() const { return const_cast<Project&>(*this).m_context; }
 
-		/// Path of the file that contain all the project's informations.
+		/// Path of the file that contain all the project's information.
 		bfs::path location() const { return m_location; }
 		
 		/// Path of the directory where this project's file is located.
@@ -57,13 +57,13 @@ namespace backend
 		/** Call the provided function for each Sequence in this project but don't allow to modify them. */
 		void foreach_sequence( std::function< void ( const Sequence& sequence )> func ) const;
 
-		/** Call the provided function for each edition session in this project but don't allow to modify them. */
-		void foreach_edition( std::function< void ( const EditionSession& edition )> func ) const;
+		/** Call the provided function for each editor in this project but don't allow to modify them. */
+		void foreach_edition( std::function< void ( const Editor& edition )> func ) const;
 
 		const Sequence* find_sequence( SequenceId sequence_id ) const {  return const_cast<Project*>(this)->find_sequence(sequence_id); }
 
-		/** Current selected edition session or null if none or if there is no project open. */
-		const EditionSession* selected_edition_session() const { return m_selected_session; }
+		/** Current selected editor or null if none or if there is no project open. */
+		const Editor* selected_editor() const { return m_selected_session; }
 
 		
 	//public slots:
@@ -74,29 +74,29 @@ namespace backend
 		/** Change the name of the project. */
 		void rename( const std::string& new_name );
 
-		/** Create a new "empty" sequence with provided informations. */
-		bool new_sequence( const SequenceInfos& infos );
+		/** Create a new "empty" sequence with provided information. */
+		bool new_sequence( const SequenceInfo& info );
 		
-		/** Create an edition session for the referenced sequence. **/
-		bool new_edition( const EditionSessionInfos& session_infos );
+		/** Create an editor for the referenced sequence. **/
+		bool new_edition( const EditorInfo& editor_info );
 
-		/** Delete an edition session of the project. */
-		bool delete_edition( EditionSessionId session_id );
+		/** Delete an editor of the project. */
+		bool delete_edition( EditorId editor_id );
 
-		/** Select the referred edition session. */
-		void select_edition_session( const EditionSessionId& session_id );
+		/** Select the referred editor. */
+		void select_editor( const EditorId& editor_id );
 
-		/** Deselect the currently selected edition session if any. */
-		void deselect_edition_session();
+		/** Deselect the currently selected editor if any. */
+		void deselect_editor();
 
-		/** Save the project informations and content in the provided location. */
+		/** Save the project information and content in the provided location. */
 		bool save( const bfs::path& filepath )
 		{
 			relocate(filepath);
 			return save();
 		}
 
-		/** Save the project informations and content in the default location. */
+		/** Save the project information and content in the default location. */
 		bool save();
 
 		/** Close this project. */
@@ -110,29 +110,29 @@ namespace backend
 		/** Signal : a sequence have been requested to be destroyed. **/
 		void sequence_deleted( const backend::Sequence& sequence );
 
-		/** Signal : at least one edition session is open now. */
+		/** Signal : at least one editor is open now. */
 		void edition_begin();
 
-		/** Signal : no edition session is open now. */
+		/** Signal : no editor is open now. */
 		void edition_end();
 
-		/** Signal : an edition session have been created. **/
-		void edition_session_created( const backend::EditionSession& edition_session );
+		/** Signal : an editor have been created. **/
+		void editor_created( const backend::Editor& editor );
 		
-		/** Signal : an edition session have been deleted. **/
-		void edition_session_deleted( const backend::EditionSession& edition_session );
+		/** Signal : an editor have been deleted. **/
+		void editor_deleted( const backend::Editor& editor );
 
-		/** Signal : an edition session have began. **/
-		void edition_session_begin( const backend::EditionSession& edition_session );
+		/** Signal : an editor have began. **/
+		void editor_begin( const backend::Editor& editor );
 
-		/** Signal : an edition session will be ended. **/
-		void edition_session_end( const backend::EditionSession& edition_session );
+		/** Signal : an editor will be ended. **/
+		void editor_end( const backend::Editor& editor );
 
-		/** Signal : an edition session have been selected. **/
-		void edition_selected( const backend::EditionSession& edition_session );
+		/** Signal : an editor have been selected. **/
+		void edition_selected( const backend::Editor& editor );
 		
-		/** Signal : an edition session have been deselected. **/
-		void edition_deselected( const backend::EditionSession& edition_session );
+		/** Signal : an editor have been deselected. **/
+		void edition_deselected( const backend::Editor& editor );
 
 		
 		
@@ -146,19 +146,19 @@ namespace backend
 		std::vector<std::unique_ptr< Sequence >> m_sequences;
 
 		/// Sequence edition sessions.
-		std::vector<std::unique_ptr< EditionSession >> m_edit_sessions;
+		std::vector<std::unique_ptr< Editor >> m_edit_sessions;
 
 		/// Name of the project.
 		std::string m_name;
 				
-		/// Path of the file that contain all the project's informations about this project.
+		/// Path of the file that contain all the project's information about this project.
 		bfs::path m_location;
 
 		/// Path of the project's directory.
 		bfs::path m_directory_path;
 
-		/// Currently selected edition session.
-		EditionSession* m_selected_session;
+		/// Currently selected editor.
+		Editor* m_selected_session;
 
 		/// Library containing resources available to all resources in this project.
 		Library m_library;
@@ -166,17 +166,17 @@ namespace backend
 		/// Add a Sequence to this project.
 		void add_sequence( std::unique_ptr<Sequence> sequence );
 
-		/// Add an edition session to this project.
-		void add_edition( std::unique_ptr<EditionSession> sequence );
+		/// Add an editor to this project.
+		void add_edition( std::unique_ptr<Editor> sequence );
 
 		/** Search for a Sequence having the provided id.
 			@return The Sequence we looked after or null if not found. 
 		**/
 		Sequence* find_sequence( const SequenceId& sequence_id );
 
-		/** Search for an edition session having the provided id.
+		/** Search for an editor having the provided id.
 		**/
-		EditionSession* find_edition( EditionSessionId session_id );
+		Editor* find_edition( EditorId editor_id );
 
 	};
 

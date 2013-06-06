@@ -2,7 +2,7 @@
 
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/context.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 
 #include "editor/editor.hpp"
 #include "freewindowmanager.hpp"
@@ -40,23 +40,23 @@ namespace view
 
 	void EditorManager::react_project_open( const backend::Project& project )
 	{
-		connect( &project, SIGNAL(edition_session_begin(const backend::EditionSession&)), this, SLOT(react_edition_session_begin(const backend::EditionSession&)) );
-		connect( &project, SIGNAL(edition_session_end(const backend::EditionSession&)), this, SLOT(react_edition_session_end(const backend::EditionSession&)), Qt::QueuedConnection );
+		connect( &project, SIGNAL(editor_begin(const backend::Editor&)), this, SLOT(react_editor_begin(const backend::Editor&)) );
+		connect( &project, SIGNAL(editor_end(const backend::Editor&)), this, SLOT(react_editor_end(const backend::Editor&)), Qt::QueuedConnection );
 
 		connect( &project, SIGNAL(sequence_created(const backend::Sequence&)), this, SLOT(react_sequence_created(const backend::Sequence&)) );
 		connect( &project, SIGNAL(sequence_deleted(const backend::Sequence&)), this, SLOT(react_sequence_deleted(const backend::Sequence&)), Qt::QueuedConnection );
 
-		const auto* initial_session_selection = project.selected_edition_session();
+		const auto* initial_editor_selection = project.selected_editor();
 
-		project.foreach_edition( [&]( const backend::EditionSession& edition_session ) 
+		project.foreach_edition( [&]( const backend::Editor& editor ) 
 		{
-			add_editor( edition_session );
+			add_editor( editor );
 		});
 
-		if( initial_session_selection )
+		if( initial_editor_selection )
 		{
-			backend::Context::instance().select_edition_session( initial_session_selection->id() );
-			select_editor( initial_session_selection->id() );
+			backend::Context::instance().select_editor( initial_editor_selection->id() );
+			select_editor( initial_editor_selection->id() );
 		}
 
 	}
@@ -71,14 +71,14 @@ namespace view
 	}
 
 
-	void EditorManager::react_edition_session_begin( const backend::EditionSession& edition_session )
+	void EditorManager::react_editor_begin( const backend::Editor& editor )
 	{
-		add_editor( edition_session );
+		add_editor( editor );
 	}
 
-	void EditorManager::react_edition_session_end( const backend::EditionSession& edition_session )
+	void EditorManager::react_editor_end( const backend::Editor& editor )
 	{
-		remove_editor( edition_session );
+		remove_editor( editor );
 	}
 
 
@@ -93,18 +93,18 @@ namespace view
 	}
 
 
-	void EditorManager::select_editor( backend::EditionSessionId session_id )
+	void EditorManager::select_editor( backend::EditorId editor_id )
 	{
-		auto editor = find_editor( session_id );
+		auto editor = find_editor( editor_id );
 		if( editor )
 		{
 			editor->setFocus();
 		}
 	}
 
-	Editor* EditorManager::find_editor( backend::EditionSessionId session_id )
+	Editor* EditorManager::find_editor( backend::EditorId editor_id )
 	{
-		auto editor_it = m_editor_registry.find( session_id );
+		auto editor_it = m_editor_registry.find( editor_id );
 		if( editor_it != m_editor_registry.end() )
 			return editor_it->second.get();
 		else
@@ -112,27 +112,27 @@ namespace view
 		
 	}
 
-	void EditorManager::add_editor( const backend::EditionSession& edition_session )
+	void EditorManager::add_editor( const backend::Editor& editor )
 	{
-		auto editor = std::unique_ptr<Editor>( new Editor( edition_session ) );
+		auto editor = std::unique_ptr<Editor>( new Editor( editor ) );
 		m_window_manager.add_window( *editor );
 
-		m_editor_registry.insert( std::make_pair( edition_session.id(), std::move( editor ) ) );
+		m_editor_registry.insert( std::make_pair( editor.id(), std::move( editor ) ) );
 	}
 
-	void EditorManager::remove_editor( const backend::EditionSession& edition_session )
+	void EditorManager::remove_editor( const backend::Editor& editor )
 	{
-		remove_editor( edition_session.id() );
+		remove_editor( editor.id() );
 	}
 
-	void EditorManager::remove_editor( backend::EditionSessionId session_id )
+	void EditorManager::remove_editor( backend::EditorId editor_id )
 	{
 		// TODO : do it in one search instead of two
-		auto editor = find_editor( session_id );
+		auto editor = find_editor( editor_id );
 		if( editor )
 		{
 			m_window_manager.remove_window( *editor );
-			m_editor_registry.erase( session_id );
+			m_editor_registry.erase( editor_id );
 		}
 	}
 

@@ -48,15 +48,15 @@ namespace view
 		std::unique_ptr< QTreeView > m_layer_list_view;
 		std::unique_ptr< QTreeView > m_layer_objects_view;
 
-		ModelViewBinder<backend::EditionSessionId> m_layer_model_binder;
+		ModelViewBinder<backend::EditorId> m_layer_model_binder;
 		std::unique_ptr< LayerObjectsModel > m_layer_objects_model;
 
 		const aosl::Layer* m_last_selected_layer;
 
-		void begin_edition_session( const backend::EditionSession& edition_session );
-		void end_edition_session( const backend::EditionSession& edition_session );
-		void connect_edition( const backend::EditionSession& edition_session );
-		void disconnect_edition( const backend::EditionSession& edition_session );
+		void begin_editor( const backend::Editor& editor );
+		void end_editor( const backend::Editor& editor );
+		void connect_edition( const backend::Editor& editor );
+		void disconnect_edition( const backend::Editor& editor );
 		
 		void update_layer_objects( const QModelIndex& );
 		

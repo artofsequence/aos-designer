@@ -5,7 +5,7 @@
 
 #include <aosdesigner/backend/context.hpp>
 #include <aosdesigner/backend/project.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 
 #include <aoslcpp/algorithm/iterator.hpp>
 
@@ -31,37 +31,37 @@ namespace view
 	}
 
 
-	void ObjectsView::connect_edition( const backend::EditionSession& edition_session )
+	void ObjectsView::connect_edition( const backend::Editor& editor )
 	{
-		bool has_model = m_model_binder.load( edition_session.id() );
+		bool has_model = m_model_binder.load( editor.id() );
 		if( !has_model )
 		{
-			begin_model( edition_session );
+			begin_model( editor );
 		}
 	}
 
-	void ObjectsView::disconnect_edition( const backend::EditionSession& edition_session )
+	void ObjectsView::disconnect_edition( const backend::Editor& editor )
 	{
 		m_model_binder.unload();
 	}
 
-	void ObjectsView::begin_edition_session( const backend::EditionSession& edition_session )
+	void ObjectsView::begin_editor( const backend::Editor& editor )
 	{
-		begin_model( edition_session );
+		begin_model( editor );
 	}
 
-	void ObjectsView::end_edition_session( const backend::EditionSession& edition_session )
+	void ObjectsView::end_editor( const backend::Editor& editor )
 	{
-		end_model( edition_session.id() );
+		end_model( editor.id() );
 	}
 
-	void ObjectsView::begin_model( const backend::EditionSession& edition_session )
+	void ObjectsView::begin_model( const backend::Editor& editor )
 	{
-		m_model_binder.add( std::unique_ptr<QAbstractItemModel>(new CanvasObjectsModel( edition_session.canvas() )), edition_session.id() );
-		m_model_binder.load( edition_session.id() );
+		m_model_binder.add( std::unique_ptr<QAbstractItemModel>(new CanvasObjectsModel( editor.canvas() )), editor.id() );
+		m_model_binder.load( editor.id() );
 	}
 
-	void ObjectsView::end_model( const backend::EditionSessionId& edition_id )
+	void ObjectsView::end_model( const backend::EditorId& edition_id )
 	{
 		m_model_binder.remove( edition_id );
 	}

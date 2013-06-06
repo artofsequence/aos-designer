@@ -46,28 +46,28 @@ namespace view
 	}
 
 	template< class InfoType, class DialogType>
-	InfoType request_infos()
+	InfoType request_info()
 	{
 		std::unique_ptr<DialogType> dialog( new DialogType() );
 		if( dialog->exec() )
-			return dialog->infos();
+			return dialog->info();
 		else
 			return InfoType();
 	}
 
-	backend::ProjectInfos request_new_project_infos()
+	backend::ProjectInfo request_new_project_info()
 	{
-		return request_infos< backend::ProjectInfos, NewProjectDialog >();
+		return request_info< backend::ProjectInfo, NewProjectDialog >();
 	}
 
-	backend::SequenceInfos request_new_sequence_infos()
+	backend::SequenceInfo request_new_sequence_info()
 	{
-		return request_infos< backend::SequenceInfos, NewSequenceDialog >();
+		return request_info< backend::SequenceInfo, NewSequenceDialog >();
 	}
 
-	backend::EditionSessionInfos request_new_edition_session_infos()
+	backend::EditorInfo request_new_editor_info()
 	{
-		return request_infos< backend::EditionSessionInfos, NewEditionSessionDialog >();
+		return request_info< backend::EditorInfo, NewEditorDialog >();
 	}
 
 }

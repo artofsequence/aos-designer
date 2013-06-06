@@ -12,12 +12,12 @@ namespace view
 		setWidget( new QToolBox() );
 	}
 
-	void ToolboxView::connect_edition( const backend::EditionSession& edition_session )
+	void ToolboxView::connect_edition( const backend::Editor& editor )
 	{
 
 	}
 
-	void ToolboxView::disconnect_edition( const backend::EditionSession& edition_session )
+	void ToolboxView::disconnect_edition( const backend::Editor& editor )
 	{
 
 	}

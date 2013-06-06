@@ -15,8 +15,8 @@ namespace event {
 	{ SequenceId sequence_id; };
 
 	template< class E >
-	struct SessionEvent : public SequenceEvent<E> 
-	{ EditionSessionId edit_id; };
+	struct EditorEvent : public SequenceEvent<E> 
+	{ EditorId editor_id; };
 
 	struct ProjectOpen		: public ProjectEvent<ProjectOpen> {};
 	struct ProjectClosed	: public ProjectEvent<ProjectClosed> {};
@@ -24,8 +24,8 @@ namespace event {
 	struct SequenceAdded	: public SequenceEvent<SequenceAdded> {};
 	struct SequenceRemoved	: public SequenceEvent<SequenceRemoved> {};
 
-	struct SessionBegin		: public SessionEvent<SessionBegin> {};
-	struct SessionEnd		: public SessionEvent<SessionEnd> {};
+	struct EditorBegin		: public EditorEvent<EditorBegin> {};
+	struct EditorEnd		: public EditorEvent<EditorEnd> {};
 
 }}}
 

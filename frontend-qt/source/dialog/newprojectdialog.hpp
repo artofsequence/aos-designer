@@ -5,7 +5,7 @@
 #include <memory>
 #include <QDialog>
 
-#include <aosdesigner/backend/projectinfos.hpp>
+#include <aosdesigner/backend/projectinfo.hpp>
 
 namespace Ui { class NewProjectDialog; }
 
@@ -24,8 +24,8 @@ namespace view
 		NewProjectDialog();
 		~NewProjectDialog();
 
-		/** Provide the basic informations about the project described by the user. */
-		backend::ProjectInfos infos();
+		/** Provide the basic information about the project described by the user. */
+		backend::ProjectInfo info();
 
 	private slots:
 

@@ -10,17 +10,17 @@
 #include <aosdesigner/backend/context.hpp>
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/sequence.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 
 namespace aosd
 {
 namespace view
 {
-	Editor::Editor( const  backend::EditionSession& edition_session )
+	Editor::Editor( const  backend::Editor& editor )
 		: m_canvas_view( new CanvasView )
 		, m_story_view( new StoryView )
-		, m_title( QString::fromStdString( edition_session.name() ) )
-		, m_session_id( edition_session.id() )
+		, m_title( QString::fromStdString( editor.name() ) )
+		, m_editor_id( editor.id() )
 		, m_is_closing( false )
 	{
 		setOrientation( Qt::Vertical );
@@ -30,18 +30,18 @@ namespace view
 
 		setWindowTitle( m_title );
 				
-		UTILCPP_LOG << "Created Editor view for edition session \"" << m_title.toStdString() << "\"";
+		UTILCPP_LOG << "Created Editor view for editor \"" << m_title.toStdString() << "\"";
 
 		const auto& project = backend::Context::instance().current_project();
-		auto sequence = project.find_sequence( edition_session.sequence_id() );
-		update( edition_session.canvas(), sequence->library(), project.library() );
+		auto sequence = project.find_sequence( editor.sequence_id() );
+		update( editor.canvas(), sequence->library(), project.library() );
 
 		setFocusPolicy( Qt::StrongFocus );
 	}
 
 	Editor::~Editor()
 	{
-		UTILCPP_LOG << "Destroyed Editor view for edition session \"" << m_title.toStdString() << "\"";
+		UTILCPP_LOG << "Destroyed Editor view for editor \"" << m_title.toStdString() << "\"";
 	}
 
 	
@@ -52,7 +52,7 @@ namespace view
 		m_is_closing = true;
 
 		// the user did close the window : delete the associated session id
-		if( backend::Context::instance().delete_edition( m_session_id ) )
+		if( backend::Context::instance().delete_edition( m_editor_id ) )
 		{
 			QSplitter::closeEvent( closeEvent );
 		}
@@ -70,12 +70,12 @@ namespace view
 	{
 		UTILCPP_ASSERT_NOT_NULL( event );
 		
-		auto selected_edittion_session = backend::Context::instance().selected_edition_session();
+		auto selected_edittion_session = backend::Context::instance().selected_editor();
 		if( selected_edittion_session
-		&&	selected_edittion_session->id() != this->session_id()
+		&&	selected_edittion_session->id() != this->editor_id()
 		)
 		{
-			backend::Context::instance().select_edition_session( this->session_id() );
+			backend::Context::instance().select_editor( this->editor_id() );
 		}
 		
 

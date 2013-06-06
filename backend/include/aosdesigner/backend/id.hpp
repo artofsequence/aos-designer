@@ -128,11 +128,11 @@ namespace backend {
 
 	class Project;
 	class Sequence;
-	class EditionSession;
+	class Editor;
 
 	typedef Id<Project> ProjectId;
 	typedef Id<Sequence> SequenceId;
-	typedef Id<EditionSession> EditionSessionId;
+	typedef Id<Editor> EditorId;
 
 	
 }}

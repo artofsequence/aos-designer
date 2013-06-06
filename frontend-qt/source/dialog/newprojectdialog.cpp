@@ -86,22 +86,22 @@ namespace view
 	}
 
 
-	core::ProjectInfos NewProjectDialog::infos()
+	core::ProjectInfo NewProjectDialog::info()
 	{
 		
 		const auto location = m_ui->edit_dir_location->text();
 		const auto codename = m_ui->edit_codename->text();
 		const auto name = m_ui->edit_project_name->text();
 
-		core::ProjectInfos infos;
+		core::ProjectInfo info;
 		if( !( location.isEmpty() || codename.isEmpty() ) )
 		{
-			infos.location = path::GENERATE_PROJECT_FILE( boost::filesystem::path( location.toStdString() ), codename.toStdString() );
+			info.location = path::GENERATE_PROJECT_FILE( boost::filesystem::path( location.toStdString() ), codename.toStdString() );
 		}
 
-		infos.name = name.toStdString();
+		info.name = name.toStdString();
 		
-		return infos;
+		return info;
 	}
 
 	void NewProjectDialog::update_project_file()

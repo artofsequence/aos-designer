@@ -16,8 +16,8 @@ namespace view
 {
 	class SequenceListView;
 
-	/** Display the basic informations about a Project and the Sequences it contains.
-		Allows edition of those informations.
+	/** Display the basic information about a Project and the Sequences it contains.
+		Allows edition of those information.
 	*/
 	class ProjectView
 		: public QDockWidget
@@ -36,7 +36,7 @@ namespace view
 
 	private:
 		
-		/// Tabs with different views of the informations of this project.
+		/// Tabs with different views of the information of this project.
 		std::unique_ptr<QTabWidget> m_tabs;
 		
 	};

@@ -6,9 +6,9 @@
 
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/sequence.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 #include <aosdesigner/backend/paths.hpp>
-#include <aosdesigner/backend/projectinfos.hpp>
+#include <aosdesigner/backend/projectinfo.hpp>
 
 namespace aosd
 {
@@ -28,11 +28,11 @@ namespace backend
 
 	}
 	
-	bool Context::new_project( const ProjectInfos& infos )
+	bool Context::new_project( const ProjectInfo& info )
 	{
-		UTILCPP_ASSERT( is_valid( infos ), "Tried to create a new project with invalid informations!" );
+		UTILCPP_ASSERT( is_valid( info ), "Tried to create a new project with invalid information!" );
 		
-		std::unique_ptr<Project> project( new Project( *this, infos ) );
+		std::unique_ptr<Project> project( new Project( *this, info ) );
 		project->save();			// save everything
 
 		const bool project_open = open_project( std::move(project) );
@@ -98,15 +98,15 @@ namespace backend
 	}
 	
 
-	bool Context::new_edition( const EditionSessionInfos& session_infos )
+	bool Context::new_edition( const EditorInfo& editor_info )
 	{
 		if( is_project_open() )
 		{
-			return m_project->new_edition( session_infos );
+			return m_project->new_edition( editor_info );
 		}
 
 		// THINK : replace that with an exception?
-		UTILCPP_LOG_ERROR << "Cannot create a edition session while no project is open!";
+		UTILCPP_LOG_ERROR << "Cannot create a editor while no project is open!";
 
 		return false;
 	}
@@ -140,29 +140,29 @@ namespace backend
 		return false;
 	}
 
-	void Context::select_edition_session( EditionSessionId session_id )
+	void Context::select_editor( EditorId editor_id )
 	{
 		if( is_project_open() )
 		{
-			m_project->select_edition_session( session_id );
+			m_project->select_editor( editor_id );
 		}
 	}
 
-	const EditionSession* Context::selected_edition_session() const
+	const Editor* Context::selected_editor() const
 	{
 		if( is_project_open() )
 		{
-			return m_project->selected_edition_session();
+			return m_project->selected_editor();
 		}
 
 		return nullptr;
 	}
 
-	bool Context::delete_edition( EditionSessionId session_id )
+	bool Context::delete_edition( EditorId editor_id )
 	{
 		if( is_project_open() )
 		{
-			return m_project->delete_edition( session_id );
+			return m_project->delete_edition( editor_id );
 		}
 		return false;
 	}

@@ -12,29 +12,29 @@ using namespace aosd::backend;
 TEST( Test_EventDispatcher, simple_use )
 {
 	bool project_is_open = false;
-	bool session_began = false;
+	bool editor_began = false;
 
 	EventDispatcher dispatcher;
 	dispatcher.connect<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	dispatcher.connect<event::SessionBegin>( [&]( const event::SessionBegin& ev ){ session_began = !session_began; } );
+	dispatcher.connect<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	dispatcher.publish( event::ProjectOpen() );
 	ASSERT_FALSE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
-	dispatcher.publish( event::SessionBegin() );
+	dispatcher.publish( event::EditorBegin() );
 	ASSERT_TRUE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
-	ASSERT_TRUE( session_began );
+	ASSERT_TRUE( editor_began );
 
 }
 
@@ -42,42 +42,42 @@ TEST( Test_EventDispatcher, simple_use )
 TEST( Test_EventDispatcher, simple_disconnections )
 {
 	bool project_is_open = false;
-	bool session_began = false;
+	bool editor_began = false;
 
 	EventDispatcher dispatcher;
 	auto connect_a = dispatcher.connect<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	auto connect_b = dispatcher.connect<event::SessionBegin>( [&]( const event::SessionBegin& ev ){ session_began = !session_began; } );
+	auto connect_b = dispatcher.connect<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	dispatcher.publish( event::ProjectOpen() );
 	ASSERT_FALSE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	connect_a.disconnect();
 	dispatcher.publish( event::ProjectOpen() );
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 
-	dispatcher.publish( event::SessionBegin() );
+	dispatcher.publish( event::EditorBegin() );
 	ASSERT_TRUE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
-	ASSERT_TRUE( session_began );
+	ASSERT_TRUE( editor_began );
 
-	dispatcher.publish( event::SessionBegin() );
+	dispatcher.publish( event::EditorBegin() );
 	connect_b.disconnect();
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
-	ASSERT_TRUE( session_began );
+	ASSERT_TRUE( editor_began );
 
 }
 
@@ -116,21 +116,21 @@ TEST( Test_EventDispatcher, simple_source_observation )
 TEST( Test_EventDispatcher, simple_use_2_threads )
 {
 	bool project_is_open = false;
-	bool session_began = false;
+	bool editor_began = false;
 	std::atomic<bool> publishing_ended = false;
 	
 	EventDispatcher dispatcher;
 
 	dispatcher.connect<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	dispatcher.connect<event::SessionBegin>( [&]( const event::SessionBegin& ev ){ session_began = !session_began; } );
+	dispatcher.connect<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
-	ASSERT_FALSE( session_began );
+	ASSERT_FALSE( editor_began );
 
 	auto event_publisher_thread = boost::thread::thread( [&]{
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
 		dispatcher.publish( event::ProjectOpen() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
-		dispatcher.publish( event::SessionBegin() );
+		dispatcher.publish( event::EditorBegin() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(300) );
 		publishing_ended = true;
 	});
@@ -142,7 +142,7 @@ TEST( Test_EventDispatcher, simple_use_2_threads )
 		dispatcher.dispatch();
 	}
 	ASSERT_TRUE( project_is_open );
-	ASSERT_TRUE( session_began );
+	ASSERT_TRUE( editor_began );
 
 }
 

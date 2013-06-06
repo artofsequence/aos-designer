@@ -2,7 +2,7 @@
 
 #include <aosdesigner/backend/context.hpp>
 #include <aosdesigner/backend/project.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 
 #include <utilcpp/assert.hpp>
 
@@ -36,13 +36,13 @@ namespace view
 		connect( &project, SIGNAL( edition_begin() ), this, SLOT( react_edition_begin() ) );
 		connect( &project, SIGNAL( edition_end() ), this, SLOT( react_edition_end() ) );
 
-		connect( &project, SIGNAL( edition_session_begin( const backend::EditionSession& ) ), this, SLOT( react_edition_session_begin( const backend::EditionSession& ) ) );
-		connect( &project, SIGNAL( edition_session_end( const backend::EditionSession& ) ), this, SLOT( react_edition_session_end( const backend::EditionSession& ) ) );
+		connect( &project, SIGNAL( editor_begin( const backend::Editor& ) ), this, SLOT( react_editor_begin( const backend::Editor& ) ) );
+		connect( &project, SIGNAL( editor_end( const backend::Editor& ) ), this, SLOT( react_editor_end( const backend::Editor& ) ) );
 
-		connect( &project, SIGNAL( edition_selected( const backend::EditionSession& ) ), this, SLOT( react_edition_selected( const backend::EditionSession& ) ) );
-		connect( &project, SIGNAL( edition_deselected( const backend::EditionSession& ) ), this, SLOT( react_edition_deselected( const backend::EditionSession& ) ) );
+		connect( &project, SIGNAL( edition_selected( const backend::Editor& ) ), this, SLOT( react_edition_selected( const backend::Editor& ) ) );
+		connect( &project, SIGNAL( edition_deselected( const backend::Editor& ) ), this, SLOT( react_edition_deselected( const backend::Editor& ) ) );
 		
-		const auto* selected_session = project.selected_edition_session();
+		const auto* selected_session = project.selected_editor();
 		if( selected_session )
 		{
 			react_edition_selected( *selected_session );
@@ -69,28 +69,28 @@ namespace view
 		deactivate();
 	}
 	
-	void EditionToolView::react_edition_session_begin( const backend::EditionSession& edition_session )
+	void EditionToolView::react_editor_begin( const backend::Editor& editor )
 	{
-		UTILCPP_ASSERT( edition_session.is_valid(), "Beginning invalid edition session!" );
-		begin_edition_session( edition_session );
+		UTILCPP_ASSERT( editor.is_valid(), "Beginning invalid editor!" );
+		begin_editor( editor );
 	}
 
-	void EditionToolView::react_edition_session_end( const backend::EditionSession& edition_session )
+	void EditionToolView::react_editor_end( const backend::Editor& editor )
 	{
-		UTILCPP_ASSERT( edition_session.is_valid(), "Ending invalid edition session!" );
-		end_edition_session( edition_session );
+		UTILCPP_ASSERT( editor.is_valid(), "Ending invalid editor!" );
+		end_editor( editor );
 	}
 
-	void EditionToolView::react_edition_selected( const backend::EditionSession& edition_session )
+	void EditionToolView::react_edition_selected( const backend::Editor& editor )
 	{
-		UTILCPP_ASSERT( edition_session.is_valid(), "Selected invalid edition session!" );
-		connect_edition( edition_session );
+		UTILCPP_ASSERT( editor.is_valid(), "Selected invalid editor!" );
+		connect_edition( editor );
 	}
 
-	void EditionToolView::react_edition_deselected( const backend::EditionSession& edition_session )
+	void EditionToolView::react_edition_deselected( const backend::Editor& editor )
 	{
-		UTILCPP_ASSERT( edition_session.is_valid(), "Deselected invalid edition session!" );
-		disconnect_edition( edition_session );
+		UTILCPP_ASSERT( editor.is_valid(), "Deselected invalid editor!" );
+		disconnect_edition( editor );
 	}
 
 	void EditionToolView::change_state( bool is_active )

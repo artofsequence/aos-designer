@@ -30,16 +30,16 @@ namespace view
 	private:
 
 		std::unique_ptr< QTreeView > m_last_changes_view;
-		ModelViewBinder<backend::EditionSessionId> m_model_view_binder;
+		ModelViewBinder<backend::EditorId> m_model_view_binder;
 
-		void begin_edition_session( const backend::EditionSession& edition_session );
-		void end_edition_session( const backend::EditionSession& edition_session );
-		void connect_edition( const backend::EditionSession& edition_session );
-		void disconnect_edition( const backend::EditionSession& edition_session );
+		void begin_editor( const backend::Editor& editor );
+		void end_editor( const backend::Editor& editor );
+		void connect_edition( const backend::Editor& editor );
+		void disconnect_edition( const backend::Editor& editor );
 
-		void update_last_changes( const backend::EditionSession& edition_session );
-		void begin_model( const backend::EditionSession& edition_session );
-		void end_model( const backend::EditionSession& edition_session );
+		void update_last_changes( const backend::Editor& editor );
+		void begin_model( const backend::Editor& editor );
+		void end_model( const backend::Editor& editor );
 	};
 
 

@@ -15,7 +15,7 @@ namespace aosd
 {
 namespace backend 
 { 
-	class EditionSession; 
+	class Editor; 
 	class Project;
 }
 
@@ -36,15 +36,15 @@ namespace view
 	private:
 
 		std::unique_ptr<QTreeView> m_object_tree_view;
-		ModelViewBinder<backend::EditionSessionId> m_model_binder;
+		ModelViewBinder<backend::EditorId> m_model_binder;
 		
-		void begin_edition_session( const backend::EditionSession& edition_session );
-		void end_edition_session( const backend::EditionSession& edition_session );
-		void connect_edition( const backend::EditionSession& edition_session );
-		void disconnect_edition( const backend::EditionSession& edition_session );
+		void begin_editor( const backend::Editor& editor );
+		void end_editor( const backend::Editor& editor );
+		void connect_edition( const backend::Editor& editor );
+		void disconnect_edition( const backend::Editor& editor );
 
-		void begin_model( const backend::EditionSession& edition_session );
-		void end_model( const backend::EditionSessionId& edition_id );
+		void begin_model( const backend::Editor& editor );
+		void end_model( const backend::EditorId& edition_id );
 
 	};
 

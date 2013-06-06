@@ -29,13 +29,13 @@ namespace view
 		using namespace aoslcpp;
 		// go through the object tree and register each object
 
-		std::for_each( objects_iterator_breadth::begin( canvas ), objects_iterator_breadth::end(), [&]( const ObjectTreeNodeInfos& infos )
+		std::for_each( objects_iterator_breadth::begin( canvas ), objects_iterator_breadth::end(), [&]( const ObjectTreeNodeInfo& info )
 		{
-			m_object_registry.insert( std::make_pair( infos.object(), infos ) );
+			m_object_registry.insert( std::make_pair( info.object(), info ) );
 
-			if( infos.depth() == 0 )
+			if( info.depth() == 0 )
 			{
-				m_root_objects.push_back( infos.object() );
+				m_root_objects.push_back( info.object() );
 			}
 
 		});
@@ -92,11 +92,11 @@ namespace view
 		auto object = static_cast< const aosl::Object* >( index.internalPointer() );
 		UTILCPP_ASSERT_NOT_NULL( object );
 
-		auto object_infos = find_infos( *object );
-		if( object_infos.parent() )
+		auto object_info = find_info( *object );
+		if( object_info.parent() )
 		{
-			auto parent_infos = find_infos( *object_infos.parent() );
-			return createIndex( parent_infos.idx(), 0, (void*)parent_infos.object() );
+			auto parent_info = find_info( *object_info.parent() );
+			return createIndex( parent_info.idx(), 0, (void*)parent_info.object() );
 		}
 
 		return QModelIndex();
@@ -104,8 +104,8 @@ namespace view
 
 	Qt::ItemFlags CanvasObjectsModel::flags( const QModelIndex& index ) const
 	{
-		/** auto infos = find( index );
-		if( infos )
+		/** auto info = find( index );
+		if( info )
 		{
 			return Qt::ItemIsSelectable; // TODO : add flags here if necessary
 		}
@@ -135,7 +135,7 @@ namespace view
 				// display a checked object if it's active, unchecked if it's not
 				return object->active() ? Qt::Checked : Qt::Unchecked;
 			}
-			// TODO : add here other informations possible
+			// TODO : add here other information possible
 
 		default:
 			{
@@ -193,7 +193,7 @@ namespace view
 		return !m_root_objects.empty();
 	}
 
-	aoslcpp::ObjectTreeNodeInfos CanvasObjectsModel::find_infos( const aosl::Object& object ) const
+	aoslcpp::ObjectTreeNodeInfo CanvasObjectsModel::find_info( const aosl::Object& object ) const
 	{
 		using namespace aoslcpp;
 
@@ -203,7 +203,7 @@ namespace view
 			return find_it->second;
 		}
 
-		return ObjectTreeNodeInfos();
+		return ObjectTreeNodeInfo();
 	}
 
 

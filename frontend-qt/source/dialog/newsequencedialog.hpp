@@ -5,7 +5,7 @@
 #include <memory>
 #include <QDialog>
 
-#include <aosdesigner/backend/sequenceinfos.hpp>
+#include <aosdesigner/backend/sequenceinfo.hpp>
 
 namespace Ui { class NewSequenceDialog; }
 
@@ -24,8 +24,8 @@ namespace view
 		NewSequenceDialog();
 		~NewSequenceDialog();
 
-		/** Provide the basic informations about the sequence described by the user. */
-		backend::SequenceInfos infos();
+		/** Provide the basic information about the sequence described by the user. */
+		backend::SequenceInfo info();
 
 	private slots:
 

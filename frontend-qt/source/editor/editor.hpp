@@ -21,7 +21,7 @@ namespace aosd
 {
 namespace backend
 { 
-	class EditionSession; 
+	class Editor; 
 	class Library;
 }
 
@@ -40,12 +40,12 @@ namespace view
 		Q_OBJECT
 	public:
 		
-		explicit Editor( const backend::EditionSession& edition_session );
+		explicit Editor( const backend::Editor& editor );
 		~Editor();
 
 		QString title() const { return m_title; }
 
-		backend::EditionSessionId session_id() const { return m_session_id; }
+		backend::EditorId editor_id() const { return m_editor_id; }
 
 		bool is_closing() const { return m_is_closing; }
 
@@ -61,11 +61,11 @@ namespace view
 		std::unique_ptr<StoryView> m_story_view;
 		
 		QString m_title;
-		backend::EditionSessionId m_session_id;
+		backend::EditorId m_editor_id;
 
 		bool m_is_closing;
 		
-		/** We need to delete the edition session when closed. */
+		/** We need to delete the editor when closed. */
 		void closeEvent( QCloseEvent* closeEvent );
 
 		/** We need to detect when there is a change of focus to this editor. */

@@ -1,14 +1,14 @@
-#ifndef HGUARD_AOSD_VIEW_NEWEDITIONSESSIONDIALOG_HPP__
-#define HGUARD_AOSD_VIEW_NEWEDITIONSESSIONDIALOG_HPP__
+#ifndef HGUARD_AOSD_VIEW_NEWEDITORDIALOG_HPP__
+#define HGUARD_AOSD_VIEW_NEWEDITORDIALOG_HPP__
 #pragma once
 
 #include <memory>
 #include <QDialog>
-#include <aosdesigner/backend/editionsessioninfos.hpp>
+#include <aosdesigner/backend/editionsessioninfo.hpp>
 
 namespace Ui
 {
-	class NewEditionSessionDialog;
+	class NewEditorDialog;
 }
 
 namespace aosd
@@ -16,18 +16,18 @@ namespace aosd
 namespace view
 {
 	/** Dialog used to ask the user details on a new sequence to create. */
-	class NewEditionSessionDialog
+	class NewEditorDialog
 		: public QDialog
 	{
 		Q_OBJECT;
 	public:
 
-		NewEditionSessionDialog();
-		~NewEditionSessionDialog();
+		NewEditorDialog();
+		~NewEditorDialog();
 
 	public slots:
 
-		backend::EditionSessionInfos infos() const;
+		backend::EditorInfo info() const;
 
 	private slots:
 
@@ -36,10 +36,10 @@ namespace view
 			
 	private:
 
-		std::unique_ptr< Ui::NewEditionSessionDialog > m_ui;
+		std::unique_ptr< Ui::NewEditorDialog > m_ui;
 
 		
-		void fill_session_selector();
+		void fill_editor_selector();
 	};
 
 }

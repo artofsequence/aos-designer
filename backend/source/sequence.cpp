@@ -19,11 +19,11 @@ namespace aosd
 namespace backend
 {
 
-	Sequence::Sequence( const Project& project, const SequenceInfos& infos )
+	Sequence::Sequence( const Project& project, const SequenceInfo& info )
 		: m_project( project )
-		, m_name( infos.name )
-		, m_location( infos.location )
-		, m_sequence( aoslcpp::make_empty_sequence( infos.name, infos.canvas_width, infos.canvas_height ) )
+		, m_name( info.name )
+		, m_location( info.location )
+		, m_sequence( aoslcpp::make_empty_sequence( info.name, info.canvas_width, info.canvas_height ) )
 		, m_library( m_project.context() )
 	{
 		if( m_sequence )
@@ -90,11 +90,11 @@ namespace backend
 				boost::filesystem::create_directories( sequence_directory );
 			}
 
-			xml_schema::NamespaceInfomap namespace_infos;
-			namespace_infos["aos"].name = aosl::AOSL_XML_NAMESPACE_NAME;
+			xml_schema::NamespaceInfomap namespace_info;
+			namespace_info["aos"].name = aosl::AOSL_XML_NAMESPACE_NAME;
 
 			boost::filesystem::ofstream filestream( sequence_file_path );
-			aosl::serialize_sequence( filestream, *m_sequence, namespace_infos );
+			aosl::serialize_sequence( filestream, *m_sequence, namespace_info );
 		
 			return true;
 

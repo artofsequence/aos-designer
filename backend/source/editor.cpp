@@ -1,4 +1,4 @@
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -21,21 +21,21 @@
 namespace aosd {
 namespace backend {
 	
-	EditionSession::EditionSession( const Project& project, const Sequence& sequence, const std::string& name )
+	Editor::Editor( const Project& project, const Sequence& sequence, const std::string& name )
 		: m_sequence( &sequence )
 		, m_project( project )
 		, m_interpreter( sequence.make_interpreter() )
-		, m_id( make_new_id<EditionSession>() )
+		, m_id( make_new_id<Editor>() )
 		, m_sequence_id( sequence.id() )
 		, m_name( name )
 	{
 		UTILCPP_ASSERT_NOT_NULL( m_sequence ); // TODO : replace this by an throwing an exception at runtime
 	}
 
-	EditionSession::EditionSession( const Project& project, const bfs::path& file_path )
+	Editor::Editor( const Project& project, const bfs::path& file_path )
 		: m_project( project )
 		, m_sequence( nullptr )
-		, m_id( EditionSessionId::INVALID )
+		, m_id( EditorId::INVALID )
 		, m_save_filepath( file_path )
 	{
 		using namespace boost::property_tree;
@@ -50,13 +50,13 @@ namespace backend {
 				return;
 			}
 
-			ptree infos;
-			read_xml( file_stream, infos );
+			ptree info;
+			read_xml( file_stream, info );
 
-			m_id = infos.get<EditionSessionId>( "edition_session.id" );
-			m_name = infos.get<std::string>( "edition_session.name" );
+			m_id = info.get<EditorId>( "editor.id" );
+			m_name = info.get<std::string>( "editor.name" );
 
-			m_sequence_id = infos.get<SequenceId>( "edition_session.sequence" );
+			m_sequence_id = info.get<SequenceId>( "editor.sequence" );
 			if( m_sequence_id.is_valid() )
 			{
 				m_sequence = project.find_sequence( m_sequence_id );
@@ -86,26 +86,26 @@ namespace backend {
 	}
 
 
-	void EditionSession::save( const bfs::path& file_path )
+	void Editor::save( const bfs::path& file_path )
 	{
 		UTILCPP_ASSERT( m_sequence ? m_sequence_id == m_sequence->id() : true, "Edition session isn't in sync with the sequence id!" )
 
 		using namespace boost::property_tree;
 
-		ptree infos;
+		ptree info;
 
 		// write the sequence id
-		infos.put( "edition_session.id", id() );
-		infos.put( "edition_session.name", name() );
-		infos.put( "edition_session.sequence", m_sequence ? m_sequence->id() : SequenceId::INVALID );
+		info.put( "editor.id", id() );
+		info.put( "editor.name", name() );
+		info.put( "editor.sequence", m_sequence ? m_sequence->id() : SequenceId::INVALID );
 
 		// write the path taken in the sequence
 		if( m_interpreter )
 		{
 			m_interpreter->path().for_each_step( [&]( const aoslcpp::StoryPath::Step& step )
 			{
-				//infos.put( "edition_session.steps.move", step.move );
-				//infos.put( "edition_session.steps.stage", step.stage );
+				//info.put( "editor.steps.move", step.move );
+				//info.put( "editor.steps.stage", step.stage );
 			});
 		}
 
@@ -115,7 +115,7 @@ namespace backend {
 			namespace bfs = boost::filesystem;
 			bfs::ofstream file_stream( file_path );
 
-			write_xml( file_stream, infos );
+			write_xml( file_stream, info );
 		}
 		catch( const boost::exception& e )
 		{

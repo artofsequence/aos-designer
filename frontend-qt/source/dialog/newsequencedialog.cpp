@@ -46,17 +46,17 @@ namespace view
 
 	}
 
-	core::SequenceInfos NewSequenceDialog::infos()
+	core::SequenceInfo NewSequenceDialog::info()
 	{
-		core::SequenceInfos infos;
+		core::SequenceInfo info;
 		
-		infos.name = m_ui->edit_name->text().toStdString();
-		infos.location = path::SEQUENCE_FILE( m_ui->edit_codename->text().toStdString() );
-		infos.canvas_width = m_ui->edit_canvas_width->text().toDouble();
-		infos.canvas_height = m_ui->edit_canvas_height->text().toDouble();
-		infos.is_edition_requested = m_ui->check_create_edition->isChecked();
+		info.name = m_ui->edit_name->text().toStdString();
+		info.location = path::SEQUENCE_FILE( m_ui->edit_codename->text().toStdString() );
+		info.canvas_width = m_ui->edit_canvas_width->text().toDouble();
+		info.canvas_height = m_ui->edit_canvas_height->text().toDouble();
+		info.is_edition_requested = m_ui->check_create_edition->isChecked();
 
-		return infos;
+		return info;
 	}
 
 	void NewSequenceDialog::create_sequence()

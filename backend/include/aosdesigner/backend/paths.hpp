@@ -40,7 +40,7 @@ namespace path
 	/// Common library definition file.
 	AOSD_BACKEND_API extern const bfs::path PROJECT_LIBRARY_FILE;
 
-	/// Meta informations common to all the sequences.
+	/// Meta information common to all the sequences.
 	AOSD_BACKEND_API extern const bfs::path PROJECT_META_FILE;
 
 	/// Directory containing the project's sequences.
@@ -49,7 +49,7 @@ namespace path
 	/// Directory that will contain the log file(s).
 	AOSD_BACKEND_API extern const bfs::path LOG_FILE_DIR;
 
-	/// Directory that will contain edition session files.
+	/// Directory that will contain editor files.
 	AOSD_BACKEND_API extern const bfs::path EDITION_SESSIONS_DIR;
 
 	/// Generate the path of a sequence directory.
@@ -58,11 +58,11 @@ namespace path
 	/// Generate the path of a sequence file definition.
 	AOSD_BACKEND_API bfs::path SEQUENCE_FILE( const std::string& sequence_codename );
 
-	/// Project infos file, defining the whole project.
+	/// Project info file, defining the whole project.
 	AOSD_BACKEND_API bfs::path PROJECT_FILE( const std::string& project_codename );
 	
-	/// Edition session infos file, defining a path in a walk in a sequence.
-	AOSD_BACKEND_API bfs::path EDITION_SESSION_FILE( const std::string& edition_session_id );
+	/// Edition session info file, defining a path in a walk in a sequence.
+	AOSD_BACKEND_API bfs::path EDITION_SESSION_FILE( const std::string& editor_id );
 
 	/// Generate a full path of for a (fictive) project file given it's codename and the directory where to find the project's folder.
 	AOSD_BACKEND_API bfs::path GENERATE_PROJECT_FILE( const bfs::path& directory, const std::string& project_codename );

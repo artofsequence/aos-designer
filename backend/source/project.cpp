@@ -11,11 +11,11 @@
 
 #include <utilcpp/assert.hpp>
 
-#include <aosdesigner/backend/projectinfos.hpp>
-#include <aosdesigner/backend/sequenceinfos.hpp>
+#include <aosdesigner/backend/projectinfo.hpp>
+#include <aosdesigner/backend/sequenceinfo.hpp>
 #include <aosdesigner/backend/sequence.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
-#include <aosdesigner/backend/editionsessioninfos.hpp>
+#include <aosdesigner/backend/editor.hpp>
+#include <aosdesigner/backend/editorinfo.hpp>
 #include <aosdesigner/backend/paths.hpp>
 
 namespace aosd
@@ -23,15 +23,15 @@ namespace aosd
 namespace backend
 {
 
-	Project::Project( Context& context, const ProjectInfos& infos )
+	Project::Project( Context& context, const ProjectInfo& info )
 		: m_context( context )
-		, m_location( infos.location )
-		, m_name( infos.name )
-		, m_directory_path( infos.location.parent_path() )
+		, m_location( info.location )
+		, m_name( info.name )
+		, m_directory_path( info.location.parent_path() )
 		, m_selected_session( nullptr )
 		, m_library( m_context )
 	{
-		UTILCPP_ASSERT( is_valid(infos), "Tried to construct a Project with invalid project infos!" );
+		UTILCPP_ASSERT( is_valid(info), "Tried to construct a Project with invalid project info!" );
 	}
 
 	Project::Project( Context& context, const bfs::path& project_file_path )
@@ -50,12 +50,12 @@ namespace backend
 
 		// THINK : move that in a separate function?
 		using namespace boost::property_tree;
-		ptree infos;
+		ptree info;
 
 		try
 		{
 			bfs::ifstream filestream( project_file_path );			
-			read_xml( filestream, infos );
+			read_xml( filestream, info );
 		}
 		catch( const boost::exception& e )
 		{
@@ -64,7 +64,7 @@ namespace backend
 
 		try
 		{
-			m_name = infos.get<std::string>( "project.name" );
+			m_name = info.get<std::string>( "project.name" );
 		}
 		catch( const boost::exception& e )
 		{
@@ -73,7 +73,7 @@ namespace backend
 
 		try
 		{
-			auto sequences = infos.get_child( "project.sequences", ptree() );
+			auto sequences = info.get_child( "project.sequences", ptree() );
 
 			if( !sequences.empty() )
 			{
@@ -106,41 +106,41 @@ namespace backend
 
 		try
 		{
-			auto edition_sessions = infos.get_child( "project.edition", ptree() );
+			auto editors = info.get_child( "project.edition", ptree() );
 
-			if( !edition_sessions.empty() )
+			if( !editors.empty() )
 			{
-				for( const auto& edition_session_it : edition_sessions )
+				for( const auto& editor_it : editors )
 				{
-					if( edition_session_it.first == "session" )
+					if( editor_it.first == "session" )
 					{
-						EditionSessionId session_id;
+						EditorId editor_id;
 						try
 						{
-							 session_id = edition_session_it.second.get_value<EditionSessionId>();
+							 editor_id = editor_it.second.get_value<EditorId>();
 						}
 						catch (const boost::exception& e)
 						{
-							UTILCPP_LOG_ERROR << "Failed to interpret edition session id : [" << edition_session_it.second.get_value<std::string>() << "] : \n" << boost::diagnostic_information(e);
+							UTILCPP_LOG_ERROR << "Failed to interpret editor id : [" << editor_it.second.get_value<std::string>() << "] : \n" << boost::diagnostic_information(e);
 						}
 						
-						if( is_valid( session_id ) )
+						if( is_valid( editor_id ) )
 						{
 							try
 							{
-								const bfs::path session_file_location = directory_path() / path::EDITION_SESSION_FILE( to_string(session_id) );
-								auto session = std::unique_ptr<EditionSession>( new EditionSession( *this, session_file_location ) );
+								const bfs::path editor_file_location = directory_path() / path::EDITION_SESSION_FILE( to_string(editor_id) );
+								auto session = std::unique_ptr<Editor>( new Editor( *this, editor_file_location ) );
 								if( session->is_valid() )
 								{
 									add_edition( std::move(session) );
 
-									UTILCPP_LOG << "Loaded edition session : [" << session_id << "]";
+									UTILCPP_LOG << "Loaded editor : [" << editor_id << "]";
 								}
 								
 							}
 							catch( const boost::exception& e )
 							{
-								UTILCPP_LOG_ERROR << "Failed to load edition session [" << session_id << "] : \n" << boost::diagnostic_information(e);
+								UTILCPP_LOG_ERROR << "Failed to load editor [" << editor_id << "] : \n" << boost::diagnostic_information(e);
 							}
 						}
 						else
@@ -149,26 +149,26 @@ namespace backend
 						}
 						
 					}
-					else if( edition_session_it.first != "selected" )
+					else if( editor_it.first != "selected" )
 					{
-						UTILCPP_LOG_ERROR << "Found an unknown tag! Should be \"session\" instead of \"" << edition_session_it.first << "\"";
+						UTILCPP_LOG_ERROR << "Found an unknown tag! Should be \"session\" instead of \"" << editor_it.first << "\"";
 					}
 				}
 
 				// select the last selected session
-				auto selected_session_id = infos.get<EditionSessionId>("project.edition.selected", EditionSessionId::INVALID);
-				if( is_valid( selected_session_id ) )
+				auto selected_editor_id = info.get<EditorId>("project.edition.selected", EditorId::INVALID);
+				if( is_valid( selected_editor_id ) )
 				{
-					UTILCPP_LOG << "Loaded session to select (if available) : [" << selected_session_id << "]";
-					select_edition_session( selected_session_id );
+					UTILCPP_LOG << "Loaded session to select (if available) : [" << selected_editor_id << "]";
+					select_editor( selected_editor_id );
 				}
 				else
 				{
 					if( !m_edit_sessions.empty() )
 					{
-						const auto last_session_id = m_edit_sessions.back()->id();
-						UTILCPP_LOG << "Selected session not found, will select : [" << last_session_id << "]";
-						select_edition_session( last_session_id ); // select the last session registered if none selected found
+						const auto last_editor_id = m_edit_sessions.back()->id();
+						UTILCPP_LOG << "Selected session not found, will select : [" << last_editor_id << "]";
+						select_editor( last_editor_id ); // select the last session registered if none selected found
 					}
 					else
 					{
@@ -180,7 +180,7 @@ namespace backend
 			}
 			else
 			{
-				UTILCPP_LOG << "No edition session for this project.";
+				UTILCPP_LOG << "No editor for this project.";
 			}
 
 			
@@ -188,7 +188,7 @@ namespace backend
 		}
 		catch( const boost::exception& e )
 		{
-			UTILCPP_LOG_ERROR << "ERROR on Project's edition session loading : \n" << boost::diagnostic_information(e);
+			UTILCPP_LOG_ERROR << "ERROR on Project's editor loading : \n" << boost::diagnostic_information(e);
 		}
 
 		
@@ -230,24 +230,24 @@ namespace backend
 		using namespace boost::property_tree;
 
 		// fill it with properties that needs to be saved
-		ptree infos;
+		ptree info;
 
-		infos.put( "project.name", name() );
+		info.put( "project.name", name() );
 
 		foreach_sequence( [&]( const Sequence& sequence )
 		{ 
-			infos.add( "project.sequences.sequence", sequence.location().generic_string() );
+			info.add( "project.sequences.sequence", sequence.location().generic_string() );
 		});
 
-		foreach_edition( [&]( const EditionSession& edition_session )
+		foreach_edition( [&]( const Editor& editor )
 		{ 
-			infos.add( "project.edition.session", edition_session.id() );
+			info.add( "project.edition.session", editor.id() );
 		});
 
 		if( m_selected_session )
-			infos.add( "project.edition.selected",  m_selected_session->id() );
+			info.add( "project.edition.selected",  m_selected_session->id() );
 
-		// TODO : add other informations here
+		// TODO : add other information here
 		// TODO : manage errors differently
 
 		try
@@ -262,7 +262,7 @@ namespace backend
 			}
 			
 			bfs::ofstream filestream( m_location );
-			write_xml( filestream, infos );
+			write_xml( filestream, info );
 		}
 		catch( const boost::exception& e )
 		{
@@ -275,10 +275,10 @@ namespace backend
 			sequence->save(); 
 		}
 
-		for( auto& edition_session : m_edit_sessions )
+		for( auto& editor : m_edit_sessions )
 		{ 
-			const auto& file_path = directory_path() / path::EDITION_SESSION_FILE( to_string( edition_session->id() ) );
-			edition_session->save( file_path ); 
+			const auto& file_path = directory_path() / path::EDITION_SESSION_FILE( to_string( editor->id() ) );
+			editor->save( file_path ); 
 		}
 
 		return true;
@@ -290,39 +290,39 @@ namespace backend
 			func( *a_sequence );
 	}
 
-	void Project::foreach_edition( std::function< void ( const EditionSession& edition_session )> func ) const
+	void Project::foreach_edition( std::function< void ( const Editor& editor )> func ) const
 	{
 		for( const auto& a_session : m_edit_sessions )
 			func( *a_session );
 	}
 
-	bool Project::new_sequence( const SequenceInfos& infos )
+	bool Project::new_sequence( const SequenceInfo& info )
 	{
-		auto sequence = new Sequence( *this, infos );
+		auto sequence = new Sequence( *this, info );
 		
 		add_sequence( std::unique_ptr<Sequence>( sequence ) );
 		/* TODO: emit */ sequence_created( *sequence );
 
-		if( infos.is_edition_requested )
+		if( info.is_edition_requested )
 		{
-			EditionSessionInfos session_infos;
-			session_infos.name = sequence->name();
-			session_infos.sequence_id = sequence->id();
-			return new_edition( session_infos );
+			EditorInfo editor_info;
+			editor_info.name = sequence->name();
+			editor_info.sequence_id = sequence->id();
+			return new_edition( editor_info );
 		}
 
 		return true;
 	}
 
 
-	bool Project::new_edition( const EditionSessionInfos& session_infos )
+	bool Project::new_edition( const EditorInfo& editor_info )
 	{
-		Sequence* sequence = find_sequence( session_infos.sequence_id );
+		Sequence* sequence = find_sequence( editor_info.sequence_id );
 		
 		if( sequence )
 		{
-			auto session = std::unique_ptr< EditionSession >( new EditionSession( *this, *sequence, session_infos.name ) );
-			/* TODO: emit */ edition_session_created( *session ); // notify the world!
+			auto session = std::unique_ptr< Editor >( new Editor( *this, *sequence, editor_info.name ) );
+			/* TODO: emit */ editor_created( *session ); // notify the world!
 
 			add_edition( std::move(session) );
 
@@ -341,7 +341,7 @@ namespace backend
 	}
 
 
-	void Project::add_edition( std::unique_ptr<EditionSession> edition )
+	void Project::add_edition( std::unique_ptr<Editor> edition )
 	{
 		UTILCPP_ASSERT_NOT_NULL( edition );
 		
@@ -349,7 +349,7 @@ namespace backend
 
 		m_edit_sessions.push_back( std::move( edition ) );
 
-		/* TODO: emit */ edition_session_begin( *m_edit_sessions.back() );
+		/* TODO: emit */ editor_begin( *m_edit_sessions.back() );
 
 		if( is_edition_begin )
 			/* TODO: emit */ edition_begin();
@@ -370,13 +370,13 @@ namespace backend
 			return nullptr;
 	}
 
-	EditionSession* Project::find_edition( EditionSessionId session_id )
+	Editor* Project::find_edition( EditorId editor_id )
 	{
-		if( m_edit_sessions.empty() || !is_valid( session_id ) )
+		if( m_edit_sessions.empty() || !is_valid( editor_id ) )
 			return nullptr;
 
 		auto find_it = std::find_if( m_edit_sessions.begin(), m_edit_sessions.end()
-			, [&]( const std::unique_ptr<EditionSession>& edition_session ){ return edition_session->id() == session_id; } );
+			, [&]( const std::unique_ptr<Editor>& editor ){ return editor->id() == editor_id; } );
 
 		if( find_it != m_edit_sessions.end() )
 			return find_it->get();
@@ -384,15 +384,15 @@ namespace backend
 			return nullptr;
 	}
 
-	void Project::select_edition_session( const EditionSessionId& session_id )
+	void Project::select_editor( const EditorId& editor_id )
 	{
-		EditionSession* edition_session = find_edition( session_id );
+		Editor* editor = find_edition( editor_id );
 
-		if( edition_session )
+		if( editor )
 		{
-			auto* previous_selected_session = selected_edition_session();
+			auto* previous_selected_session = selected_editor();
 
-			m_selected_session = edition_session;
+			m_selected_session = editor;
 
 			if( previous_selected_session )
 			{
@@ -400,12 +400,12 @@ namespace backend
 			}
 
 			UTILCPP_LOG << "Selected session [" << m_selected_session->id() << "] \"" << m_selected_session->name() << "\"";
-			/* TODO: emit */ edition_selected( *selected_edition_session() );
+			/* TODO: emit */ edition_selected( *selected_editor() );
 		}
 
 	}
 
-	void Project::deselect_edition_session()
+	void Project::deselect_editor()
 	{
 		if( m_selected_session )
 		{
@@ -417,63 +417,63 @@ namespace backend
 
 	void Project::close()
 	{
-		deselect_edition_session();
+		deselect_editor();
 
 		// make sure that the world is notified by the closing of all edition sessions, without deleting them
 		for( auto& session : m_edit_sessions )
 		{
-			/* TODO: emit */ edition_session_end( *session );
+			/* TODO: emit */ editor_end( *session );
 		}
 
 		/* TODO: emit */ edition_end();
 	}
 
-	bool Project::delete_edition( EditionSessionId session_id )
+	bool Project::delete_edition( EditorId editor_id )
 	{
-		auto edition_session = find_edition( session_id );
+		auto editor = find_edition( editor_id );
 
-		if( edition_session )
+		if( editor )
 		{
-			if( selected_edition_session() == edition_session )
+			if( selected_editor() == editor )
 			{
-				deselect_edition_session();
+				deselect_editor();
 			}
 				
 			try
 			{
-				auto save_filepath = edition_session->save_filepath();
+				auto save_filepath = editor->save_filepath();
 				
 				if( exists( save_filepath ) )
 				{
 					if( remove( save_filepath ) )
 					{
-						UTILCPP_LOG << "Removed edition session filed : " << save_filepath;
+						UTILCPP_LOG << "Removed editor filed : " << save_filepath;
 					}
 					else
 					{
-						UTILCPP_LOG << "Failed to remove edition session file : " << save_filepath;
+						UTILCPP_LOG << "Failed to remove editor file : " << save_filepath;
 					}
 				}
 				
 			}
 			catch (const boost::exception& e)
 			{
-				UTILCPP_LOG_ERROR << "ERROR on deleting edition session '" << edition_session->name() << "' save file : \n" << boost::diagnostic_information(e) 
+				UTILCPP_LOG_ERROR << "ERROR on deleting editor '" << editor->name() << "' save file : \n" << boost::diagnostic_information(e) 
 					<< "'\nNote : The file will remain but the session will be removed from the Project.";
 			}
 			
 			// now notify the world about the end of this session
-			/* TODO: emit */ edition_session_end( *edition_session );
-			/* TODO: emit */ edition_session_deleted( *edition_session );
+			/* TODO: emit */ editor_end( *editor );
+			/* TODO: emit */ editor_deleted( *editor );
 
-			const auto session_name = edition_session->name();
+			const auto editor_name = editor->name();
 
 			// and delete it
-			m_edit_sessions.erase( std::remove_if( begin(m_edit_sessions), end(m_edit_sessions), [&]( const std::unique_ptr<EditionSession>& session )
-											{ return session->id() == session_id; } )
+			m_edit_sessions.erase( std::remove_if( begin(m_edit_sessions), end(m_edit_sessions), [&]( const std::unique_ptr<Editor>& session )
+											{ return session->id() == editor_id; } )
 											, m_edit_sessions.end() );
 			
-			UTILCPP_LOG << "Edition session \"" << session_name << "\" have been destroyed and removed from the Project";
+			UTILCPP_LOG << "Edition session \"" << editor_name << "\" have been destroyed and removed from the Project";
 
 			if( m_edit_sessions.empty() )
 				/* TODO: emit */ edition_end();

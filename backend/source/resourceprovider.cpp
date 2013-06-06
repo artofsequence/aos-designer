@@ -9,26 +9,26 @@ namespace aosd
 namespace backend
 {
 
-	ResourcePtr ResourceProvider::get( const ResourceInfo& resource_infos )
+	ResourcePtr ResourceProvider::get( const ResourceInfo& resource_info )
 	{
-		auto resource = find( resource_infos );
+		auto resource = find( resource_info );
 
 		if( resource )
 			return resource;
 
-		resource = create_resource( resource_infos );
+		resource = create_resource( resource_info );
 
 		if( resource )
 		{
-			add_resource( resource_infos, resource );
+			add_resource( resource_info, resource );
 		}
 
 		return resource;
 	}
 
-	ResourcePtr ResourceProvider::find( const ResourceInfo& resource_infos )
+	ResourcePtr ResourceProvider::find( const ResourceInfo& resource_info )
 	{
-		auto resource_it = m_resources_registry.find( resource_infos );
+		auto resource_it = m_resources_registry.find( resource_info );
 		if( resource_it != end(m_resources_registry) )
 		{
 			return resource_it->second;
@@ -36,9 +36,9 @@ namespace backend
 		return ResourcePtr();
 	}
 
-	void ResourceProvider::add_resource( const ResourceInfo& resource_infos, ResourcePtr resource )
+	void ResourceProvider::add_resource( const ResourceInfo& resource_info, ResourcePtr resource )
 	{
-		m_resources_registry.insert( std::make_pair( resource_infos, resource ) );
+		m_resources_registry.insert( std::make_pair( resource_info, resource ) );
 	}
 
 

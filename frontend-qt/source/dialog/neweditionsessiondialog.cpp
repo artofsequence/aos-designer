@@ -11,8 +11,8 @@ namespace aosd
 namespace view
 {
 
-	NewEditionSessionDialog::NewEditionSessionDialog()
-		: m_ui( new Ui::NewEditionSessionDialog() )
+	NewEditorDialog::NewEditorDialog()
+		: m_ui( new Ui::NewEditorDialog() )
 	{
 		m_ui->setupUi( this );
 
@@ -21,29 +21,29 @@ namespace view
 		connect( m_ui->button_create			, SIGNAL( clicked() )					, this		, SLOT( create_session() )		);
 		connect( m_ui->selector_sequence		, SIGNAL( currentIndexChanged(int) )	, this		, SLOT( update_name() )			);
 		
-		fill_session_selector();
+		fill_editor_selector();
 		update_name();
 	}
 
-	NewEditionSessionDialog::~NewEditionSessionDialog()
+	NewEditorDialog::~NewEditorDialog()
 	{
 
 	}
 
-	core::EditionSessionInfos NewEditionSessionDialog::infos() const
+	backend::EditorInfo NewEditorDialog::info() const
 	{
-		core::EditionSessionInfos session_infos;
+		backend::EditorInfo editor_info;
 
-		session_infos.name = m_ui->edit_name->text().toStdString();
+		editor_info.name = m_ui->edit_name->text().toStdString();
 
 		UTILCPP_ASSERT_NOT_NULL( m_ui->selector_sequence );
 		auto& selector = *m_ui->selector_sequence;
-		session_infos.sequence_id = selector.itemData( selector.currentIndex() ).toString().toStdString();
+		editor_info.sequence_id = selector.itemData( selector.currentIndex() ).toString().toStdString();
 
-		return session_infos;
+		return editor_info;
 	}
 
-	void NewEditionSessionDialog::create_session()
+	void NewEditorDialog::create_session()
 	{
 		// TODO : check that the names are filled
 		if( !m_ui->edit_name->text().isEmpty() 
@@ -61,7 +61,7 @@ namespace view
 
 	}
 
-	void NewEditionSessionDialog::fill_session_selector()
+	void NewEditorDialog::fill_editor_selector()
 	{
 		const auto& context = core::Context::instance();
 
@@ -79,7 +79,7 @@ namespace view
 		
 	}
 
-	void NewEditionSessionDialog::update_name()
+	void NewEditorDialog::update_name()
 	{
 		auto& selector = *m_ui->selector_sequence;
 		core::SequenceId sequence_id = selector.itemData( selector.currentIndex() ).toString().toStdString();
@@ -87,9 +87,9 @@ namespace view
 		std::size_t edition_count = 0;
 
 		const auto& project = core::Context::instance().current_project();
-		project.foreach_edition( [&]( const core::EditionSession& edition_session )
+		project.foreach_edition( [&]( const core::Editor& editor )
 		{
-			if( sequence_id == edition_session.sequence_id() )
+			if( sequence_id == editor.sequence_id() )
 			{
 				++edition_count;
 			}

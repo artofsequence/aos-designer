@@ -1,5 +1,5 @@
-#ifndef HGUARD_AOSD_BACKEND_EDITIONSESSION_HPP__
-#define HGUARD_AOSD_BACKEND_EDITIONSESSION_HPP__
+#ifndef HGUARD_AOSD_BACKEND_EDITOR_HPP__
+#define HGUARD_AOSD_BACKEND_EDITOR_HPP__
 #pragma once
 
 #include <functional>
@@ -20,26 +20,26 @@ namespace backend {
 
 	namespace bfs = boost::filesystem;
 
-	/** Informations about an edition session of a sequence.
+	/** Information about an editor of a sequence.
 	*/
-	class EditionSession
+	class Editor
 	{
 	public:
 
-		/** Constructor : create a new edition session.
-			@param project		Project in which this edition session occurs.
+		/** Constructor : create a new editor.
+			@param project		Project in which this editor occurs.
 			@param sequence		Sequence that is being walked in.
 			@param name			Name of the session, displayed in views.
 		**/
-		EditionSession( const Project& project, const Sequence& sequence, const std::string& name );
+		Editor( const Project& project, const Sequence& sequence, const std::string& name );
 
-		/**	Constructor : load a edition session from a file.
+		/**	Constructor : load a editor from a file.
 			@param project		Project in which this session occurs.
-			@param file_path	Path of the file containing the session informations.
+			@param file_path	Path of the file containing the session information.
 		**/
-		EditionSession( const Project& project, const bfs::path& file_path );
+		Editor( const Project& project, const bfs::path& file_path );
 	
-		EditionSessionId id() const { return m_id; }
+		EditorId id() const { return m_id; }
 		SequenceId sequence_id() const { return m_sequence_id; }
 
 		const std::string& name() const { return m_name; }
@@ -53,7 +53,7 @@ namespace backend {
 		
 	// public slots:
 
-		/** Save this edition session state in a file at the provided path. */
+		/** Save this editor state in a file at the provided path. */
 		void save( const bfs::path& file_path );
 	
 	private:
@@ -66,7 +66,7 @@ namespace backend {
 		const Project& m_project;
 		const Sequence* m_sequence;
 
-		EditionSessionId m_id;
+		EditorId m_id;
 		SequenceId m_sequence_id;
 	};
 

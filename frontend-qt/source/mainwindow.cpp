@@ -8,7 +8,7 @@
 #include <aosdesigner/backend/context.hpp>
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/sequence.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 
 #include "projectview.hpp"
 #include "librariesview.hpp"

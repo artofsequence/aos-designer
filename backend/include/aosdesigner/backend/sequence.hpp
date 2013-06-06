@@ -8,7 +8,7 @@
 
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/sequenceinfos.hpp>
+#include <aosdesigner/backend/sequenceinfo.hpp>
 #include <aosdesigner/backend/library.hpp>
 #include <aoslcpp/sequenceinterpreter.hpp>
 
@@ -31,13 +31,13 @@ namespace backend
 	{
 	public:
 
-		/** Create a new sequence using the provided informations.
+		/** Create a new sequence using the provided information.
 			@param project		Project in which this sequence exists.
-			@param infos		Informations required to build the sequence.
+			@param info		Information required to build the sequence.
 		*/
-		Sequence( const Project& project, const SequenceInfos& infos );
+		Sequence( const Project& project, const SequenceInfo& info );
 
-		/** Create the sequence by loading informations from the AOSL file at the the provided path.
+		/** Create the sequence by loading information from the AOSL file at the the provided path.
 			The path have to be 
 		*/
 		Sequence( const Project& project, boost::filesystem::path sequence_file_path );

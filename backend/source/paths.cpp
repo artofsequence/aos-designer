@@ -44,9 +44,9 @@ namespace path
 	}
 
 
-	bfs::path EDITION_SESSION_FILE( const std::string& edition_session_id )
+	bfs::path EDITION_SESSION_FILE( const std::string& editor_id )
 	{
-		return EDITION_SESSIONS_DIR / ("edit-" + edition_session_id + EDITION_SESSION_FILE_EXTENSION ) ;
+		return EDITION_SESSIONS_DIR / ("edit-" + editor_id + EDITION_SESSION_FILE_EXTENSION ) ;
 	}
 
 

@@ -48,15 +48,15 @@ namespace view
 		*/
 		void read_sequences( const backend::Project& project );
 
-		/** Clear the displayed infos. */
+		/** Clear the displayed info. */
 		void clear();
 
 		void connect_context();
 		void connect_project( const backend::Project& project );
 		void disconnect_project( const backend::Project& project );
 
-		void add_sequence_infos( const backend::Sequence& sequence );
-		void remove_sequence_infos( const backend::Sequence& sequence );
+		void add_sequence_info( const backend::Sequence& sequence );
+		void remove_sequence_info( const backend::Sequence& sequence );
 
 	};
 

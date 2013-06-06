@@ -26,7 +26,7 @@ namespace aosd
 	private:
 
 		
-		/// Current context informations of the application : opened project, opened sequence, etc.
+		/// Current context information of the application : opened project, opened sequence, etc.
 		std::unique_ptr<backend::Context> m_context;
 		
 		/// Application view.

@@ -47,10 +47,10 @@ namespace view
 		
 	private:
 
-		std::map< const aosl::Object*, aoslcpp::ObjectTreeNodeInfos > m_object_registry;
+		std::map< const aosl::Object*, aoslcpp::ObjectTreeNodeInfo > m_object_registry;
 		std::vector< const aosl::Object* > m_root_objects;
 
-		aoslcpp::ObjectTreeNodeInfos find_infos( const aosl::Object& object ) const;
+		aoslcpp::ObjectTreeNodeInfo find_info( const aosl::Object& object ) const;
 
 	};
 

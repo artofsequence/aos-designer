@@ -17,7 +17,7 @@ namespace aosd
 		
 		
 
-		// TODO : add version informations to logs 
+		// TODO : add version information to logs 
 	}
 
 	Application::~Application()

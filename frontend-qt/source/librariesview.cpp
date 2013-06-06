@@ -6,7 +6,7 @@
 #include <aosdesigner/backend/context.hpp>
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/sequence.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 #include <aosdesigner/backend/sequence.hpp>
 #include "model/librarymodel.hpp"
 
@@ -35,15 +35,15 @@ namespace view
 		setWidget( m_splitter.get() );
 	}
 
-	void LibrariesView::connect_edition( const backend::EditionSession& edition_session )
+	void LibrariesView::connect_edition( const backend::Editor& editor )
 	{
-		if( m_sequence_model_view_binder.current_id() != edition_session.sequence_id() )
+		if( m_sequence_model_view_binder.current_id() != editor.sequence_id() )
 		{
-			m_sequence_model_view_binder.load( edition_session.sequence_id() );
+			m_sequence_model_view_binder.load( editor.sequence_id() );
 		}
 	}
 
-	void LibrariesView::disconnect_edition( const backend::EditionSession& edition_session )
+	void LibrariesView::disconnect_edition( const backend::Editor& editor )
 	{
 		m_sequence_model_view_binder.unload();
 	}
@@ -64,15 +64,15 @@ namespace view
 		m_sequence_model_view_binder.clear();
 	}
 
-	void LibrariesView::begin_edition_session( const backend::EditionSession& edition_session )
+	void LibrariesView::begin_editor( const backend::Editor& editor )
 	{
-		if( m_sequence_model_view_binder.find( edition_session.sequence_id() ) == nullptr )
+		if( m_sequence_model_view_binder.find( editor.sequence_id() ) == nullptr )
 		{
-			auto sequence = backend::Context::instance().current_project().find_sequence( edition_session.sequence_id() );
+			auto sequence = backend::Context::instance().current_project().find_sequence( editor.sequence_id() );
 
 			UTILCPP_ASSERT_NOT_NULL( sequence );
-			UTILCPP_ASSERT( sequence->id() == edition_session.sequence_id(), "Sequence found with an id doesn't contain the same Id???? "
-				<<	" Find id : " << edition_session.sequence_id()
+			UTILCPP_ASSERT( sequence->id() == editor.sequence_id(), "Sequence found with an id doesn't contain the same Id???? "
+				<<	" Find id : " << editor.sequence_id()
 				<<  " Got id : " << sequence->id() 
 				);
 
@@ -82,16 +82,16 @@ namespace view
 
 	}
 
-	void LibrariesView::end_edition_session( const backend::EditionSession& edition_session )
+	void LibrariesView::end_editor( const backend::Editor& editor )
 	{
 		const auto& project = backend::Context::instance().current_project();
 
 		bool no_more_edition_for_this_sequence = true;
 
-		project.foreach_edition( [&]( const backend::EditionSession& other_session )
+		project.foreach_edition( [&]( const backend::Editor& other_session )
 		{
-			if(	&other_session != &edition_session
-			&&	other_session.sequence_id() == edition_session.sequence_id() 
+			if(	&other_session != &editor
+			&&	other_session.sequence_id() == editor.sequence_id() 
 			)
 			{
 				no_more_edition_for_this_sequence = false;
@@ -99,7 +99,7 @@ namespace view
 		});
 
 		if( no_more_edition_for_this_sequence )
-			m_sequence_model_view_binder.remove( edition_session.sequence_id() );
+			m_sequence_model_view_binder.remove( editor.sequence_id() );
 	}
 
 	void LibrariesView::add_sequence_library( const backend::Sequence& sequence )

@@ -26,8 +26,8 @@ namespace view
 		explicit ModelViewBinder( QAbstractItemView& viewer );
 		~ModelViewBinder();
 
-		void add( std::unique_ptr< QAbstractItemModel > model, const IdType& session_id );
-		void remove( const IdType& session_id );
+		void add( std::unique_ptr< QAbstractItemModel > model, const IdType& editor_id );
+		void remove( const IdType& editor_id );
 		void clear();
 
 		/**	Will load the model associated with the provided session id.
@@ -73,16 +73,16 @@ namespace view
 	}
 
 	template< class IdType >
-	void ModelViewBinder<IdType>::add( std::unique_ptr< QAbstractItemModel > model, const IdType& session_id )
+	void ModelViewBinder<IdType>::add( std::unique_ptr< QAbstractItemModel > model, const IdType& editor_id )
 	{
-		UTILCPP_ASSERT( m_registry.find( session_id ) == m_registry.end(), "Tried to begin edition session already registered : " << session_id );
-		m_registry.insert( std::make_pair( session_id, std::move( model ) ) );
+		UTILCPP_ASSERT( m_registry.find( editor_id ) == m_registry.end(), "Tried to begin editor already registered : " << editor_id );
+		m_registry.insert( std::make_pair( editor_id, std::move( model ) ) );
 	}
 
 	template< class IdType >
-	void ModelViewBinder<IdType>::remove( const IdType& session_id )
+	void ModelViewBinder<IdType>::remove( const IdType& editor_id )
 	{
-		m_registry.erase( session_id );
+		m_registry.erase( editor_id );
 	}
 
 	template< class IdType >
@@ -93,13 +93,13 @@ namespace view
 	}
 
 	template< class IdType >
-	bool ModelViewBinder<IdType>::load( const IdType& session_id )
+	bool ModelViewBinder<IdType>::load( const IdType& editor_id )
 	{
-		auto model = find( session_id );
+		auto model = find( editor_id );
 		if( model )
 		{
 			bind_to_view( model );
-			m_id = session_id;
+			m_id = editor_id;
 			return true;
 		}
 		else
@@ -114,9 +114,9 @@ namespace view
 	}
 
 	template< class IdType >
-	QAbstractItemModel* ModelViewBinder<IdType>::find( const IdType& session_id )
+	QAbstractItemModel* ModelViewBinder<IdType>::find( const IdType& editor_id )
 	{
-		auto find_it = m_registry.find( session_id );
+		auto find_it = m_registry.find( editor_id );
 		if( find_it != m_registry.end() )
 			return find_it->second.get();
 

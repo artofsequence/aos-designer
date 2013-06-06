@@ -10,7 +10,7 @@ namespace aosd
 namespace backend
 {
 	class Project;
-	class EditionSession;
+	class Editor;
 }
 
 namespace view
@@ -28,11 +28,11 @@ namespace view
 		void deactivate()  { change_state( false ); }
 
 
-		virtual void begin_edition_session( const backend::EditionSession& edition_session ) = 0;
-		virtual void end_edition_session( const backend::EditionSession& edition_session ) = 0;
+		virtual void begin_editor( const backend::Editor& editor ) = 0;
+		virtual void end_editor( const backend::Editor& editor ) = 0;
 
-		virtual void connect_edition( const backend::EditionSession& edition_session ) = 0;
-		virtual void disconnect_edition( const backend::EditionSession& edition_session ) = 0;
+		virtual void connect_edition( const backend::Editor& editor ) = 0;
+		virtual void disconnect_edition( const backend::Editor& editor ) = 0;
 
 		virtual void connect_project( const backend::Project& project ) {}
 		virtual void disconnect_project( const backend::Project& project ) {}
@@ -46,11 +46,11 @@ namespace view
 		void react_edition_begin();
 		void react_edition_end();
 
-		void react_edition_session_begin( const backend::EditionSession& edition_session );
-		void react_edition_session_end( const backend::EditionSession& edition_session );
+		void react_editor_begin( const backend::Editor& editor );
+		void react_editor_end( const backend::Editor& editor );
 
-		void react_edition_selected( const backend::EditionSession& edition_session );
-		void react_edition_deselected( const backend::EditionSession& edition_session );
+		void react_edition_selected( const backend::Editor& editor );
+		void react_edition_deselected( const backend::Editor& editor );
 		
 	private:
 		

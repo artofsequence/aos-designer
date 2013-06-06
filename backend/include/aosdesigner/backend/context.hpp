@@ -13,11 +13,11 @@ namespace aosd
 namespace backend
 {
 	class Project;
-	struct ProjectInfos;
+	struct ProjectInfo;
 	class Sequence;
-	struct SequenceInfos;
-	class EditionSession;
-	struct EditionSessionInfos;
+	struct SequenceInfo;
+	class Editor;
+	struct EditorInfo;
 
 	/** TODO: MISSING DOCUMENTATION
 	*/
@@ -34,19 +34,19 @@ namespace backend
 		/** Current project open for edition. */
 		const Project& current_project() const;
 
-		/** Current selected edition session or null if none or if there is no project open. */
-		const EditionSession* selected_edition_session() const;
+		/** Current selected editor or null if none or if there is no project open. */
+		const Editor* selected_editor() const;
 
 		ResourceProvider& resource_provider() { return m_resource_provider; }
 		
 
 	// public slots:
 
-		/** Create a new empty project using the provided informations and set it as the current project.
+		/** Create a new empty project using the provided information and set it as the current project.
 			If there was already a project open, it will be closed first.
 			@return false if the project creation process failed, true otherwise.
 		*/
-		bool new_project( const ProjectInfos& infos );
+		bool new_project( const ProjectInfo& info );
 
 		/** Close the currently open project. */
 		void close_project();
@@ -62,19 +62,19 @@ namespace backend
 		/** Close the current project without saving it and load the last saved version of it. */
 		bool restore_project();
 
-		/** Create a new edition session for a sequence of the project.
-			@param session_infos Informations necessary to create a new edition session.
-			@return false if the edition session creation failed or if there is no project currently open, true otherwise.
+		/** Create a new editor for a sequence of the project.
+			@param editor_info Information necessary to create a new editor.
+			@return false if the editor creation failed or if there is no project currently open, true otherwise.
 		**/
-		bool new_edition( const EditionSessionInfos& session_infos );
+		bool new_edition( const EditorInfo& editor_info );
 
-		/** Delete an edition session of the current project.
-			@return false if the edition session deletion failed or was canceled or if the edition session was not found. 
+		/** Delete an editor of the current project.
+			@return false if the editor deletion failed or was canceled or if the editor was not found. 
 		**/
-		bool delete_edition( EditionSessionId session_id );
+		bool delete_edition( EditorId editor_id );
 
-		/** Select the referred edition session. */
-		void select_edition_session( EditionSessionId session_id );
+		/** Select the referred editor. */
+		void select_editor( EditorId editor_id );
 		
 	// signals:
 

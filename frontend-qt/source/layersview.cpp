@@ -6,7 +6,7 @@
 #include <QTreeView>
 
 #include <aosl/layer.hpp>
-#include <aosdesigner/backend/editionsession.hpp>
+#include <aosdesigner/backend/editor.hpp>
 #include "model/canvaslayersmodel.hpp"
 #include "model/layerobjectsmodel.hpp"
 
@@ -41,32 +41,32 @@ namespace view
 		m_layer_objects_view->setModel( nullptr );
 	}
 
-	void LayersView::connect_edition( const backend::EditionSession& edition_session )
+	void LayersView::connect_edition( const backend::Editor& editor )
 	{
 		// first load the layer list
-		bool has_model = m_layer_model_binder.load( edition_session.id() );
+		bool has_model = m_layer_model_binder.load( editor.id() );
 		if( !has_model )
 		{
-			begin_edition_session( edition_session );
-			m_layer_model_binder.load( edition_session.id() );
+			begin_editor( editor );
+			m_layer_model_binder.load( editor.id() );
 		}
 		
 	}
 
-	void LayersView::disconnect_edition( const backend::EditionSession& edition_session )
+	void LayersView::disconnect_edition( const backend::Editor& editor )
 	{
 		m_layer_model_binder.unload();
 		m_layer_objects_model->clear();
 	}
 
-	void LayersView::begin_edition_session( const backend::EditionSession& edition_session )
+	void LayersView::begin_editor( const backend::Editor& editor )
 	{
-		m_layer_model_binder.add( std::unique_ptr<QAbstractItemModel>( new CanvasLayersModel( edition_session.canvas() ) ), edition_session.id() );
+		m_layer_model_binder.add( std::unique_ptr<QAbstractItemModel>( new CanvasLayersModel( editor.canvas() ) ), editor.id() );
 	}
 
-	void LayersView::end_edition_session( const backend::EditionSession& edition_session )
+	void LayersView::end_editor( const backend::Editor& editor )
 	{
-		m_layer_model_binder.remove( edition_session.id() );
+		m_layer_model_binder.remove( editor.id() );
 	}
 
 	void LayersView::react_layer_clicked( const QModelIndex& layer_index )

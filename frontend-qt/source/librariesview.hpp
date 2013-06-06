@@ -43,10 +43,10 @@ namespace view
 		ModelViewBinder<backend::SequenceId> m_sequence_model_view_binder;
 		
 
-		void begin_edition_session( const backend::EditionSession& edition_session );
-		void end_edition_session( const backend::EditionSession& edition_session );
-		void connect_edition( const backend::EditionSession& edition_session );
-		void disconnect_edition( const backend::EditionSession& edition_session );
+		void begin_editor( const backend::Editor& editor );
+		void end_editor( const backend::Editor& editor );
+		void connect_edition( const backend::Editor& editor );
+		void disconnect_edition( const backend::Editor& editor );
 		void connect_project( const backend::Project& project );
 		void disconnect_project( const backend::Project& project );
 

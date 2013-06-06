@@ -16,15 +16,15 @@ namespace backend
 	{
 	public:
 		
-		ResourcePtr get( const ResourceInfo& resource_infos );
+		ResourcePtr get( const ResourceInfo& resource_info );
 		
 		
 	private:
 
 		std::map< ResourceInfo, ResourcePtr > m_resources_registry;
 
-		ResourcePtr find( const ResourceInfo& resource_infos );
-		void add_resource( const ResourceInfo& resource_infos, ResourcePtr resource );
+		ResourcePtr find( const ResourceInfo& resource_info );
+		void add_resource( const ResourceInfo& resource_info, ResourcePtr resource );
 
 	};
 

@@ -4,9 +4,9 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <aosdesigner/backend/projectinfos.hpp>
-#include <aosdesigner/backend/sequenceinfos.hpp>
-#include <aosdesigner/backend/editionsessioninfos.hpp>
+#include <aosdesigner/backend/projectinfo.hpp>
+#include <aosdesigner/backend/sequenceinfo.hpp>
+#include <aosdesigner/backend/editorinfo.hpp>
 
 namespace aosd
 {
@@ -31,13 +31,13 @@ namespace view
 	void show_welcome_screen();
 
 	/** Show the dialog to create a new project. */
-	backend::ProjectInfos request_new_project_infos();
+	backend::ProjectInfo request_new_project_info();
 
 	/** Show the dialog to create a new sequence. */
-	backend::SequenceInfos request_new_sequence_infos();
+	backend::SequenceInfo request_new_sequence_info();
 
-	/** Show the dialog to create a new edition session. */
-	backend::EditionSessionInfos request_new_edition_session_infos();
+	/** Show the dialog to create a new editor. */
+	backend::EditorInfo request_new_editor_info();
 
 }
 }
