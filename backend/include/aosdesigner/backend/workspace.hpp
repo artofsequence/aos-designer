@@ -28,7 +28,7 @@ namespace backend {
 		template< class TaskType >
 		auto schedule( TaskType task ) -> boost::future<decltype(task())>;
 
-		EventDispatcher& event_dispatcher() { return m_event_dispatcher; }
+		EventQueueDispatcher& event_dispatcher() { return m_event_dispatcher; }
 
 		/////
 
@@ -78,7 +78,7 @@ namespace backend {
 		Workspace& operator=( const Workspace& ); // = delete;
 
 		TaskExecutor m_executor;
-		EventDispatcher m_event_dispatcher;
+		EventQueueDispatcher m_event_dispatcher;
 
 	};
 

@@ -23,20 +23,21 @@ namespace backend {
 		EventDispatcher(){} // = default
 
 		template< class EventType >
-		void publish( EventType event )
+		void dispatch( const EventType& event )
 		{
-			m_event_queue.push( [=]{ dispatch( event );	} );			
+			if( auto observers = find_observers<EventType>() )
+			{
+				observers->dispatch( event );
+			}			
 		}
 
-		template< class EventType, class SourceType >
-		void publish( Id<SourceType> source_id,  EventType event )
+		template< class SubjectId, class EventType >
+		void dispatch( const Id<SubjectId>& source_id, const EventType& event )
 		{
-			m_event_queue.push( [=]{ dispatch( source_id, event );	} );
-		}
-
-		void dispatch()
-		{
-			m_event_queue.execute();
+			if( auto observers = find_observers<EventType>() )
+			{
+				observers->dispatch( source_id, event );
+			}			
 		}
 
 		template< class EventType, class ObserverType >
@@ -66,7 +67,6 @@ namespace backend {
 		};
 		typedef std::shared_ptr<ObserverGroup> ObserverGroupPtr;
 
-		WorkQueue<void> m_event_queue;
 		typedef tbb::concurrent_unordered_map< std::type_index, ObserverGroupPtr > ObserversIndex;
 		ObserversIndex m_observers_index;
 
@@ -145,25 +145,7 @@ namespace backend {
 
 		};
 
-		template< class EventType >
-		void dispatch( const EventType& event )
-		{
-			auto observers = find_observers<EventType>();
-			if( observers )
-			{
-				observers->dispatch( event );
-			}			
-		}
-
-		template< class SubjectId, class EventType >
-		void dispatch( const Id<SubjectId>& source_id, const EventType& event )
-		{
-			auto observers = find_observers<EventType>();
-			if( observers )
-			{
-				observers->dispatch( source_id, event );
-			}			
-		}
+		
 
 		template< class EventType >
 		std::shared_ptr<EventObservers<EventType>> find_observers()
@@ -196,6 +178,36 @@ namespace backend {
 		}
 
 		
+	};
+
+	class EventQueueDispatcher
+		: private EventDispatcher
+	{
+	public:
+		
+		template< class EventType >
+		void publish( EventType event )
+		{
+			m_event_queue.push( [=]{ dispatch( event );	} );			
+		}
+
+		template< class EventType, class SourceType >
+		void publish( Id<SourceType> source_id,  EventType event )
+		{
+			m_event_queue.push( [=]{ dispatch( source_id, event );	} );
+		}
+
+		void dispatch()
+		{
+			m_event_queue.execute();
+		}
+
+		using EventDispatcher::connect;
+
+	private:
+		
+		WorkQueue<void> m_event_queue;
+		using EventDispatcher::dispatch;
 	};
 
 }}
