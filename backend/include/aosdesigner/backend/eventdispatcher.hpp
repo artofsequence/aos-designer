@@ -202,8 +202,7 @@ namespace backend {
 
 namespace tbb
 {
-	template<>
-	size_t tbb_hasher( const std::type_index& idx )
+	inline size_t tbb_hasher( const std::type_index& idx )
 	{ 
 		return std::hash<std::type_index>()( idx );
 	}
