@@ -11,10 +11,17 @@
 #include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/library.hpp>
 
-namespace aosd 
-{ 
-namespace backend 
-{
+namespace aosd { 
+namespace backend {
+	
+	/*
+	class AOSD_BACKEND_API Project
+	: public WorkspaceObject<Project>
+	{
+
+	};
+	*/
+
 	class Context;
 	class Sequence;
 	class Editor;
@@ -182,8 +189,7 @@ namespace backend
 
 	
 
-}
-}
+}}
 
 
 #endif
