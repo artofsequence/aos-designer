@@ -6,8 +6,8 @@ namespace aosd {
 namespace backend {
 
 	
-	Workspace::Workspace( TaskExecutor& executor )
-		: m_executor( executor )
+	Workspace::Workspace( TaskExecutor executor )
+		: m_executor( std::move(executor) )
 	{
 
 	}
