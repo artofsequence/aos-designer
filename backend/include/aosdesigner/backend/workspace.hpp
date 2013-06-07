@@ -26,7 +26,7 @@ namespace backend {
 		~Workspace();
 
 		template< class TaskType >
-		auto schedule( TaskType task ) -> boost::future<decltype(task())>;
+		auto async( TaskType task ) -> boost::future<decltype(task())>;
 
 		EventQueueDispatcher& event_dispatcher() { return m_event_dispatcher; }
 
@@ -101,7 +101,7 @@ namespace backend {
 	}
 
 	template< class TaskType >
-	auto Workspace::schedule( TaskType task ) -> boost::future< decltype(task()) >
+	auto Workspace::async( TaskType task ) -> boost::future< decltype(task()) >
 	{		
 		typedef decltype(task()) ResultType;
 

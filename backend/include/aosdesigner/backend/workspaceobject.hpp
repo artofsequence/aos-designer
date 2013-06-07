@@ -34,11 +34,11 @@ namespace backend {
 		~WorkspaceObject(){} // = default;
 
 		template< class TaskType >
-		auto push_task( TaskType task ) -> boost::future< decltype(task()) >;
+		auto schedule( TaskType task ) -> boost::future< decltype(task()) >;
 
 		template< class TaskType >
-		auto schedule( TaskType&& task ) -> boost::future< decltype(task()) > 
-		{ return m_workspace.schedule( std::forward<TaskType>(task) ); }
+		auto async( TaskType&& task ) -> boost::future< decltype(task()) > 
+		{ return m_workspace.async( std::forward<TaskType>(task) ); }
 
 		void execute_tasks() { m_work_queue.execute(); }
 
@@ -75,7 +75,7 @@ namespace backend {
 	
 	template< class T >
 	template< class TaskType >
-	auto WorkspaceObject<T>::push_task( TaskType task ) -> boost::future< decltype(task()) >
+	auto WorkspaceObject<T>::schedule( TaskType task ) -> boost::future< decltype(task()) >
 	{		
 		typedef decltype(task()) ResultType;
 

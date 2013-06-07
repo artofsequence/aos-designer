@@ -24,7 +24,7 @@ public:
 
 	boost::future<void> dummy_action()
 	{
-		return push_task( [&]{ publish( DummyEvent() ); } );
+		return schedule( [&]{ publish( DummyEvent() ); } );
 	}
 
 
@@ -51,7 +51,7 @@ public:
 	{
 		if(!object)
 			throw std::invalid_argument( "Object have to be provided in ObjectGroupe::add()!" );
-		return push_task( [this, object]{
+		return schedule( [this, object]{
 			m_objects.emplace_back( object );
 		});
 	}
@@ -61,7 +61,7 @@ public:
 		execute_tasks();
 		for( auto object : m_objects )
 		{
-			schedule( [=]{
+			async( [=]{
 				object->update();
 			});
 		}
