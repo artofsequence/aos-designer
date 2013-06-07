@@ -129,10 +129,12 @@ namespace backend {
 	class Project;
 	class Sequence;
 	class Editor;
+	class Library;
 
 	typedef Id<Project> ProjectId;
 	typedef Id<Sequence> SequenceId;
 	typedef Id<Editor> EditorId;
+	typedef Id<Library> LibraryId;
 
 	
 }}
