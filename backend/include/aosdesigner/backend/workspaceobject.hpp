@@ -8,7 +8,7 @@
 #include <aosdesigner/backend/workspace.hpp>
 #include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/workqueue.hpp>
-#include <aosdesigner/backend/eventdispatcher.hpp>
+#include <aosdesigner/backend/async.hpp>
 
 namespace aosd { 
 namespace backend {
@@ -34,7 +34,10 @@ namespace backend {
 		~WorkspaceObject(){} // = default;
 
 		template< class TaskType >
-		auto schedule( TaskType task ) -> boost::future< decltype(task()) >;
+		auto schedule( TaskType&& task ) -> boost::future< decltype(task()) >
+		{
+			return async_impl( m_work_queue, std::forward<TaskType>(task) );
+		}
 
 		template< class TaskType >
 		auto async( TaskType&& task ) -> boost::future< decltype(task()) > 
@@ -54,48 +57,13 @@ namespace backend {
 		WorkspaceObject( const WorkspaceObject& ); // = delete;
 		WorkspaceObject& operator=( const WorkspaceObject& ); // = delete;
 
-		WorkQueue<void> m_work_queue;
+		mutable WorkQueue<void> m_work_queue;
 		std::atomic<Id<T>> m_id;
 		Workspace& m_workspace;
 
-		template< class TaskType, class ReturnType >
-		void execute_task( boost::promise<ReturnType>& promise, TaskType& task )
-		{
-			promise.set_value( task() );
-		}
-
-		template< class TaskType >
-		void execute_task( boost::promise<void>& promise, TaskType& task )
-		{
-			task();
-			promise.set_value();
-		}
 
 	};
 	
-	template< class T >
-	template< class TaskType >
-	auto WorkspaceObject<T>::schedule( TaskType task ) -> boost::future< decltype(task()) >
-	{		
-		typedef decltype(task()) ResultType;
-
-		auto promise = std::make_shared<boost::promise<ResultType>>(); // TODO: c++14 allow moving in lambda instead of having to do this
-		auto result = promise->get_future();
-
-		m_work_queue.push( [promise, task]
-		{ 
-			try
-			{
-				detail::execute_task( *promise, task );
-			}
-			catch( ... )
-			{
-				promise->set_exception( boost::current_exception() );
-			}			
-		});
-
-		return std::move(result); // TODO: remove move() it is implicit but current version of VS is buggy
-	}
 
 }}
 

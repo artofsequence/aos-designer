@@ -41,6 +41,7 @@ set( AOSD_BACKEND_API_ROOT_HEADERS
 	${AOSD_BACKEND_API_DIR}/event.hpp
 	${AOSD_BACKEND_API_DIR}/eventdispatcher.hpp
 	${AOSD_BACKEND_API_DIR}/workqueue.hpp
+	${AOSD_BACKEND_API_DIR}/async.hpp
 	${AOSD_BACKEND_API_DIR}/workspaceobject.hpp
 	${AOSD_BACKEND_API_DIR}/workspace.hpp
 	${AOSD_BACKEND_API_DIR}/taskexecutor.hpp
