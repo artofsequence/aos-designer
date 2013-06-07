@@ -31,7 +31,12 @@ namespace backend {
 			m_task_queue.push( [=](const ContextData&){ task(); } );
 		}
 
-
+		template< class WorkTask >
+		void operator()( WorkTask&& task )
+		{
+			push( std::forward<WorkTask>(task) );
+		}
+		
 		/** Execute all the work queued until now. */
 		void execute( const ContextData& context )
 		{
@@ -66,6 +71,12 @@ namespace backend {
 			m_task_queue.push( std::forward<WorkTask>( task ) );
 		}
 
+		template< class WorkTask >
+		void operator()( WorkTask&& task )
+		{
+			push( std::forward<WorkTask>(task) );
+		}
+		
 		/** Execute all the work queued until now. */
 		void execute()
 		{
