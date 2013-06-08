@@ -29,7 +29,7 @@ namespace backend {
 		EventDispatcher::ObservationAPI& event_dispatcher() const { return m_event_dispatcher.observation_api(); }
 
 		// Dispatch queued events to observers using the calling thread.
-		void dispatch_events() { m_event_dispatcher.dispatch(); }
+		void dispatch_events();
 		
 		// TODO: project, sequence, editor, library thread-safe access - must occur in the workspace queue or async?
 

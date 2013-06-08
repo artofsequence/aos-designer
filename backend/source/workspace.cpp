@@ -18,6 +18,10 @@ namespace backend {
 
 	}
 
+	void Workspace::dispatch_events()
+	{
+		m_event_dispatcher.dispatch();
+	}
 
 	class Workspace::Impl
 	{
