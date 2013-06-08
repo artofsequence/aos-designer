@@ -9,6 +9,7 @@
 namespace aosd {
 namespace backend {
 
+	// TODO: add a private base class which gather common code (maybe easier with variadic templates available)
 
 	template< class ContextData >
 	class WorkQueue
@@ -53,6 +54,8 @@ namespace backend {
 			}
 		}
 
+		bool empty() const { return m_task_queue.empty(); }
+
 	private:
 
 		mutable tbb::concurrent_queue< WorkType > m_task_queue;
@@ -92,6 +95,8 @@ namespace backend {
 				work();
 			}
 		}
+
+		bool empty() const { return m_task_queue.empty(); }
 
 	private:
 

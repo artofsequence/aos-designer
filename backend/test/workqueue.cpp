@@ -20,7 +20,11 @@ TEST( Test_WorkQueue, simple_task_sequence )
 	work_queue.execute();
 
 	ASSERT_EQ( 666, k );
+	ASSERT_TRUE( work_queue.empty() );
 
+	work_queue.push( [&]{ k = 99; } );
+	ASSERT_EQ( 666, k );
+	ASSERT_FALSE( work_queue.empty() );
 }
 
 
@@ -37,6 +41,11 @@ TEST( Test_WorkQueue, simple_task_sequence_param )
 	work_queue.execute( 666 );
 
 	ASSERT_EQ( 666, k );
+	ASSERT_TRUE( work_queue.empty() );
+
+	work_queue.push( [&]{ k = 99; } );
+	ASSERT_EQ( 666, k );
+	ASSERT_FALSE( work_queue.empty() );
 
 }
 
@@ -62,6 +71,7 @@ TEST( Test_WorkQueue, future_promise_shared_work )
 
 	auto value = ft_value.get();
 	ASSERT_EQ( &TRUC, value );
+	ASSERT_TRUE( work_queue.empty() );
 }
 
 TEST( Test_WorkQueue, call_simple_task_sequence )
@@ -77,6 +87,11 @@ TEST( Test_WorkQueue, call_simple_task_sequence )
 	work_queue.execute();
 
 	ASSERT_EQ( 666, k );
+	ASSERT_TRUE( work_queue.empty() );
+
+	work_queue( [&]{ k = 99; } );
+	ASSERT_EQ( 666, k );
+	ASSERT_FALSE( work_queue.empty() );
 
 }
 
@@ -94,6 +109,11 @@ TEST( Test_WorkQueue, call_simple_task_sequence_param )
 	work_queue.execute( 666 );
 
 	ASSERT_EQ( 666, k );
+	ASSERT_TRUE( work_queue.empty() );
+
+	work_queue( [&]{ k = 99; } );
+	ASSERT_EQ( 666, k );
+	ASSERT_FALSE( work_queue.empty() );
 
 }
 
@@ -118,5 +138,6 @@ TEST( Test_WorkQueue, call_future_promise_shared_work )
 
 	auto value = ft_value.get();
 	ASSERT_EQ( &TRUC, value );
+	ASSERT_TRUE( work_queue.empty() );
 }
 
