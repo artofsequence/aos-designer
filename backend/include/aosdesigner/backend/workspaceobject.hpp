@@ -23,7 +23,7 @@ namespace backend {
 		template< class EventType, class ObserverType >
 		EventDispatcher::Connection on( ObserverType&& observer )
 		{
-			return m_workspace.m_event_dispatcher.connect<EventType>( id(), std::forward<ObserverType>(observer) );
+			return m_workspace.m_event_dispatcher.on<EventType>( id(), std::forward<ObserverType>(observer) );
 		}
 
 	protected:

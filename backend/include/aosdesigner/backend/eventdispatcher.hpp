@@ -41,14 +41,14 @@ namespace backend {
 		}
 
 		template< class EventType, class ObserverType >
-		Connection connect( ObserverType&& observer )
+		Connection on( ObserverType&& observer )
 		{
 			auto observers = find_or_create_observers<EventType>();
 			return observers->connect( std::forward<ObserverType>(observer) );
 		}
 
 		template< class EventType, class SourceType, class ObserverType >
-		Connection connect( const Id<SourceType>& source_id, ObserverType&& observer )
+		Connection on( const Id<SourceType>& source_id, ObserverType&& observer )
 		{
 			auto observers = find_or_create_observers<EventType>();
 			return observers->connect( source_id, std::forward<ObserverType>(observer) );
@@ -63,12 +63,12 @@ namespace backend {
 			// TODO: replace these functions by variadic templates so that it can forward attributes
 
 			template< class EventType, class ObserverType >
-			Connection connect( ObserverType&& observer )
-			{ return m_event_dispatcher.connect<EventType>( std::forward<ObserverType>(observer) ); }
+			Connection on( ObserverType&& observer )
+			{ return m_event_dispatcher.on<EventType>( std::forward<ObserverType>(observer) ); }
 
 			template< class EventType, class SourceType, class ObserverType >
-			Connection connect( const Id<SourceType>& source_id, ObserverType&& observer )
-			{ return m_event_dispatcher.connect<EventType>( source_id, std::forward<ObserverType>(observer) ); }
+			Connection on( const Id<SourceType>& source_id, ObserverType&& observer )
+			{ return m_event_dispatcher.on<EventType>( source_id, std::forward<ObserverType>(observer) ); }
 
 		};
 
@@ -111,7 +111,7 @@ namespace backend {
 				}
 
 				template< class ObserverType >
-				Connection connect( ObserverType&& observer )
+				Connection on( ObserverType&& observer )
 				{
 					return signal->connect( std::forward<ObserverType>( observer ) );
 				}
@@ -153,13 +153,13 @@ namespace backend {
 			template< class SourceType, class ObserverType >
 			auto connect( const Id<SourceType>& id, ObserverType&& observer ) -> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
 			{
-				return m_specifics_signals[id.value()].connect( std::forward<ObserverType>(observer) );
+				return m_specifics_signals[id.value()].on( std::forward<ObserverType>(observer) );
 			}
 
 			template< class SourceType, class ObserverType >
 			auto connect( const Id<SourceType>& id, ObserverType observer ) -> typename std::conditional< true, Connection, decltype( observer() ) >::type
 			{
-				return m_specifics_signals[id.value()].connect( [=]( const EventType& ){ observer(); } );
+				return m_specifics_signals[id.value()].on( [=]( const EventType& ){ observer(); } );
 			}
 
 
@@ -222,7 +222,7 @@ namespace backend {
 			m_event_queue.execute();
 		}
 
-		using EventDispatcher::connect;
+		using EventDispatcher::on;
 		using EventDispatcher::observation_api;
 
 	private:
