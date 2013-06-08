@@ -21,10 +21,7 @@ namespace backend {
 		Id<T> id() const { return m_id; }
 
 		template< class EventType, class ObserverType >
-		EventDispatcher::Connection on( ObserverType&& observer )
-		{
-			return m_workspace.m_event_dispatcher.on<EventType>( id(), std::forward<ObserverType>(observer) );
-		}
+		EventDispatcher::Connection on( ObserverType&& observer );
 
 	protected:
 		explicit WorkspaceObject( Workspace& workspace )
@@ -34,24 +31,17 @@ namespace backend {
 		~WorkspaceObject(){} // = default;
 
 		template< class TaskType >
-		auto schedule( TaskType&& task ) -> boost::future< decltype(task()) >
-		{
-			return async_impl( m_work_queue, std::forward<TaskType>(task) );
-		}
+		auto schedule( TaskType&& task ) -> boost::future< decltype(task()) >;
 
 		template< class TaskType >
-		auto async( TaskType&& task ) -> boost::future< decltype(task()) > 
-		{ return m_workspace.async( std::forward<TaskType>(task) ); }
+		auto async( TaskType&& task ) -> boost::future< decltype(task()) >;
 
-		void execute_tasks() { m_work_queue.execute(); }
+		void execute_tasks();
 
 		void set_id( const Id<T>& new_id ) { m_id = new_id; }
 
 		template< class EventType >
-		void publish( EventType&& e )
-		{
-			m_workspace.m_event_dispatcher.publish( id(), e );
-		}
+		void publish( EventType&& e );
 
 	private:
 		WorkspaceObject( const WorkspaceObject& ); // = delete;
@@ -63,7 +53,46 @@ namespace backend {
 
 
 	};
-	
+
+	template< class T >
+	template< class EventType, class ObserverType >
+	EventDispatcher::Connection WorkspaceObject<T>::on( ObserverType&& observer )
+	{
+		return m_workspace.m_event_dispatcher.on<EventType>( id(), std::forward<ObserverType>(observer) );
+	}
+
+	template< class T >
+	template< class TaskType >
+	auto WorkspaceObject<T>::schedule( TaskType&& task ) -> boost::future< decltype(task()) >
+	{
+		auto result = async_impl( m_work_queue, std::forward<TaskType>(task) );
+		m_workspace.request_update();
+		return std::move(result); // TODO: remove this when boost::future is fixed
+	}
+
+	template< class T >
+	template< class TaskType >
+	auto WorkspaceObject<T>::async( TaskType&& task ) -> boost::future< decltype(task()) > 
+	{ 
+		return m_workspace.async( std::forward<TaskType>(task) ); 
+	}
+
+	template< class T >
+	void WorkspaceObject<T>::execute_tasks()
+	{ 
+		m_work_queue.execute(); 
+		if( !m_work_queue.empty() )
+			m_workspace.request_update();
+	}
+
+
+	template< class T >
+	template< class EventType >
+	void WorkspaceObject<T>::publish( EventType&& e )
+	{
+		m_workspace.m_event_dispatcher.publish( id(), e );
+	}
+
 
 }}
 

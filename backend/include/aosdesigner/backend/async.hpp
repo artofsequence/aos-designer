@@ -45,7 +45,7 @@ namespace backend
 			}			
 		});
 
-		return std::move(result); // TODO: remove move() it is implicit but current version of VS is buggy
+		return std::move(result); // TODO: remove move() it is implicit but current version of Boost
 	}
 	
 
