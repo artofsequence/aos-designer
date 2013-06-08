@@ -3,7 +3,8 @@
 #pragma once
 
 #include <string>
-#include <boost/filesystem/path.hpp>
+#include <aosdesigner/backend/id.hpp>
+#include <aosdesigner/backend/uri.hpp>
 
 
 namespace aosd
@@ -14,14 +15,28 @@ namespace backend
 	*/
 	struct ProjectInfo
 	{
-		boost::filesystem::path location;
+		ProjectId id;
 		std::string name;
-		
+		URI location;
+
+		bool is_valid() const
+		{
+			return id.is_valid()
+				&& !location.empty()
+				&& !name.empty();
+		}
+	};
+
+	struct ProjectInfoEx
+		: ProjectInfo
+	{
+		std::vector<SequenceId> sequence_list;
+		std::vector<EditorId> editor_list;
 	};
 
 	inline bool is_valid( const ProjectInfo& info )
 	{
-		return !( info.location.empty() || info.name.empty() );
+		return info.is_valid();
 	}
 
 }
