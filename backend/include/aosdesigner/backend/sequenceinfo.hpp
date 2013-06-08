@@ -3,7 +3,8 @@
 #pragma once
 
 #include <string>
-#include <boost/filesystem/path.hpp>
+#include <aosdesigner/backend/id.hpp>
+#include <aosdesigner/backend/uri.hpp>
 
 namespace aosd
 {
@@ -12,23 +13,35 @@ namespace backend
 	
 	struct SequenceInfo
 	{
-		SequenceInfo() : canvas_width( 0.0 ), canvas_height( 0.0 ), is_edition_requested(false) {}
+		SequenceInfo() 
+			: canvas_width( 0.0 )
+			, canvas_height( 0.0 ) 
+			, canvas_depth( 0.0 )
+		{}
 
-		boost::filesystem::path location;
+		SequenceId id;
+		ProjectId project_id;
+		URI location;
 		std::string name;
-		double canvas_width;
-		double canvas_height;
-		bool is_edition_requested;
+		
+		double canvas_width; // = 0.0;
+		double canvas_height; // = 0.0;
+		double canvas_depth; // = 0.0;
 
+		bool is_valid() const
+		{
+			return id.is_valid()
+				&& !location.empty()
+				&& !name.empty()
+				&& canvas_height >= 0.0
+				&& canvas_width >= 0.0
+				;
+		}
 	};
-
+	
 	inline bool is_valid( const SequenceInfo& info )
 	{
-		return !(	info.location.empty()
-				||	info.name.empty()
-				||	info.canvas_height <= 0.0
-				||  info.canvas_width <= 0.0
-			);
+		return info.is_valid();
 	}
 
 }
