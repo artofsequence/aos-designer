@@ -34,8 +34,7 @@ namespace backend {
 		// TODO: project, sequence, editor, library thread-safe access - must occur in the workspace queue or async?
 
 		// TODO: request_update(), update(), work_queue
-
-		
+		void request_update();
 
 		//boost::future<SequenceInfo> get_sequence_info( SequenceId sequence_id );
 		//boost::future<ProjectInfo> get_project_info( ProjectId project_id );
