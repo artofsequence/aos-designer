@@ -87,14 +87,14 @@ TEST( Test_WorkspaceObject, simple_use )
 	ASSERT_EQ( 0, k );
 	test.update();
 	ASSERT_EQ( 0, k );
-	workspace.event_dispatcher().dispatch();
+	workspace.dispatch_events();
 	ASSERT_EQ( 1, k );
 	test.update();
-	workspace.event_dispatcher().dispatch();
+	workspace.dispatch_events();
 	ASSERT_EQ( 1, k );
 	test.dummy_action();
 	test.update();
-	workspace.event_dispatcher().dispatch();
+	workspace.dispatch_events();
 	ASSERT_EQ( 2, k );
 }
 
@@ -119,14 +119,14 @@ TEST( Test_WorkspaceObject, object_group )
 
 	group.update();
 	ASSERT_EQ( 0, k );
-	workspace.event_dispatcher().dispatch();
+	workspace.dispatch_events();
 	ASSERT_EQ( 0, k );
 
 	a->dummy_action();
 	ASSERT_EQ( 0, k );
 	group.update();
 	ASSERT_EQ( 0, k );
-	workspace.event_dispatcher().dispatch();
+	workspace.dispatch_events();
 	ASSERT_EQ( 1, k );
 
 	a->dummy_action();
@@ -134,7 +134,7 @@ TEST( Test_WorkspaceObject, object_group )
 	ASSERT_EQ( 1, k );
 	group.update();
 	ASSERT_EQ( 1, k );
-	workspace.event_dispatcher().dispatch();
+	workspace.dispatch_events();
 	ASSERT_EQ( 3, k );
 
 }

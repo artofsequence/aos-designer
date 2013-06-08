@@ -23,7 +23,7 @@ namespace backend {
 		template< class EventType, class ObserverType >
 		EventDispatcher::Connection on( ObserverType&& observer )
 		{
-			return m_workspace.event_dispatcher().connect<EventType>( id(), std::forward<ObserverType>(observer) );
+			return m_workspace.m_event_dispatcher.connect<EventType>( id(), std::forward<ObserverType>(observer) );
 		}
 
 	protected:
@@ -50,7 +50,7 @@ namespace backend {
 		template< class EventType >
 		void publish( EventType&& e )
 		{
-			m_workspace.event_dispatcher().publish( id(), e );
+			m_workspace.m_event_dispatcher.publish( id(), e );
 		}
 
 	private:
