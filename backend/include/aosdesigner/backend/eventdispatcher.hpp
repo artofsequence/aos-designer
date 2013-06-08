@@ -54,6 +54,26 @@ namespace backend {
 			return observers->connect( source_id, std::forward<ObserverType>(observer) );
 		}
 
+		class ObservationAPI
+		{
+			friend class EventDispatcher;
+			EventDispatcher& m_event_dispatcher;
+			explicit ObservationAPI( EventDispatcher& dispatcher ) : m_event_dispatcher( dispatcher ){ }
+		public:
+			// TODO: replace these functions by variadic templates so that it can forward attributes
+
+			template< class EventType, class ObserverType >
+			Connection connect( ObserverType&& observer )
+			{ return m_event_dispatcher.connect<EventType>( std::forward<ObserverType>(observer) ); }
+
+			template< class EventType, class SourceType, class ObserverType >
+			Connection connect( const Id<SourceType>& source_id, ObserverType&& observer )
+			{ return m_event_dispatcher.connect<EventType>( source_id, std::forward<ObserverType>(observer) ); }
+
+		};
+
+		ObservationAPI observation_api() { return ObservationAPI(*this); }
+
 	private:
 		EventDispatcher( const EventDispatcher& ); // = delete;
 		EventDispatcher& operator=( const EventDispatcher& ); // = delete;
@@ -203,6 +223,7 @@ namespace backend {
 		}
 
 		using EventDispatcher::connect;
+		using EventDispatcher::observation_api;
 
 	private:
 		
