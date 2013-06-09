@@ -36,13 +36,13 @@ namespace backend {
 		// TODO: project, sequence, editor, library thread-safe access - must occur in the workspace queue or async?
 
 
-		//boost::future<SequenceInfo> get_sequence_info( SequenceId sequence_id );
-		//boost::future<ProjectInfo> get_project_info( ProjectId project_id );
-		//boost::future<EditorInfo> get_editeditor_info( EditorId edit_editor_id );
+		//future<SequenceInfo> get_sequence_info( SequenceId sequence_id );
+		//future<ProjectInfo> get_project_info( ProjectId project_id );
+		//future<EditorInfo> get_editeditor_info( EditorId edit_editor_id );
 
-		//boost::future<ProjectId> create_project();
-		//boost::future<ProjectId> open_project( URI project_address );
-		//boost::future<void> close_project( ProjectId project_id );
+		//future<ProjectId> create_project();
+		//future<ProjectId> open_project( URI project_address );
+		//future<void> close_project( ProjectId project_id );
 
 		
 		
@@ -57,7 +57,7 @@ namespace backend {
 		mutable EventQueueDispatcher m_event_dispatcher;
 		
 		template< class TaskType >
-		auto async( TaskType&& task ) -> boost::future<decltype(task())>
+		auto async( TaskType&& task ) -> future<decltype(task())>
 		{
 			return async_impl( m_executor, std::forward<TaskType>(task) );
 		}

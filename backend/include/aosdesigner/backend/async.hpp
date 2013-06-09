@@ -9,39 +9,43 @@ namespace aosd
 {
 namespace backend
 {
+	using boost::future;
+	using boost::promise;
+	using boost::packaged_task;
+
 	namespace detail_async_impl
 	{
 		template< class TaskType, class ReturnType >
-		void execute_task( boost::promise<ReturnType>& promise, TaskType& task )
+		void execute_task( promise<ReturnType>& result, TaskType& task )
 		{
-			promise.set_value( task() );
+			result.set_value( task() );
 		}
 
 		template< class TaskType >
-		void execute_task( boost::promise<void>& promise, TaskType& task )
+		void execute_task( promise<void>& result, TaskType& task )
 		{
 			task();
-			promise.set_value();
+			result.set_value();
 		}
 	}
 
 	template< class ExecutorType, class TaskType >
-	auto async_impl( ExecutorType&& executor, TaskType task ) -> boost::future< decltype(task()) >
+	auto async_impl( ExecutorType&& executor, TaskType task ) -> future< decltype(task()) >
 	{		
 		typedef decltype(task()) ResultType;
 
-		auto promise = std::make_shared<boost::promise<ResultType>>(); // TODO: c++14 allow moving in lambda instead of having to do this
-		auto result = promise->get_future();
+		auto result_promise = std::make_shared<promise<ResultType>>(); // TODO: c++14 allow moving in lambda instead of having to do this
+		auto result = result_promise->get_future();
 
-		executor( [promise, task]
+		executor( [result_promise, task]
 		{ 
 			try
 			{
-				detail_async_impl::execute_task( *promise, task );
+				detail_async_impl::execute_task( *result_promise, task );
 			}
 			catch( ... )
 			{
-				promise->set_exception( boost::current_exception() );
+				result_promise->set_exception( boost::current_exception() );
 			}			
 		});
 
