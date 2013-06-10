@@ -23,6 +23,7 @@ namespace backend {
 		~Sequence();
 
 		SequenceInfo info() const;
+		aosl::Sequence aosl_model() const;
 
 
 	private:

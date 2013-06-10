@@ -12,12 +12,14 @@ namespace backend {
 		: public WorkspaceObject<Library>
 	{
 	public:
-		Library( const Workspace& workspace );
+		explicit Library( Workspace& workspace );
 
 
 
 	private:
 		
+		class Impl;
+		std::unique_ptr<Impl> impl;
 
 	};
 

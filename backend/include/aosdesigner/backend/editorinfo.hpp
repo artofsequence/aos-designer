@@ -12,13 +12,19 @@ namespace backend {
 	{
 		std::string name;
 		SequenceId sequence_id;
+		
+		bool is_valid() const 
+		{
+			return sequence_id.is_valid()
+				&& !name.empty()
+				;
+		}
+		
 	};
 
 	inline bool is_valid( const EditorInfo& info )
 	{
-		return is_valid( info.sequence_id )
-			&& !info.name.empty()
-			;
+		return info.is_valid();
 	}
 
 }}

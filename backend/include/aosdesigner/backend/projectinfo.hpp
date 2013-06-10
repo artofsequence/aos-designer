@@ -33,7 +33,6 @@ namespace backend
 	{
 		std::vector<LibraryId> library_list;
 		std::vector<SequenceId> sequence_list;
-		std::vector<EditorId> editor_list;
 	};
 
 	inline bool is_valid( const ProjectInfo& info )
