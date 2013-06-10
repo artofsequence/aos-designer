@@ -7,8 +7,8 @@
 
 #include <aosdesigner/backend/workspace.hpp>
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/workqueue.hpp>
-#include <aosdesigner/backend/async.hpp>
+#include <aosdesigner/backend/tools/workqueue.hpp>
+#include <aosdesigner/backend/tools/async.hpp>
 
 namespace aosd { 
 namespace backend {

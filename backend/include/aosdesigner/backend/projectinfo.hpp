@@ -3,8 +3,9 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/uri.hpp>
+#include <aosdesigner/backend/tools/uri.hpp>
 
 
 namespace aosd
@@ -30,6 +31,7 @@ namespace backend
 	struct ProjectInfoEx
 		: ProjectInfo
 	{
+		std::vector<LibraryId> library_list;
 		std::vector<SequenceId> sequence_list;
 		std::vector<EditorId> editor_list;
 	};

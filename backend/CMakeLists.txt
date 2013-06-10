@@ -33,45 +33,53 @@ set( AOSD_BACKEND_INCLUDE_DIR ${AOSD_BACKEND_INCLUDE_DIR} PARENT_SCOPE )
 set( AOSD_BACKEND_API_DIR ${AOSD_BACKEND_INCLUDE_DIR}/aosdesigner/backend )
 set( AOSD_BACKEND_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source )
 
+set( AOSD_BACKEND_API_RESOURCE_DIR ${AOSD_BACKEND_API_DIR}/resource )
+set( AOSD_BACKEND_API_TOOLS_DIR ${AOSD_BACKEND_API_DIR}/tools )
+
+set( AOSD_BACKEND_RESOURCE_SOURCE_DIR ${AOSD_BACKEND_SOURCE_DIR}/resource )
+
+
 #####################################################
 # API Header files.
 
 set( AOSD_BACKEND_API_ROOT_HEADERS
+	${AOSD_BACKEND_API_DIR}/context.hpp # DEPRECATED
 	${AOSD_BACKEND_API_DIR}/id.hpp
 	${AOSD_BACKEND_API_DIR}/event.hpp
-	${AOSD_BACKEND_API_DIR}/eventdispatcher.hpp
-	${AOSD_BACKEND_API_DIR}/workqueue.hpp
-	${AOSD_BACKEND_API_DIR}/async.hpp
-	${AOSD_BACKEND_API_DIR}/workspaceobject.hpp
 	${AOSD_BACKEND_API_DIR}/workspace.hpp
-	${AOSD_BACKEND_API_DIR}/taskexecutor.hpp
-	${AOSD_BACKEND_API_DIR}/context.hpp
+	${AOSD_BACKEND_API_DIR}/workspaceobject.hpp
 	${AOSD_BACKEND_API_DIR}/project.hpp
 	${AOSD_BACKEND_API_DIR}/sequence.hpp
 	${AOSD_BACKEND_API_DIR}/projectinfo.hpp
 	${AOSD_BACKEND_API_DIR}/sequenceinfo.hpp
 	${AOSD_BACKEND_API_DIR}/library.hpp
+	${AOSD_BACKEND_API_DIR}/editor.hpp
+	${AOSD_BACKEND_API_DIR}/editorinfo.hpp
 	${AOSD_BACKEND_API_DIR}/paths.hpp
 )
 
-set( AOSD_BACKEND_API_EDITION_HEADERS
-	${AOSD_BACKEND_API_DIR}/editor.hpp
-	${AOSD_BACKEND_API_DIR}/editorinfo.hpp
+set( AOSD_BACKEND_API_TOOLS_HEADERS
+	${AOSD_BACKEND_API_TOOLS_DIR}/eventdispatcher.hpp
+	${AOSD_BACKEND_API_TOOLS_DIR}/workqueue.hpp
+	${AOSD_BACKEND_API_TOOLS_DIR}/async.hpp
+	${AOSD_BACKEND_API_TOOLS_DIR}/taskexecutor.hpp
+	${AOSD_BACKEND_API_TOOLS_DIR}/uri.hpp
 )
 
+
 set( AOSD_BACKEND_API_RESOURCE_HEADERS
-	${AOSD_BACKEND_API_DIR}/resource.hpp
-	${AOSD_BACKEND_API_DIR}/resourceptr.hpp
-	${AOSD_BACKEND_API_DIR}/resourceref.hpp
-	${AOSD_BACKEND_API_DIR}/resourceprovider.hpp
-	${AOSD_BACKEND_API_DIR}/resourcefactory.hpp
-	${AOSD_BACKEND_API_DIR}/resourceinfo.hpp
-	${AOSD_BACKEND_API_DIR}/uri.hpp
+	${AOSD_BACKEND_API_RESOURCE_DIR}/resource.hpp
+	${AOSD_BACKEND_API_RESOURCE_DIR}/resourceptr.hpp
+	${AOSD_BACKEND_API_RESOURCE_DIR}/resourceref.hpp
+	${AOSD_BACKEND_API_RESOURCE_DIR}/resourceprovider.hpp
+	${AOSD_BACKEND_API_RESOURCE_DIR}/resourcefactory.hpp
+	${AOSD_BACKEND_API_RESOURCE_DIR}/resourceinfo.hpp
+	
 )
 
 set( AOSD_BACKEND_API_HEADERS
 	${AOSD_BACKEND_API_ROOT_HEADERS}
-	${AOSD_BACKEND_API_EDITION_HEADERS}
+	${AOSD_BACKEND_API_TOOLS_HEADERS}
 	${AOSD_BACKEND_API_RESOURCE_HEADERS}
 )
 
@@ -84,23 +92,20 @@ set( AOSD_BACKEND_ROOT_SOURCES
 	${AOSD_BACKEND_SOURCE_DIR}/context.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/project.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/sequence.cpp
+	${AOSD_BACKEND_SOURCE_DIR}/editor.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/library.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/paths.cpp
 )
 
-set( AOSD_BACKEND_EDITION_SOURCES
-	${AOSD_BACKEND_SOURCE_DIR}/editor.cpp
-)
 
 set( AOSD_BACKEND_RESOURCE_SOURCES
-	${AOSD_BACKEND_SOURCE_DIR}/resource.cpp
-	${AOSD_BACKEND_SOURCE_DIR}/resourceprovider.cpp
-	${AOSD_BACKEND_SOURCE_DIR}/resourcefactory.cpp
+	${AOSD_BACKEND_RESOURCE_SOURCE_DIR}/resource.cpp
+	${AOSD_BACKEND_RESOURCE_SOURCE_DIR}/resourceprovider.cpp
+	${AOSD_BACKEND_RESOURCE_SOURCE_DIR}/resourcefactory.cpp
 )
 
 set( AOSD_BACKEND_SOURCES
 	${AOSD_BACKEND_ROOT_SOURCES}
-	${AOSD_BACKEND_EDITION_SOURCES}
 	${AOSD_BACKEND_RESOURCE_SOURCES}
 )
 
@@ -108,10 +113,9 @@ set( AOSD_BACKEND_SOURCES
 # Files groups.
 
 source_group( "\\backend_api" FILES ${AOSD_BACKEND_API_ROOT_HEADERS} )
-source_group( "\\backend_api\\edition" FILES ${AOSD_BACKEND_API_EDITION_HEADERS} )
+source_group( "\\backend_api\\tools" FILES ${AOSD_BACKEND_API_TOOLS_HEADERS} )
 source_group( "\\backend_api\\resource" FILES ${AOSD_BACKEND_API_RESOURCE_HEADERS} )
 source_group( "\\backend_sources" FILES ${AOSD_BACKEND_ROOT_SOURCES} )
-source_group( "\\backend_sources\\edition" FILES ${AOSD_BACKEND_EDITION_SOURCES} )
 source_group( "\\backend_sources\\resource" FILES ${AOSD_BACKEND_RESOURCE_SOURCES} )
 
 ####################################################

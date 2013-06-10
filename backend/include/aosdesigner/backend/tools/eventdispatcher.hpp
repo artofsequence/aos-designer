@@ -8,7 +8,7 @@
 #include <boost/signals2/connection.hpp>
 
 #include <utilcpp/assert.hpp>
-#include <aosdesigner/backend/workqueue.hpp>
+#include <aosdesigner/backend/tools/workqueue.hpp>
 #include <aosdesigner/backend/id.hpp>
 
 namespace aosd {

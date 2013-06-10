@@ -4,7 +4,7 @@
 
 #include <string>
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/uri.hpp>
+#include <aosdesigner/backend/tools/uri.hpp>
 
 namespace aosd
 {

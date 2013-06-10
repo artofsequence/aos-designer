@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <aosdesigner/backend/workqueue.hpp>
+#include <aosdesigner/backend/tools/workqueue.hpp>
 #include <future>
 
 using namespace aosd::backend;

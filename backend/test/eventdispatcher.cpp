@@ -3,7 +3,7 @@
 #include <boost/thread/thread.hpp>
 #include <atomic>
 
-#include <aosdesigner/backend/eventdispatcher.hpp>
+#include <aosdesigner/backend/tools/eventdispatcher.hpp>
 #include <aosdesigner/backend/event.hpp>
 
 
