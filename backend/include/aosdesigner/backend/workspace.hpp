@@ -7,12 +7,13 @@
 #include <boost/thread/future.hpp>
 
 #include <aosdesigner/backend/api.hpp>
-#include <aosdesigner/backend/taskexecutor.hpp>
-#include <aosdesigner/backend/eventdispatcher.hpp>
-#include <aosdesigner/backend/async.hpp>
-
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/uri.hpp>
+#include <aosdesigner/backend/tools/taskexecutor.hpp>
+#include <aosdesigner/backend/tools/eventdispatcher.hpp>
+#include <aosdesigner/backend/tools/async.hpp>
+#include <aosdesigner/backend/tools/uri.hpp>
+
+
 
 namespace aosd {
 namespace backend {
@@ -36,9 +37,9 @@ namespace backend {
 		// TODO: project, sequence, editor, library thread-safe access - must occur in the workspace queue or async?
 
 
-		//future<SequenceInfo> get_sequence_info( SequenceId sequence_id );
-		//future<ProjectInfo> get_project_info( ProjectId project_id );
-		//future<EditorInfo> get_editeditor_info( EditorId edit_editor_id );
+		//SequenceInfo get_sequence_info( SequenceId sequence_id );
+		//ProjectInfo get_project_info( ProjectId project_id );
+		//EditorInfo get_editeditor_info( EditorId edit_editor_id );
 
 		//future<ProjectId> create_project();
 		//future<ProjectId> open_project( URI project_address );
