@@ -14,11 +14,18 @@
 namespace aosd {
 namespace backend {
 
+	enum class EventPriority
+	{
+		HIGH				= boost::signals2::connect_position::at_front
+	,	LOW					= boost::signals2::connect_position::at_back
+	};
+
 	class EventDispatcher
 	{
 	public:
 		typedef boost::signals2::connection Connection;		
 		typedef boost::signals2::scoped_connection ScopedConnection;
+
 
 		EventDispatcher(){} // = default
 
@@ -41,17 +48,17 @@ namespace backend {
 		}
 
 		template< class EventType, class ObserverType >
-		Connection on( ObserverType&& observer )
+		Connection on( ObserverType&& observer, EventPriority priority = EventPriority::LOW )
 		{
 			auto observers = find_or_create_observers<EventType>();
-			return observers->connect( std::forward<ObserverType>(observer) );
+			return observers->connect( priority, std::forward<ObserverType>(observer) );
 		}
 
 		template< class EventType, class SourceType, class ObserverType >
-		Connection on( const Id<SourceType>& source_id, ObserverType&& observer )
+		Connection on( const Id<SourceType>& source_id, ObserverType&& observer, EventPriority priority = EventPriority::LOW )
 		{
 			auto observers = find_or_create_observers<EventType>();
-			return observers->connect( source_id, std::forward<ObserverType>(observer) );
+			return observers->connect( priority, source_id, std::forward<ObserverType>(observer) );
 		}
 
 		class ObservationAPI
@@ -63,12 +70,12 @@ namespace backend {
 			// TODO: replace these functions by variadic templates so that it can forward attributes
 
 			template< class EventType, class ObserverType >
-			Connection on( ObserverType&& observer )
-			{ return m_event_dispatcher.on<EventType>( std::forward<ObserverType>(observer) ); }
+			Connection on( ObserverType&& observer, EventPriority priority = EventPriority::LOW )
+			{ return m_event_dispatcher.on<EventType>( std::forward<ObserverType>(observer), priority ); }
 
 			template< class EventType, class SourceType, class ObserverType >
-			Connection on( const Id<SourceType>& source_id, ObserverType&& observer )
-			{ return m_event_dispatcher.on<EventType>( source_id, std::forward<ObserverType>(observer) ); }
+			Connection on( const Id<SourceType>& source_id, ObserverType&& observer, EventPriority priority = EventPriority::LOW )
+			{ return m_event_dispatcher.on<EventType>( source_id, std::forward<ObserverType>(observer), priority ); }
 
 		};
 
@@ -97,6 +104,13 @@ namespace backend {
 			static const EventType* dummy() { return nullptr; }
 			typedef boost::signals2::signal< void( EventType )> Signal;
 
+			template< class TaskType >
+			static Connection connection_impl( Signal& signal, EventPriority priority, TaskType&& task )
+			{
+				const auto connection_pos = static_cast< boost::signals2::connect_position >( priority );
+				return signal.connect( connection_pos, std::forward<TaskType>(task) ); 
+			}
+
 			class SignalSlot // this is because concurrent_unordered_map can't accept move-only types like signal
 			{ 
 				std::shared_ptr<Signal> signal;
@@ -111,15 +125,17 @@ namespace backend {
 				}
 
 				template< class ObserverType >
-				Connection on( ObserverType&& observer )
+				Connection on( EventPriority priority, ObserverType&& observer )
 				{
-					return signal->connect( std::forward<ObserverType>( observer ) );
+					return connection_impl( *signal, priority, std::forward<ObserverType>(observer) );
 				}
 			};
 			typedef tbb::concurrent_unordered_map< IdValueType, SignalSlot > SourceSignalIndex;
 
 			SourceSignalIndex m_specifics_signals;
 			Signal m_global_signal;
+
+			
 			
 		public:
 
@@ -139,27 +155,31 @@ namespace backend {
 			}
 
 			template< class ObserverType >
-			auto connect( ObserverType&& observer ) -> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
+			auto connect( EventPriority priority, ObserverType&& observer )
+				-> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
 			{
-				return m_global_signal.connect( std::forward<ObserverType>(observer) );
+				return connection_impl( m_global_signal, priority, std::forward<ObserverType>(observer) );
 			}
 
 			template< class ObserverType >
-			auto connect( ObserverType observer ) -> typename std::conditional< true, Connection, decltype( observer() ) >::type
+			auto connect( EventPriority priority, ObserverType observer ) 
+				-> typename std::conditional< true, Connection, decltype( observer() ) >::type
 			{
-				return m_global_signal.connect( [=]( const EventType& ){ observer(); } );
+				return connection_impl( m_global_signal, priority, [=]( const EventType& ){ observer(); } );
 			}
 
 			template< class SourceType, class ObserverType >
-			auto connect( const Id<SourceType>& id, ObserverType&& observer ) -> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
+			auto connect( EventPriority priority, const Id<SourceType>& id, ObserverType&& observer ) 
+				-> typename std::conditional< true, Connection, decltype( observer( *dummy() ) ) >::type
 			{
-				return m_specifics_signals[id.value()].on( std::forward<ObserverType>(observer) );
+				return m_specifics_signals[id.value()].on( priority, std::forward<ObserverType>(observer) );
 			}
 
 			template< class SourceType, class ObserverType >
-			auto connect( const Id<SourceType>& id, ObserverType observer ) -> typename std::conditional< true, Connection, decltype( observer() ) >::type
+			auto connect( EventPriority priority, const Id<SourceType>& id, ObserverType observer ) 
+				-> typename std::conditional< true, Connection, decltype( observer() ) >::type
 			{
-				return m_specifics_signals[id.value()].on( [=]( const EventType& ){ observer(); } );
+				return m_specifics_signals[id.value()].on( priority, [=]( const EventType& ){ observer(); } );
 			}
 
 

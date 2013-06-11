@@ -16,7 +16,7 @@ TEST( Test_EventDispatcher, simple_use )
 
 	EventDispatcher dispatcher;
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	dispatcher.on<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
+	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -24,7 +24,7 @@ TEST( Test_EventDispatcher, simple_use )
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
-	dispatcher.dispatch( event::EditorBegin() );
+	dispatcher.dispatch( event::EditorOpen() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_TRUE( editor_began );
 
@@ -38,7 +38,7 @@ TEST( Test_EventDispatcher, simple_disconnections )
 
 	EventDispatcher dispatcher;
 	auto connect_a = dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	auto connect_b = dispatcher.on<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
+	auto connect_b = dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -51,12 +51,12 @@ TEST( Test_EventDispatcher, simple_disconnections )
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
-	dispatcher.dispatch( event::EditorBegin() );
+	dispatcher.dispatch( event::EditorOpen() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_TRUE( editor_began );
 
 	connect_b.disconnect();
-	dispatcher.dispatch( event::EditorBegin() );
+	dispatcher.dispatch( event::EditorOpen() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_TRUE( editor_began );
 
@@ -104,7 +104,7 @@ TEST( Test_EventDispatcher, simple_use_2_threads )
 	EventDispatcher dispatcher;
 
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	dispatcher.on<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
+	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -112,7 +112,7 @@ TEST( Test_EventDispatcher, simple_use_2_threads )
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
 		dispatcher.dispatch( event::ProjectOpen() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
-		dispatcher.dispatch( event::EditorBegin() );
+		dispatcher.dispatch( event::EditorOpen() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(300) );
 		publishing_ended = true;
 	});
@@ -185,7 +185,7 @@ TEST( Test_EventQueueDispatcher, simple_use )
 
 	EventQueueDispatcher dispatcher;
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	dispatcher.on<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
+	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -197,7 +197,7 @@ TEST( Test_EventQueueDispatcher, simple_use )
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
-	dispatcher.publish( event::EditorBegin() );
+	dispatcher.publish( event::EditorOpen() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -215,7 +215,7 @@ TEST( Test_EventQueueDispatcher, simple_disconnections )
 
 	EventQueueDispatcher dispatcher;
 	auto connect_a = dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	auto connect_b = dispatcher.on<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
+	auto connect_b = dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -234,7 +234,7 @@ TEST( Test_EventQueueDispatcher, simple_disconnections )
 	ASSERT_FALSE( editor_began );
 
 
-	dispatcher.publish( event::EditorBegin() );
+	dispatcher.publish( event::EditorOpen() );
 	ASSERT_TRUE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -242,7 +242,7 @@ TEST( Test_EventQueueDispatcher, simple_disconnections )
 	ASSERT_TRUE( project_is_open );
 	ASSERT_TRUE( editor_began );
 
-	dispatcher.publish( event::EditorBegin() );
+	dispatcher.publish( event::EditorOpen() );
 	connect_b.disconnect();
 	dispatcher.dispatch();
 	ASSERT_TRUE( project_is_open );
@@ -294,7 +294,7 @@ TEST( Test_EventQueueDispatcher, simple_use_2_threads )
 	EventQueueDispatcher dispatcher;
 
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	dispatcher.on<event::EditorBegin>( [&]( const event::EditorBegin& ev ){ editor_began = !editor_began; } );
+	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
 	ASSERT_FALSE( editor_began );
 
@@ -302,7 +302,7 @@ TEST( Test_EventQueueDispatcher, simple_use_2_threads )
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
 		dispatcher.publish( event::ProjectOpen() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(500) );
-		dispatcher.publish( event::EditorBegin() );
+		dispatcher.publish( event::EditorOpen() );
 		boost::this_thread::sleep_for( boost::chrono::milliseconds(300) );
 		publishing_ended = true;
 	});
@@ -367,3 +367,42 @@ TEST( Test_EventQueueDispatcher, parrallel_connections )
 	check_thread.join();
 }
 
+
+TEST( Test_EventQueueDispatcher, event_priority )
+{
+	std::vector<int> values;
+
+	EventQueueDispatcher dispatcher;
+
+	dispatcher.on<event::ProjectOpen>( [&]{ values.emplace_back(0); }, EventPriority::HIGH );
+	dispatcher.on<event::ProjectOpen>( [&]{ values.emplace_back(1); } );
+	dispatcher.on<event::ProjectOpen>( [&]{ values.emplace_back(2); }, EventPriority::LOW );
+	
+	ASSERT_TRUE( values.empty() );
+
+	dispatcher.publish( event::ProjectOpen() );
+	dispatcher.dispatch();
+
+	ASSERT_EQ( 0, values[0] );
+	ASSERT_EQ( 1, values[1] );
+	ASSERT_EQ( 2, values[2] );
+}
+
+TEST( Test_EventDispatcher, event_priority )
+{
+	std::vector<int> values;
+
+	EventDispatcher dispatcher;
+
+	dispatcher.on<event::ProjectOpen>( [&]{ values.emplace_back(0); }, EventPriority::HIGH );
+	dispatcher.on<event::ProjectOpen>( [&]{ values.emplace_back(1); } );
+	dispatcher.on<event::ProjectOpen>( [&]{ values.emplace_back(2); }, EventPriority::LOW );
+
+	ASSERT_TRUE( values.empty() );
+
+	dispatcher.dispatch( event::ProjectOpen() );
+
+	ASSERT_EQ( 0, values[0] );
+	ASSERT_EQ( 1, values[1] );
+	ASSERT_EQ( 2, values[2] );
+}
