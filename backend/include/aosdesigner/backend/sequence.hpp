@@ -4,6 +4,8 @@
 
 #include <memory>
 
+#include <aosl/sequence.hpp>
+
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/sequenceinfo.hpp>
@@ -13,13 +15,13 @@
 namespace aosd {
 namespace backend {
 
+	class Project;
+
 	class AOSD_BACKEND_API Sequence
 		: public WorkspaceObject<Sequence>
 	{
 	public:
 
-		explicit Sequence( Workspace& workspace );
-		explicit Sequence( Workspace& workspace, SequenceInfo info );
 		~Sequence();
 
 		SequenceInfo info() const;
@@ -27,6 +29,8 @@ namespace backend {
 
 
 	private:
+		friend class Project;
+		explicit Sequence( Project& project, SequenceInfo info );
 
 		class Impl;
 		std::unique_ptr<Impl> impl;

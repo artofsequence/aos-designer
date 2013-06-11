@@ -16,16 +16,15 @@ namespace backend {
 	public:
 		explicit Project( Workspace& workspace );
 		explicit Project( Workspace& workspace, ProjectInfo info );
-		explicit Project( Workspace& workspace, ProjectInfoEx info );
 		~Project();
 
 		ProjectInfo info() const;
-		ProjectInfoEx info_ex() const;
 
 		future<void> rename( std::string new_name );
 		future<void> relocate( URI new_location );
 		
-		future<void> add_sequence( std::shared_ptr<Sequence> sequence );
+		future<SequenceId> create_sequence();
+		future<void> add_sequence( SequenceInfo info );
 		future<void> remove_sequence( SequenceId sequence_id );
 
 		
