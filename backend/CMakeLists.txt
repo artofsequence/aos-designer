@@ -53,6 +53,7 @@ set( AOSD_BACKEND_API_ROOT_HEADERS
 	${AOSD_BACKEND_API_DIR}/projectinfo.hpp
 	${AOSD_BACKEND_API_DIR}/sequenceinfo.hpp
 	${AOSD_BACKEND_API_DIR}/library.hpp
+	${AOSD_BACKEND_API_DIR}/libraryinfo.hpp
 	${AOSD_BACKEND_API_DIR}/editor.hpp
 	${AOSD_BACKEND_API_DIR}/editorinfo.hpp
 	${AOSD_BACKEND_API_DIR}/paths.hpp
