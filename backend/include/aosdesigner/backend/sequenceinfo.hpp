@@ -13,35 +13,16 @@ namespace backend
 	
 	struct SequenceInfo
 	{
-		SequenceInfo() 
-			: canvas_width( 0.0 )
-			, canvas_height( 0.0 ) 
-			, canvas_depth( 0.0 )
-		{}
-
-		SequenceId id;
-		ProjectId project_id;
-		URI location;
-		std::string name;
-		
-		double canvas_width; // = 0.0;
-		double canvas_height; // = 0.0;
-		double canvas_depth; // = 0.0;
-
-		bool is_valid() const
-		{
-			return id.is_valid()
-				&& !location.empty()
-				&& !name.empty()
-				&& canvas_height >= 0.0
-				&& canvas_width >= 0.0
-				;
-		}
+		SequenceId		id;
+		ProjectId		project_id;
+		std::string		name;
 	};
 	
 	inline bool is_valid( const SequenceInfo& info )
 	{
-		return info.is_valid();
+		return is_valid( info.id )
+			&& !info.name.empty()
+			;
 	}
 
 }

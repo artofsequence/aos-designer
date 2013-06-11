@@ -16,28 +16,21 @@ namespace backend
 	*/
 	struct ProjectInfo
 	{
-		ProjectId id;
-		std::string name;
-		URI location;
+		ProjectId				id;
+		std::string				name;
+		URI						location;
 
-		bool is_valid() const
-		{
-			return id.is_valid()
-				&& !location.empty()
-				&& !name.empty();
-		}
-	};
-
-	struct ProjectInfoEx
-		: ProjectInfo
-	{
-		std::vector<LibraryId> library_list;
+		std::vector<LibraryId>	library_list;
 		std::vector<SequenceId> sequence_list;
-	};
+		std::vector<EditorId>	editor_list;
 
+	};
+	
 	inline bool is_valid( const ProjectInfo& info )
 	{
-		return info.is_valid();
+		return is_valid( info.id )
+			&& !info.location.empty()
+			&& !info.name.empty();
 	}
 
 }

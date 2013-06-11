@@ -10,21 +10,17 @@ namespace backend {
 
 	struct EditorInfo
 	{
-		std::string name;
-		SequenceId sequence_id;
-		
-		bool is_valid() const 
-		{
-			return sequence_id.is_valid()
-				&& !name.empty()
-				;
-		}
-		
+		EditorId		id;
+		SequenceId		sequence_id;
+		ProjectId		project_id;
 	};
 
 	inline bool is_valid( const EditorInfo& info )
 	{
-		return info.is_valid();
+		return is_valid( info.id )
+			&& is_valid( info.sequence_id )
+			&& is_valid( info.project_id )
+			;
 	}
 
 }}
