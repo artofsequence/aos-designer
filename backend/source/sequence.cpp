@@ -6,6 +6,8 @@
 
 #include <aosdesigner/backend/project.hpp>
 
+#include <aoslcpp/algorithm/edition.hpp>
+
 namespace aosd {
 namespace backend {
 
@@ -13,8 +15,34 @@ namespace backend {
 	{
 	public:
 		explicit Impl( SequenceInfo info )
-			: m_info( std::move(info) )
-		{  }
+			: m_info( info )
+			, m_aosl( aoslcpp::make_empty_sequence( info.name, to_string(info.id) ) )
+		{
+			if( !is_valid( *m_info ) )
+			{
+				std::stringstream error_message;
+				error_message << "Tried to build a Sequence with invalid informations!"; // TODO: add informations
+				throw std::invalid_argument( error_message.str() );
+			}
+			
+		}
+
+		explicit Impl( SequenceInfo info, aosl::Sequence aosl_data ) // TODO: c++11 constructor...
+			: m_info( info ) 
+			, m_aosl( std::move(aosl_data) )
+		{  
+			if( !is_valid( info ) )
+			{
+				std::stringstream error_message;
+				error_message << "Tried to build a Sequence with invalid informations!"; // TODO: add informations
+				throw std::invalid_argument( error_message.str() );
+			}
+
+			auto aosl_source = m_aosl.synchronize();
+			aosl_source->id( aosl::Unique_id(to_string(info.id)) );
+			aosl_source->name( info.name );
+
+		}
 
 		SequenceInfo info() const { return *m_info; }
 		aosl::Sequence aosl_source() const { return *m_aosl; }
@@ -26,8 +54,15 @@ namespace backend {
 	};
 
 	Sequence::Sequence( Workspace& workspace, SequenceInfo info )
-		: WorkspaceObject( workspace )
+		: WorkspaceObject( workspace, info.id )
 		, impl( std::make_unique<Impl>( std::move(info) ) )
+	{
+
+	}
+
+	Sequence::Sequence( Workspace& workspace, SequenceInfo info, aosl::Sequence aosl_data )
+		: WorkspaceObject( workspace, info.id )
+		, impl( std::make_unique<Impl>( std::move(info), std::move(aosl_data) ) ) 
 	{
 
 	}
