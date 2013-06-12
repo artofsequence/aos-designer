@@ -34,17 +34,17 @@ namespace backend {
 		void request_update();
 
 		// TODO: project, sequence, editor, library thread-safe access - must occur in the workspace queue or async?
-		template< class ObjectType, class TaskType >
-		auto async( Id<ObjectType> id, TaskType task ) -> future< boost::optional<decltype(task( *dummy() ))> >
-		{
-			return async( [=]{
-					if( auto object = object_registry.find( id ) ) // return a shared_ptr if it managed to lock it
-					{
-						return task( *object );
-					}
-					return {};
-				});
-		}
+		//template< class ObjectType, class TaskType >
+		//auto async( Id<ObjectType> id, TaskType task ) -> future< boost::optional<decltype(task( *dummy() ))> >
+		//{
+		//	return async( [=]{
+		//			if( auto object = object_registry.find( id ) ) // return a shared_ptr if it managed to lock it
+		//			{
+		//				return task( *object );
+		//			}
+		//			return {};
+		//		});
+		//}
 
 		//SequenceInfo get_sequence_info( SequenceId sequence_id );
 		//ProjectInfo get_project_info( ProjectId project_id );

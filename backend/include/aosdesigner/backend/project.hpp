@@ -5,6 +5,7 @@
 #include <memory>
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/projectinfo.hpp>
+#include <aosdesigner/backend/sequenceinfo.hpp>
 #include <aosdesigner/backend/workspaceobject.hpp>
 
 namespace aosd { 
