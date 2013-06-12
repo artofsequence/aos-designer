@@ -15,7 +15,7 @@ class Object
 	int m_k;
 public:
 
-	Object( Workspace& workspace ) 
+	explicit Object( Workspace& workspace ) 
 		: WorkspaceObject( workspace )
 		, m_k(0)
 	{
@@ -42,9 +42,10 @@ class ObjectGroup
 	std::vector< std::shared_ptr<Object> > m_objects;
 public:
 
-	ObjectGroup( Workspace& workspace ) 
+	explicit ObjectGroup( Workspace& workspace ) 
 		: WorkspaceObject( workspace )
 	{
+		set_id( make_new_id<ObjectGroup>() );
 	}
 
 	boost::future<void> add( std::shared_ptr<Object> object )
@@ -77,7 +78,7 @@ TEST( Test_WorkspaceObject, simple_use )
 	Workspace workspace( executor );
 	auto test = Object( workspace );
 
-	ASSERT_FALSE( is_valid( test.id() ) );
+	ASSERT_TRUE( is_valid( test.id() ) );
 
 	int k = 0;
 
