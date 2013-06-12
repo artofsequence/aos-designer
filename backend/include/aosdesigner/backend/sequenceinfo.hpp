@@ -6,10 +6,8 @@
 #include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/tools/uri.hpp>
 
-namespace aosd
-{
-namespace backend
-{
+namespace aosd {
+namespace backend {
 	
 	struct SequenceInfo
 	{
@@ -21,12 +19,12 @@ namespace backend
 	inline bool is_valid( const SequenceInfo& info )
 	{
 		return is_valid( info.id )
+			&& is_valid( info.project_id )
 			&& !info.name.empty()
 			;
 	}
 
-}
-}
+}}
 
 
 #endif

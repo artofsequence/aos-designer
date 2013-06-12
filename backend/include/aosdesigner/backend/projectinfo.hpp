@@ -8,10 +8,8 @@
 #include <aosdesigner/backend/tools/uri.hpp>
 
 
-namespace aosd
-{
-namespace backend
-{
+namespace aosd {
+namespace backend {
 	/** Basic information about a project.
 	*/
 	struct ProjectInfo
@@ -33,8 +31,7 @@ namespace backend
 			&& !info.name.empty();
 	}
 
-}
-}
+}}
 
 
 #endif
