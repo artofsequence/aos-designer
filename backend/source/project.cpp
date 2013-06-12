@@ -21,19 +21,19 @@ namespace backend {
 	};
 
 
-	Project::Project( Workspace& workspace )
-		: WorkspaceObject( workspace )
-		, impl( std::make_unique<Impl>() )
-	{
+	//Project::Project( Workspace& workspace )
+	//	: WorkspaceObject( workspace )
+	//	, impl( std::make_unique<Impl>() )
+	//{
 
-	}
+	//}
 
-	Project::Project( Workspace& workspace, ProjectInfo info )
-		: WorkspaceObject( workspace )		// TODO this
-		, impl( std::make_unique<Impl>() )  // TODO and this should be changed to Project( workspace )
-	{
+	//Project::Project( Workspace& workspace, ProjectInfo info )
+	//	: WorkspaceObject( workspace )		// TODO this
+	//	, impl( std::make_unique<Impl>() )  // TODO and this should be changed to Project( workspace )
+	//{
 
-	}
+	//}
 
 	//Project::~Project()
 	//{

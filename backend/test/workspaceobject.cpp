@@ -16,10 +16,9 @@ class Object
 public:
 
 	explicit Object( Workspace& workspace ) 
-		: WorkspaceObject( workspace )
+		: WorkspaceObject( workspace, make_new_id<Object>() )
 		, m_k(0)
 	{
-		set_id( make_new_id<Object>() );
 	}
 
 	boost::future<void> dummy_action()
@@ -41,9 +40,8 @@ class ObjectGroup
 public:
 
 	explicit ObjectGroup( Workspace& workspace ) 
-		: WorkspaceObject( workspace )
+		: WorkspaceObject( workspace, make_new_id<ObjectGroup>() )
 	{
-		set_id( make_new_id<ObjectGroup>() );
 	}
 
 	boost::future<void> add( std::shared_ptr<Object> object )

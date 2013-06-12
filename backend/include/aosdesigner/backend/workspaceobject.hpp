@@ -2,7 +2,7 @@
 #define HGUARD_AOSD_BACKEND_WORKSPACEOBJECT_HPP__
 #pragma once
 
-#include <atomic>
+#include <sstream>
 #include <boost/thread/future.hpp>
 
 #include <aosdesigner/backend/workspace.hpp>
@@ -18,15 +18,25 @@ namespace backend {
 	{
 	public:
 
-		Id<T> id() const { return m_id; }
+		const Id<T>& id() const { return m_id; }
 
 		template< class EventType, class ObserverType >
 		EventDispatcher::Connection on( ObserverType&& observer );
 
 	protected:
-		explicit WorkspaceObject( Workspace& workspace )
+		explicit WorkspaceObject( Workspace& workspace, Id<T> new_id )
 			: m_workspace( workspace )
-		{}
+			, m_id( std::move(new_id) )
+		{
+			if( !is_valid(m_id) )
+			{
+				std::stringstream error_message;
+				error_message << "Tried to build a '" << typeid(T).name() << '\''
+				<< " (inheriting from WorkspaceObject<" << typeid(T).name() << '>'
+				<< " with an invalid ID : " << to_string(m_id);
+				throw std::invalid_argument( error_message.str() );
+			}
+		}
 
 		~WorkspaceObject(){} // = default;
 
@@ -37,9 +47,7 @@ namespace backend {
 		auto async( TaskType&& task ) -> future< decltype(task()) >;
 
 		void execute_tasks();
-
-		void set_id( const Id<T>& new_id ) { m_id = new_id; }
-
+		
 		template< class EventType >
 		void publish( EventType&& e );
 
@@ -50,7 +58,7 @@ namespace backend {
 		WorkspaceObject& operator=( const WorkspaceObject& ); // = delete;
 
 		mutable WorkQueue<void> m_work_queue;
-		std::atomic<Id<T>> m_id;
+		const Id<T> m_id;
 		Workspace& m_workspace;
 
 
