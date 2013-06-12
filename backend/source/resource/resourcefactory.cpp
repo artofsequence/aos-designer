@@ -1,4 +1,4 @@
-#include <aosdesigner/backend/resourcefactory.hpp>
+#include <aosdesigner/backend/resource/resourcefactory.hpp>
 
 #include <functional>
 #include <map>
@@ -6,8 +6,8 @@
 #include <utilcpp/assert.hpp>
 #include <aosl/resource_type.hpp>
 
-#include <aosdesigner/backend/resourceptr.hpp>
-#include <aosdesigner/backend/resource.hpp>
+#include <aosdesigner/backend/resource/resourceptr.hpp>
+#include <aosdesigner/backend/resource/resource.hpp>
 
 namespace aosd
 {

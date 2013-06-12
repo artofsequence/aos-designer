@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-#include <aosdesigner/backend/workqueue.hpp>
+#include <aosdesigner/backend/tools/workqueue.hpp>
 
 namespace aosd {
 namespace backend {

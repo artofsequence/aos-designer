@@ -2,7 +2,7 @@
 #define HGUARD_AOSD_BACKEND_RESOURCEREF_HPP__
 #pragma once
 
-#include <aosdesigner/backend/resourceptr.hpp>
+#include <aosdesigner/backend/resource/resourceptr.hpp>
 #include <aosl/resource_id.hpp>
 
 namespace aosd

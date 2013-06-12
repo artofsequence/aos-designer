@@ -7,7 +7,7 @@
 #include <boost/noncopyable.hpp>
 #include <aosl/resource_type.hpp>
 
-#include <aosdesigner/backend/uri.hpp>
+#include <aosdesigner/backend/tools/uri.hpp>
 
 namespace aosd
 {

@@ -3,8 +3,8 @@
 #pragma once
 
 #include <map>
-#include <aosdesigner/backend/resourceptr.hpp>
-#include <aosdesigner/backend/resourceinfo.hpp>
+#include <aosdesigner/backend/resource/resourceptr.hpp>
+#include <aosdesigner/backend/resource/resourceinfo.hpp>
 #include <aosl/resource.hpp>
 
 namespace aosd

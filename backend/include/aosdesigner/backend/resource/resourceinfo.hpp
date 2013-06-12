@@ -2,7 +2,7 @@
 #define HGUARD_AOSD_BACKEND_RESOURCEINFO_HPP__
 #pragma once
 
-#include <aosdesigner/backend/uri.hpp>
+#include <aosdesigner/backend/tools/uri.hpp>
 #include <aosl/resource.hpp>
 
 namespace aosd

@@ -1,8 +1,8 @@
-#include <aosdesigner/backend/resourceprovider.hpp>
+#include <aosdesigner/backend/resource/resourceprovider.hpp>
 
 #include <utilcpp/assert.hpp>
 
-#include <aosdesigner/backend/resourcefactory.hpp>
+#include <aosdesigner/backend/resource/resourcefactory.hpp>
 
 namespace aosd
 {

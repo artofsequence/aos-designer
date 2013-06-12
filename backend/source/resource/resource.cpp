@@ -1,4 +1,4 @@
-#include <aosdesigner/backend/resource.hpp>
+#include <aosdesigner/backend/resource/resource.hpp>
 
 
 
