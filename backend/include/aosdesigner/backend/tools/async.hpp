@@ -49,7 +49,7 @@ namespace backend
 			}			
 		});
 
-		return std::move(result); // TODO: remove move() it is implicit but current version of Boost
+		return result;
 	}
 	
 

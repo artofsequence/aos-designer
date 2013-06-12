@@ -69,7 +69,7 @@ namespace backend {
 	{
 		auto result = async_impl( m_work_queue, std::forward<TaskType>(task) );
 		m_workspace.request_update();
-		return std::move(result); // TODO: remove this when boost::future is fixed
+		return result;
 	}
 
 	template< class T >
