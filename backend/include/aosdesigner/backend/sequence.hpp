@@ -15,23 +15,23 @@
 namespace aosd {
 namespace backend {
 
-	class Project;
-
+	class Workspace;
+	
 	class AOSD_BACKEND_API Sequence
 		: public WorkspaceObject<Sequence>
 	{
 	public:
 
+		explicit Sequence( Workspace& workspace, SequenceInfo info );
+		explicit Sequence( Workspace& workspace, SequenceInfo info, aosl::Sequence aosl_data );
 		~Sequence();
 
 		SequenceInfo info() const;
-		aosl::Sequence aosl_model() const;
+		aosl::Sequence aosl_source() const;
 
 
 	private:
-		friend class Project;
-		explicit Sequence( Project& project, SequenceInfo info );
-
+		
 		class Impl;
 		std::unique_ptr<Impl> impl;
 

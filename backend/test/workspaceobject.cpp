@@ -27,8 +27,6 @@ public:
 		return schedule( [&]{ publish( DummyEvent() ); } );
 	}
 
-
-
 	void update()
 	{
 		execute_tasks();
