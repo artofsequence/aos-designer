@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <QDialog>
-#include <aosdesigner/backend/editionsessioninfo.hpp>
+#include <aosdesigner/backend/editorinfo.hpp>
 
 namespace Ui
 {

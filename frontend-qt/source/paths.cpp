@@ -1,4 +1,4 @@
-#include <aosdesigner/backend/paths.hpp>
+#include "paths.hpp"
 
 #include <boost/filesystem.hpp>
 

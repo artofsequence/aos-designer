@@ -38,6 +38,7 @@ set( AOSD_FRONTENDQT_MODEL_DIR ${AOSD_FRONTENDQT_SOURCE_DIR}/model )
 # Header files.
 
 set( AOSD_FRONTENDQT_ROOT_HEADERS
+	${AOSD_FRONTENDQT_SOURCE_DIR}/paths.hpp
 	${AOSD_FRONTENDQT_SOURCE_DIR}/applicationview.hpp
 	${AOSD_FRONTENDQT_SOURCE_DIR}/mainwindow.hpp
 	${AOSD_FRONTENDQT_SOURCE_DIR}/projectview.hpp
@@ -123,6 +124,7 @@ source_group( "\\_generated\\moc" FILES ${AOSD_FRONTENDQT_QOBJECT_HEADERS_MOC} )
 
 # Views source files.
 set( AOSD_FRONTENDQT_ROOT_SOURCES 
+	${AOSD_FRONTENDQT_SOURCE_DIR}/paths.cpp
 	${AOSD_FRONTENDQT_SOURCE_DIR}/applicationview.cpp
 	${AOSD_FRONTENDQT_SOURCE_DIR}/mainWindow.cpp
 	${AOSD_FRONTENDQT_SOURCE_DIR}/projectview.cpp

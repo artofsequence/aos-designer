@@ -55,7 +55,6 @@ set( AOSD_BACKEND_API_ROOT_HEADERS
 	${AOSD_BACKEND_API_DIR}/libraryinfo.hpp
 	${AOSD_BACKEND_API_DIR}/editor.hpp
 	${AOSD_BACKEND_API_DIR}/editorinfo.hpp
-	${AOSD_BACKEND_API_DIR}/paths.hpp
 )
 
 set( AOSD_BACKEND_API_TOOLS_HEADERS
@@ -93,7 +92,6 @@ set( AOSD_BACKEND_ROOT_SOURCES
 	${AOSD_BACKEND_SOURCE_DIR}/sequence.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/editor.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/library.cpp
-	${AOSD_BACKEND_SOURCE_DIR}/paths.cpp
 )
 
 
