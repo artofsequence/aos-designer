@@ -23,6 +23,8 @@ namespace backend {
 		template< class EventType, class ObserverType >
 		EventDispatcher::Connection on( ObserverType&& observer );
 
+		Workspace& workspace() { return m_workspace; }
+
 	protected:
 		explicit WorkspaceObject( Workspace& workspace, Id<T> new_id )
 			: m_workspace( workspace )
@@ -50,8 +52,6 @@ namespace backend {
 		
 		template< class EventType >
 		void publish( EventType&& e );
-
-		Workspace& workspace() { return m_workspace; }
 
 	private:
 		WorkspaceObject( const WorkspaceObject& ); // = delete;
