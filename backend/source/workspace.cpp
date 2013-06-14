@@ -63,11 +63,14 @@ namespace backend {
 
 		void request_update();
 
-		void register_editor( std::shared_ptr<Editor> editor ) { register_impl( editor, m_editor_registry ); }
-		void register_library( std::shared_ptr<Library> library ) { register_impl( library, m_library_registry ); }
-		void register_sequence( std::shared_ptr<Sequence> sequence ) { register_impl( sequence, m_sequence_registry ); }
+		void add_to_registry( std::shared_ptr<Editor> editor ) { register_impl( editor, m_editor_registry ); }
+		void add_to_registry( std::shared_ptr<Library> library ) { register_impl( library, m_library_registry ); }
+		void add_to_registry( std::shared_ptr<Sequence> sequence ) { register_impl( sequence, m_sequence_registry ); }
 
-		
+		std::shared_ptr<Project> find( const ProjectId& id ) const { return m_project_registry.find( id ); }
+		std::shared_ptr<Editor> find( const EditorId& id ) const { return m_editor_registry.find( id ); }
+		std::shared_ptr<Library> find( const LibraryId& id ) const { return m_library_registry.find( id ); }
+		std::shared_ptr<Sequence> find( const SequenceId& id ) const { return m_sequence_registry.find( id ); }
 
 	private:
 		Impl( const Impl& ); // = delete;
@@ -155,7 +158,7 @@ namespace backend {
 
 	void Workspace::InternalAPI::add_to_registry( std::shared_ptr<Sequence> sequence )
 	{
-		m_workspace_impl.register_sequence( std::move(sequence) );
+		m_workspace_impl.add_to_registry( std::move(sequence) );
 	}
 
 
@@ -170,7 +173,7 @@ namespace backend {
 
 	Workspace::~Workspace()
 	{
-
+		// TODO: wait for all updating to end and prevent another update
 	}
 
 	void Workspace::dispatch_events()
@@ -189,6 +192,26 @@ namespace backend {
 		return InternalAPI(*pimpl);
 	}
 
-	
+	std::shared_ptr<Project> Workspace::find( const ProjectId& id ) const
+	{
+		return pimpl->find( id );
+	}
+
+	std::shared_ptr<Editor> Workspace::find( const EditorId& id ) const
+	{
+		return pimpl->find( id );
+	}
+
+	std::shared_ptr<Library> Workspace::find( const LibraryId& id ) const
+	{
+		return pimpl->find( id );
+	}
+
+	std::shared_ptr<Sequence> Workspace::find( const SequenceId& id ) const
+	{
+		return pimpl->find( id );
+	}
+
+
 
 }}

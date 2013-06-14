@@ -5,6 +5,7 @@
 #include <memory>
 #include <type_traits>
 #include <boost/thread/future.hpp>
+#include <boost/optional/optional.hpp>
 
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/id.hpp>
@@ -32,18 +33,10 @@ namespace backend {
 		
 		void request_update();
 
-		// TODO: project, sequence, editor, library thread-safe access - must occur in the workspace queue or async?
-		//template< class ObjectType, class TaskType >
-		//auto async( Id<ObjectType> id, TaskType task ) -> future< boost::optional<decltype(task( *dummy() ))> >
-		//{
-		//	return async( [=]{
-		//			if( auto object = object_registry.find( id ) ) // return a shared_ptr if it managed to lock it
-		//			{
-		//				return task( *object );
-		//			}
-		//			return {};
-		//		});
-		//}
+		// project, sequence, editor, library thread-safe access - must occur in the object's update.
+		template< class ObjectType, class TaskType >
+		auto work_on( const Id<ObjectType>& id, TaskType task, ObjectType* dummy = nullptr ) 
+			-> boost::optional< future< decltype(task(*dummy)) > >;
 
 		//SequenceInfo get_sequence_info( SequenceId sequence_id );
 		//ProjectInfo get_project_info( ProjectId project_id );
@@ -64,18 +57,37 @@ namespace backend {
 
 		TaskExecutor m_executor;
 		mutable EventQueueDispatcher m_event_dispatcher;
-		
+				
+		class Impl;
+		std::unique_ptr<Impl> pimpl;
+
 		template< class TaskType >
 		auto async( TaskType&& task ) -> future<decltype(task())>
 		{
 			return async_impl( m_executor, std::forward<TaskType>(task) );
 		}
-		
-		class Impl;
-		std::unique_ptr<Impl> pimpl;
+
+		std::shared_ptr<Project> find( const ProjectId& id ) const;
+		std::shared_ptr<Editor> find( const EditorId& id ) const;
+		std::shared_ptr<Library> find( const LibraryId& id ) const;
+		std::shared_ptr<Sequence> find( const SequenceId& id ) const;
 
 	};
 
+	template< class ObjectType, class TaskType >
+	auto Workspace::work_on( const Id<ObjectType>& id, TaskType task, ObjectType* dummy )
+		-> boost::optional< future< decltype(task(*dummy)) > >
+	{
+		if( auto object = find<ObjectType>( id ) )
+		{
+			auto& workspace_object = static_cast<WorkspaceObject&>( *object );
+			return workspace_object.on_next_update( 
+				[=]( ObjectType& ready_object ){
+					task( ready_object );
+			});
+		}
+		return boost::none;
+	}
 
 }}
 
