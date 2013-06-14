@@ -25,6 +25,10 @@ namespace backend {
 
 		Workspace& workspace() { return m_workspace; }
 
+		template< class TaskType >
+		auto on_next_update( TaskType task ) -> future< decltype(task( *this )) >;
+
+
 	protected:
 		explicit WorkspaceObject( Workspace& workspace, Id<T> new_id )
 			: m_workspace( workspace )
@@ -40,7 +44,7 @@ namespace backend {
 			}
 		}
 
-		~WorkspaceObject(){} // = default;
+		virtual ~WorkspaceObject(){} // = default;
 
 		template< class TaskType >
 		auto schedule( TaskType&& task ) -> future< decltype(task()) >;
@@ -48,11 +52,11 @@ namespace backend {
 		template< class TaskType >
 		auto async( TaskType&& task ) -> future< decltype(task()) >;
 
-		void execute_tasks();
+		virtual void after_update() = 0;
 		
 		template< class EventType >
 		void publish( EventType&& e );
-
+		
 	private:
 		WorkspaceObject( const WorkspaceObject& ); // = delete;
 		WorkspaceObject& operator=( const WorkspaceObject& ); // = delete;
@@ -61,6 +65,8 @@ namespace backend {
 		const Id<T> m_id;
 		Workspace& m_workspace;
 
+		friend class Workspace::Impl;
+		void update();
 
 	};
 
@@ -69,6 +75,15 @@ namespace backend {
 	EventDispatcher::Connection WorkspaceObject<T>::on( ObserverType&& observer )
 	{
 		return m_workspace.m_event_dispatcher.on<EventType>( id(), std::forward<ObserverType>(observer) );
+	}
+
+	template< class T >
+	template< class TaskType >
+	auto WorkspaceObject<T>::on_next_update( TaskType task ) -> future< decltype(task( *this )) >
+	{
+		return schedule( [this,task]{
+			task( *this );
+		});
 	}
 
 	template< class T >
@@ -88,9 +103,10 @@ namespace backend {
 	}
 
 	template< class T >
-	void WorkspaceObject<T>::execute_tasks()
+	void WorkspaceObject<T>::update()
 	{ 
-		m_work_queue.execute(); 
+		m_work_queue.execute();
+		after_update();
 		if( !m_work_queue.empty() )
 			m_workspace.request_update();
 	}
