@@ -17,7 +17,7 @@ namespace backend {
 	class EventDispatcher
 	{
 	public:
-		typedef boost::signals2::connection Connection;		
+		typedef boost::signals2::connection Connection;
 		typedef boost::signals2::scoped_connection ScopedConnection;
 
 

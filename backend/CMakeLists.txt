@@ -87,6 +87,7 @@ set( AOSD_BACKEND_API_HEADERS
 
 set( AOSD_BACKEND_ROOT_SOURCES
 	${AOSD_BACKEND_SOURCE_DIR}/id.cpp
+	${AOSD_BACKEND_SOURCE_DIR}/workspaceinternalapi.hpp
 	${AOSD_BACKEND_SOURCE_DIR}/workspace.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/project.cpp
 	${AOSD_BACKEND_SOURCE_DIR}/sequence.cpp

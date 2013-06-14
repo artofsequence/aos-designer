@@ -25,7 +25,6 @@ namespace backend {
 		~Workspace();
 
 		
-
 		EventDispatcher::ObservationAPI& event_dispatcher() const { return m_event_dispatcher.observation_api(); }
 
 		// Dispatch queued events to observers using the calling thread.
@@ -54,9 +53,9 @@ namespace backend {
 		//future<ProjectId> open_project( URI project_address );
 		//future<void> close_project( ProjectId project_id );
 
+		class InternalAPI;
+		InternalAPI internal_api();
 		
-		
-
 	private:
 		Workspace( const Workspace& ); // = delete;
 		Workspace& operator=( const Workspace& ); // = delete;
@@ -71,12 +70,7 @@ namespace backend {
 		{
 			return async_impl( m_executor, std::forward<TaskType>(task) );
 		}
-
-		void add_to_registry( std::weak_ptr<Project> project );
-		void add_to_registry( std::weak_ptr<Sequence> sequence );
-		void add_to_registry( std::weak_ptr<Editor> editor );
-		void add_to_registry( std::weak_ptr<Library> library );
-
+		
 		class Impl;
 		std::unique_ptr<Impl> pimpl;
 
