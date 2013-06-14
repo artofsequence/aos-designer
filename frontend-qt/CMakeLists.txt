@@ -144,7 +144,7 @@ set( AOSD_FRONTENDQT_ROOT_SOURCES
 
 
 # Dialog source files.
-set( AOSDESIGNER_DIALOG_SOURCES 
+set( AOSD_FRONTENDQT_DIALOG_SOURCES 
 	${AOSD_FRONTENDQT_DIALOG_DIR}/welcomescreen.cpp
 	${AOSD_FRONTENDQT_DIALOG_DIR}/newprojectdialog.cpp
 	${AOSD_FRONTENDQT_DIALOG_DIR}/newsequencedialog.cpp
@@ -221,7 +221,7 @@ source_group( "\\frontendqt\\_generated\\ui" FILES ${AOSD_FRONTENDQT_GENERATED_H
 
 # Additional groups
 source_group( "\\frontendqt\\" FILES ${AOSD_FRONTENDQT_ROOT_HEADERS} ${AOSD_FRONTENDQT_ROOT_SOURCES} )
-source_group( "\\frontendqt\\dialog" FILES ${AOSD_FRONTENDQT_DIALOG_HEADERS} ${AOSDESIGNER_DIALOG_SOURCES} )
+source_group( "\\frontendqt\\dialog" FILES ${AOSD_FRONTENDQT_DIALOG_HEADERS} ${AOSD_FRONTENDQT_DIALOG_SOURCES} )
 source_group( "\\frontendqt\\model" FILES ${AOSD_FRONTENDQT_MODEL_HEADERS} ${AOSD_FRONTENDQT_MODEL_SOURCES} )
 source_group( "\\frontendqt\\editor" FILES ${AOSD_FRONTENDQT_EDITOR_HEADERS} ${AOSD_FRONTENDQT_EDITOR_SOURCES} )
 source_group( "\\frontendqt\\editor\\canvas" FILES ${AOSD_FRONTENDQT_EDITOR_CANVAS_HEADERS} ${AOSD_FRONTENDQT_EDITOR_CANVAS_SOURCES} )
