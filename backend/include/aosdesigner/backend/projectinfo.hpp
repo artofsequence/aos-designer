@@ -10,8 +10,7 @@
 
 namespace aosd {
 namespace backend {
-	/** Basic information about a project.
-	*/
+
 	struct ProjectInfo
 	{
 		ProjectId				id;
