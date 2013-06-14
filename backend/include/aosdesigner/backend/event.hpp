@@ -30,6 +30,17 @@ namespace event {
 	{
 		LibraryId library_id;
 	};
+
+	struct LibraryAdded
+	{
+		LibraryInfo library_info;
+	};
+
+	struct LibraryRemoved
+	{
+		ProjectId project_id;
+		LibraryId library_id;
+	};
 	
 	struct SequenceAdded
 	{
