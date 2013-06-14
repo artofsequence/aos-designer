@@ -34,7 +34,7 @@ namespace backend {
 		
 		class Impl;
 		std::unique_ptr<Impl> impl;
-
+		void after_update(){}
 	};
 
 
