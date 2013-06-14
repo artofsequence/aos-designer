@@ -13,6 +13,7 @@ class Object
 	: public WorkspaceObject<Object>
 {
 	int m_k;
+	void after_update(){}
 public:
 
 	explicit Object( Workspace& workspace ) 
@@ -21,15 +22,11 @@ public:
 	{
 	}
 
+	void update() { WorkspaceObject::update(); }
+
 	boost::future<void> dummy_action()
 	{
 		return schedule( [&]{ publish( DummyEvent() ); } );
-	}
-
-	void update()
-	{
-		execute_tasks();
-
 	}
 };
 
@@ -53,16 +50,17 @@ public:
 		});
 	}
 
-	void update()
+	void update() 
 	{
-		execute_tasks();
 		for( auto object : m_objects )
 		{
-			async( [=]{
-				object->update();
-			});
+			async( [=]{ object->update(); } );
 		}
 	}
+
+private:
+	void after_update(){}
+	
 
 };
 
@@ -93,6 +91,11 @@ TEST( Test_WorkspaceObject, simple_use )
 	test.update();
 	workspace.dispatch_events();
 	ASSERT_EQ( 2, k );
+	test.on_next_update( []( Object& object ){ object.dummy_action(); } );
+	test.update();
+	workspace.dispatch_events();
+	ASSERT_EQ( 3, k );
+
 }
 
 TEST( Test_WorkspaceObject, object_group )

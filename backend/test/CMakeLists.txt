@@ -5,6 +5,7 @@ UTILCPP_MAKE_TEST_FOR( aosdesigner-backend
 		workqueue.cpp
 		eventdispatcher.cpp
 		workspaceobject.cpp
+		workspace.cpp
 		sequence.cpp
 	DEPENDENCIES
 		tbb

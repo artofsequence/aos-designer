@@ -78,12 +78,13 @@ namespace backend {
 	auto Workspace::work_on( const Id<ObjectType>& id, TaskType task, ObjectType* dummy )
 		-> boost::optional< future< decltype(task(*dummy)) > >
 	{
-		if( auto object = find<ObjectType>( id ) )
+		static_assert( std::is_base_of< WorkspaceObject<ObjectType>, ObjectType>::value, "Tried to work on an object of type unknown to Workspace!"
+			"Valid types: Project, Sequence, Library, Editor" );
+		if( auto object = find( id ) )
 		{
-			auto& workspace_object = static_cast<WorkspaceObject&>( *object );
-			return workspace_object.on_next_update( 
-				[=]( ObjectType& ready_object ){
-					task( ready_object );
+			WorkspaceObject<ObjectType>& workspace_object = static_cast<WorkspaceObject<ObjectType>&>( *object );
+			return workspace_object.on_next_update( [=]( ObjectType& ready_object ){ 
+				task( ready_object ); 
 			});
 		}
 		return boost::none;

@@ -26,7 +26,8 @@ namespace backend {
 		Workspace& workspace() { return m_workspace; }
 
 		template< class TaskType >
-		auto on_next_update( TaskType task ) -> future< decltype(task( *this )) >;
+		auto on_next_update( TaskType task, T* dummy = nullptr ) -> future< decltype(task( *dummy )) >;
+
 
 
 	protected:
@@ -52,6 +53,8 @@ namespace backend {
 		template< class TaskType >
 		auto async( TaskType&& task ) -> future< decltype(task()) >;
 
+		friend class Workspace::Impl;
+		void update();
 		virtual void after_update() = 0;
 		
 		template< class EventType >
@@ -65,8 +68,7 @@ namespace backend {
 		const Id<T> m_id;
 		Workspace& m_workspace;
 
-		friend class Workspace::Impl;
-		void update();
+		
 
 	};
 
@@ -79,10 +81,10 @@ namespace backend {
 
 	template< class T >
 	template< class TaskType >
-	auto WorkspaceObject<T>::on_next_update( TaskType task ) -> future< decltype(task( *this )) >
+	auto WorkspaceObject<T>::on_next_update( TaskType task, T* dummy ) -> future< decltype(task( *dummy )) >
 	{
 		return schedule( [this,task]{
-			task( *this );
+			return task( *static_cast<T*>(this) );
 		});
 	}
 
