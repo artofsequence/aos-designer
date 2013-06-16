@@ -91,6 +91,8 @@ namespace backend {
 		
 		flat_map< ProjectId, std::shared_ptr<Project> > m_project_index;
 
+		std::vector< future<void> > m_project_update_futures;
+
 		void update_loop();
 		void update();
 
@@ -136,12 +138,16 @@ namespace backend {
 	{
 		m_work_queue.execute();
 		
-		// TODO: update all projects using async()
+		m_project_update_futures.clear();
+		m_project_update_futures.reserve( m_project_index.size() );
+
 		for( auto& project_slot : m_project_index )
 		{
 			auto& project = project_slot.second;
-			m_workspace.async( [project]{ project->update(); } );
+			m_project_update_futures.emplace_back( m_workspace.async( [project]{ project->update(); } ) );
 		}
+
+		wait_for_all( m_project_update_futures );
 
 		if( !m_work_queue.empty() )
 			request_update();
