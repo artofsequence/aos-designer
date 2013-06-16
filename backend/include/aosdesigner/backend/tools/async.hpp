@@ -52,6 +52,12 @@ namespace backend
 		return result;
 	}
 	
+	template< class FutureContainer >
+	void wait_for_all( FutureContainer&& container )
+	{
+		for( auto& ft: container )
+			ft.wait();
+	}
 
 }
 }
