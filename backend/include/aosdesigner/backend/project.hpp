@@ -14,6 +14,25 @@
 namespace aosd { 
 namespace backend {
 		
+	/** An open project, containing info about sequences, libraries and open editors.
+		Destroying a Project instance closes it.
+		@par
+		Each project can contain:
+		 - a set of sequences informations, which are associated with that project;
+		 - a set of libraries which can be accessed by all the sequences in the project;
+		 - a set of Editor instances, which are used to view and edit Sequence instances;
+		@par
+		Adding a sequence in the Project don't instantiate a Sequence object, 
+		but opening an Editor of a sequence does (it needs to load the state of 
+		the Sequence in memory and modify it accordingly).
+
+		@remark The public member functions are all thread-safe.
+		They return futures when the action will be done later 
+		(usually on update, which is managed by the associated Workspace,
+		@see WorkspaceObject ).
+		They return by value or void when the action will be performed
+		synchronously, which might imply waiting.
+	*/
 	class AOSD_BACKEND_API Project
 		: public WorkspaceObject<Project>
 	{
@@ -23,9 +42,6 @@ namespace backend {
 
 		ProjectInfo info() const;
 
-		future<void> rename( std::string new_name );
-		future<void> relocate( URI new_location );
-		
 		future<void> add_sequence( SequenceInfo info );
 		future<void> remove_sequence( SequenceId sequence_id );
 
