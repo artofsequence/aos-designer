@@ -4,7 +4,6 @@
 
 #include <string>
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/tools/uri.hpp>
 
 namespace aosd {
 namespace backend {
@@ -13,7 +12,6 @@ namespace backend {
 	{
 		LibraryId		id;
 		std::string		name;
-		URI				location;
 		ProjectId		project_id;
 		SequenceId		sequence_id;
 		
@@ -25,7 +23,6 @@ namespace backend {
 		return is_valid( info.id )
 			&& is_valid( info.project_id )
 			&& !info.name.empty()
-			&& !info.location.empty()
 			;
 	}
 
