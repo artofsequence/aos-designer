@@ -10,6 +10,7 @@ namespace aosd
 namespace backend
 {
 	using boost::future;
+	using boost::make_ready_future;
 	using boost::promise;
 	using boost::packaged_task;
 
