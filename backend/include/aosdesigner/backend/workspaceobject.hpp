@@ -67,9 +67,7 @@ namespace backend {
 		mutable WorkQueue<void> m_work_queue;
 		const Id<T> m_id;
 		Workspace& m_workspace;
-
 		
-
 	};
 
 	template< class T >
@@ -116,9 +114,9 @@ namespace backend {
 
 	template< class T >
 	template< class EventType >
-	void WorkspaceObject<T>::publish( EventType&& e )
+	void WorkspaceObject<T>::publish( EventType&& ev )
 	{
-		m_workspace.m_event_dispatcher.publish( id(), e );
+		m_workspace.m_event_dispatcher.publish( id(), std::forward<EventType>(ev) );
 	}
 
 
