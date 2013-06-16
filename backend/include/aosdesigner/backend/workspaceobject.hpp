@@ -28,8 +28,6 @@ namespace backend {
 		template< class TaskType >
 		auto on_next_update( TaskType task, T* dummy = nullptr ) -> future< decltype(task( *dummy )) >;
 
-
-
 	protected:
 		explicit WorkspaceObject( Workspace& workspace, Id<T> new_id )
 			: m_workspace( workspace )

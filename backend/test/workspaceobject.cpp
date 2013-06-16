@@ -22,7 +22,7 @@ public:
 	{
 	}
 
-	void update() { WorkspaceObject::update(); }
+	using WorkspaceObject::update;
 
 	boost::future<void> dummy_action()
 	{
@@ -50,16 +50,16 @@ public:
 		});
 	}
 
-	void update() 
-	{
-		for( auto object : m_objects )
+	using WorkspaceObject::update;
+
+private:
+	void after_update()
+	{ 
+		for( const auto& object : m_objects )
 		{
 			async( [=]{ object->update(); } );
 		}
 	}
-
-private:
-	void after_update(){}
 	
 
 };
@@ -75,6 +75,7 @@ TEST( Test_WorkspaceObject, simple_use )
 	ASSERT_TRUE( is_valid( test.id() ) );
 
 	int k = 0;
+	
 
 	test.on<DummyEvent>( [&]{ ++k; } );
 	ASSERT_EQ( 0, k );
@@ -91,10 +92,12 @@ TEST( Test_WorkspaceObject, simple_use )
 	test.update();
 	workspace.dispatch_events();
 	ASSERT_EQ( 2, k );
-	test.on_next_update( []( Object& object ){ object.dummy_action(); } );
+
+	Object* target_object = nullptr;
+	test.on_next_update( [&]( Object& object ){ target_object= &object; } );
 	test.update();
 	workspace.dispatch_events();
-	ASSERT_EQ( 3, k );
+	ASSERT_EQ( &test, target_object );
 
 }
 
