@@ -12,8 +12,6 @@
 #include <aosdesigner/backend/tools/taskexecutor.hpp>
 #include <aosdesigner/backend/tools/eventdispatcher.hpp>
 #include <aosdesigner/backend/tools/async.hpp>
-#include <aosdesigner/backend/tools/uri.hpp>
-
 
 namespace aosd {
 namespace backend {
@@ -21,7 +19,7 @@ namespace backend {
 	class AOSD_BACKEND_API Workspace
 	{
 	public:
-				
+		
 		explicit Workspace( TaskExecutor executor ); // THINK: set a default task executor?
 		~Workspace();
 
