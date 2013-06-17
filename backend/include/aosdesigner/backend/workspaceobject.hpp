@@ -13,11 +13,21 @@
 namespace aosd { 
 namespace backend {
 
+	/** CRTP base for types managed by the Workspace.
+		Inject several public and protected services common to all 
+		objects into the workspace:
+		 - event dispatching (into the related workspace event dispatcher);
+		 - access to the related workspace;
+		 - a work queue automatically scheduling execution ASAP through the workspace update cycle;
+
+		@remark Unless explicitly specified, all the member functions are thread-safe.
+	*/
 	template< class T >
 	class WorkspaceObject
 	{
 	public:
 
+		/** @return Unique identifier of this object. */
 		const Id<T>& id() const { return m_id; }
 
 		template< class EventType, class ObserverType >

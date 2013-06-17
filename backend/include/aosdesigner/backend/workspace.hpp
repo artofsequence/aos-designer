@@ -42,6 +42,9 @@ namespace backend {
 
 		/** Read-only access to the event dispatcher.
 			The event dispatcher is actually a thread-safe event queue, so connections can be done 
+			but no other event dispatching can be done from client code.
+			@see EventQueueDispatcher
+
 			Usage example:
 			@code
 				
