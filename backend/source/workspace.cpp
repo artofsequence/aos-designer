@@ -76,6 +76,7 @@ namespace backend {
 		auto schedule( TaskType&& task ) -> future< decltype(task()) >;
 
 		future<Project&> open_project( ProjectInfo info );
+		future<void> close_project( ProjectId id );
 
 	private:
 		Impl( const Impl& ); // = delete;
@@ -189,6 +190,20 @@ namespace backend {
 		});
 	}
 
+	future<void> Workspace::Impl::close_project( ProjectId id )
+	{
+		UTILCPP_ASSERT( is_valid( id ), "Tried to close a project with an invalid id!" );
+
+		return schedule( [this,id]{
+			if( m_open_projects.erase( id ) )
+			{
+				event::ProjectClosed ev;
+				ev.project_id = id;
+				m_workspace.m_event_dispatcher.publish( ev );
+			}
+		});
+	}
+
 	///////////////////////
 
 	Workspace::InternalAPI::InternalAPI( Workspace::Impl& workspace_impl )
@@ -255,12 +270,12 @@ namespace backend {
 
 	future<Project&> Workspace::open_project( ProjectInfo info )
 	{
-		return  pimpl->open_project( info );
+		return pimpl->open_project( info );
 	}
 
 	future<void> Workspace::close_project( ProjectId project_id )
 	{
-		return make_ready_future(); // TEMPORARY
+		return pimpl->close_project( project_id );
 	}
 
 
