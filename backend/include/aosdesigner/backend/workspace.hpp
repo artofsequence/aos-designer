@@ -12,6 +12,7 @@
 #include <aosdesigner/backend/tools/taskexecutor.hpp>
 #include <aosdesigner/backend/tools/eventdispatcher.hpp>
 #include <aosdesigner/backend/tools/async.hpp>
+#include <aosdesigner/backend/projectinfo.hpp>
 
 namespace aosd {
 namespace backend {
@@ -45,9 +46,8 @@ namespace backend {
 		//ProjectInfo get_project_info( ProjectId project_id );
 		//EditorInfo get_editeditor_info( EditorId edit_editor_id );
 
-		//future<ProjectId> create_project();
-		//future<ProjectId> open_project( URI project_address );
-		//future<void> close_project( ProjectId project_id );
+		future<Project&> open_project( ProjectInfo info );
+		future<void> close_project( ProjectId project_id );
 
 		class InternalAPI;
 		InternalAPI internal_api();

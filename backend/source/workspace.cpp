@@ -5,19 +5,19 @@
 #include <boost/container/flat_map.hpp>
 #include <tbb/concurrent_unordered_map.h>
 
+#include <utilcpp/assert.hpp>
 #include <utilcpp/make_unique.hpp>
 #include <aosdesigner/backend/tools/workqueue.hpp>
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/editor.hpp>
 #include <aosdesigner/backend/sequence.hpp>
 #include <aosdesigner/backend/library.hpp>
+#include <aosdesigner/backend/event.hpp>
 
 #include "workspaceinternalapi.hpp"
 
 namespace aosd {
 namespace backend {
-
-
 
 	template< class T >
 	class WeakRegistry
@@ -72,6 +72,11 @@ namespace backend {
 		std::shared_ptr<Library> find( const LibraryId& id ) const { return m_library_registry.find( id ); }
 		std::shared_ptr<Sequence> find( const SequenceId& id ) const { return m_sequence_registry.find( id ); }
 
+		template< class TaskType >
+		auto schedule( TaskType&& task ) -> future< decltype(task()) >;
+
+		future<Project&> open_project( ProjectInfo info );
+
 	private:
 		Impl( const Impl& ); // = delete;
 		Impl& operator=( const Impl& ); // = delete;
@@ -89,7 +94,7 @@ namespace backend {
 		WeakRegistry<Sequence>	m_sequence_registry;
 
 		
-		flat_map< ProjectId, std::shared_ptr<Project> > m_project_index;
+		flat_map< ProjectId, std::shared_ptr<Project> > m_open_projects;
 
 		std::vector< future<void> > m_project_update_futures;
 
@@ -109,6 +114,14 @@ namespace backend {
 		, m_update_request_count( 0 )
 	{
 
+	}
+
+	template< class TaskType >
+	auto Workspace::Impl::schedule( TaskType&& task ) -> future< decltype(task()) >
+	{
+		auto result = async_impl( m_work_queue, std::forward<TaskType>(task) );
+		m_workspace.request_update();
+		return result;
 	}
 
 	void Workspace::Impl::request_update()
@@ -139,9 +152,9 @@ namespace backend {
 		m_work_queue.execute();
 		
 		m_project_update_futures.clear();
-		m_project_update_futures.reserve( m_project_index.size() );
+		m_project_update_futures.reserve( m_open_projects.size() );
 
-		for( auto& project_slot : m_project_index )
+		for( auto& project_slot : m_open_projects )
 		{
 			auto& project = project_slot.second;
 			m_project_update_futures.emplace_back( m_workspace.async( [project]{ project->update(); } ) );
@@ -152,6 +165,28 @@ namespace backend {
 		if( !m_work_queue.empty() )
 			request_update();
 
+	}
+
+	future<Project&> Workspace::Impl::open_project( ProjectInfo info )
+	{
+		UTILCPP_ASSERT( is_valid( info ), "Tried to open a project with invalid information!" );
+
+		return schedule( [this,info]()-> Project& {
+			// TODO: check that the project isn't already open
+
+			auto project = std::make_shared<Project>( m_workspace, info );
+			UTILCPP_ASSERT_NOT_NULL( project );
+			UTILCPP_ASSERT( project->id() == info.id, "Project creation inconsistency!" );
+
+			m_open_projects.insert( std::make_pair( project->id(), project ) );
+			m_project_registry.add( project->id(), project );
+
+			event::ProjectOpen ev;
+			ev.project_info = info;
+			m_workspace.m_event_dispatcher.publish( project->id(), ev );
+
+			return *project;
+		});
 	}
 
 	///////////////////////
@@ -216,6 +251,16 @@ namespace backend {
 	std::shared_ptr<Sequence> Workspace::find( const SequenceId& id ) const
 	{
 		return pimpl->find( id );
+	}
+
+	future<Project&> Workspace::open_project( ProjectInfo info )
+	{
+		return  pimpl->open_project( info );
+	}
+
+	future<void> Workspace::close_project( ProjectId project_id )
+	{
+		return make_ready_future(); // TEMPORARY
 	}
 
 
