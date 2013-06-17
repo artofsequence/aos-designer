@@ -31,7 +31,7 @@ namespace backend {
 		~Workspace();
 
 		
-		EventDispatcher::ObservationAPI& event_dispatcher() const { return m_event_dispatcher.observation_api(); }
+		EventDispatcher::ObservationAPI event_dispatcher() const { return m_event_dispatcher.observation_api(); }
 
 		// Dispatch queued events to observers using the calling thread.
 		void dispatch_events();

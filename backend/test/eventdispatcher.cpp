@@ -30,6 +30,31 @@ TEST( Test_EventDispatcher, simple_use )
 
 }
 
+TEST( Test_EventDispatcher, simple_use_observation_api )
+{
+	bool project_is_open = false;
+	bool editor_began = false;
+
+	EventDispatcher dispatcher;
+	auto obs_api = dispatcher.observation_api();
+	auto obs_api_2 = obs_api;
+
+	obs_api_2.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
+	obs_api_2.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
+	ASSERT_FALSE( project_is_open );
+	ASSERT_FALSE( editor_began );
+
+	dispatcher.dispatch( event::ProjectOpen() );
+	ASSERT_TRUE( project_is_open );
+	ASSERT_FALSE( editor_began );
+
+	dispatcher.dispatch( event::EditorOpen() );
+	ASSERT_TRUE( project_is_open );
+	ASSERT_TRUE( editor_began );
+
+}
+
+
 
 TEST( Test_EventDispatcher, simple_disconnections )
 {
