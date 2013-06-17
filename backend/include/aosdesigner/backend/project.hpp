@@ -48,12 +48,14 @@ namespace backend {
 		future<void> add_library( LibraryInfo info );
 		future<void> remove_library( LibraryId library_id );
 
-		future<std::shared_ptr<Editor>> open_editor( SequenceId sequence_id );
+		future<EditorId> open_editor( SequenceId sequence_id );
 		future<void> close_editor( EditorId editor_id );
 		
 	private:
 		class Impl;
 		std::unique_ptr<Impl> impl;
+
+		void after_update();
 	};
 
 
