@@ -199,7 +199,7 @@ namespace backend {
 			{
 				event::ProjectClosed ev;
 				ev.project_id = id;
-				m_workspace.m_event_dispatcher.publish( ev );
+				m_workspace.m_event_dispatcher.publish( id, ev );
 			}
 		});
 	}
