@@ -25,6 +25,7 @@ namespace backend {
 	template< class T >
 	class WorkspaceObject
 	{
+		static T* dummy() { return nullptr; }
 	public:
 
 		/** @return Unique identifier of this object. */
@@ -36,7 +37,7 @@ namespace backend {
 		Workspace& workspace() { return m_workspace; }
 
 		template< class TaskType >
-		auto on_next_update( TaskType task, T* dummy = nullptr ) -> future< decltype(task( *dummy )) >;
+		auto on_next_update( TaskType task ) -> future< decltype(task( *dummy() )) >;
 
 	protected:
 		explicit WorkspaceObject( Workspace& workspace, Id<T> new_id )
@@ -87,7 +88,7 @@ namespace backend {
 
 	template< class T >
 	template< class TaskType >
-	auto WorkspaceObject<T>::on_next_update( TaskType task, T* dummy ) -> future< decltype(task( *dummy )) >
+	auto WorkspaceObject<T>::on_next_update( TaskType task ) -> future< decltype(task( *dummy() )) >
 	{
 		return schedule( [this,task]{
 			return task( *static_cast<T*>(this) );
