@@ -64,7 +64,6 @@ namespace backend {
 
 		friend class Workspace::Impl;
 		void update();
-		virtual void after_update() = 0;
 		
 		template< class EventType >
 		void publish( EventType&& e );
@@ -115,7 +114,6 @@ namespace backend {
 	void WorkspaceObject<T>::update()
 	{ 
 		m_work_queue.execute();
-		after_update();
 		if( !m_work_queue.empty() )
 			m_workspace.request_update();
 	}

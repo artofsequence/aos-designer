@@ -39,18 +39,59 @@ namespace backend {
 				if( auto object = find_it->second.lock() )
 				{
 					return object;
-				}
+				} // Unfortunately, tbb::concurrent_unordered_map can't erase elements safely in concurrent code, so we have to keep the pointer.
 			}
 
 			return nullptr;
 		}
 
+		
+
 	private:
 		WeakRegistry( const WeakRegistry& ); // = delete;
 		WeakRegistry& operator=( const WeakRegistry& ); // = delete;
 
+
 		tbb::concurrent_unordered_map< Id<T>, std::weak_ptr<T> > m_index; 
 
+	};
+
+	template< class T >
+	class WeakUpdateList
+	{
+	public:
+
+		void add( const std::shared_ptr<T>& object )
+		{
+			m_update_list.emplace_back( object );
+		}
+
+		template< class ExecutorType, class TaskType >
+		void parallel_for_all( ExecutorType&& executor, TaskType&& task )
+		{
+			m_update_futures.clear();
+			m_update_futures.reserve( m_update_list.size() );
+			
+			for( auto it = begin(m_update_list); it != end(m_update_list); )
+			{
+				if( auto object = it->lock() )
+				{
+					m_update_futures.emplace_back( async_impl( executor, [=]{ task( object ); } ) );
+					++it;
+				}
+				else
+				{
+					// we only keep weak pointers to valid elements for faster updates
+					it = m_update_list.erase( it );
+				}
+			}
+
+			wait_for_all( m_update_futures );
+		}
+
+	private:
+		std::vector< std::weak_ptr<T> > m_update_list;
+		std::vector< future<void> > m_update_futures;
 	};
 
 	using boost::container::flat_map;
@@ -63,9 +104,9 @@ namespace backend {
 
 		void request_update();
 
-		void add_to_registry( std::shared_ptr<Editor> editor ) { register_impl( editor, m_editor_registry ); }
-		void add_to_registry( std::shared_ptr<Library> library ) { register_impl( library, m_library_registry ); }
-		void add_to_registry( std::shared_ptr<Sequence> sequence ) { register_impl( sequence, m_sequence_registry ); }
+		void add_to_registry( std::shared_ptr<Editor> editor ) { register_impl( editor, m_editor_registry, m_editor_update_list ); }
+		void add_to_registry( std::shared_ptr<Library> library ) { register_impl( library, m_library_registry, m_library_update_list ); }
+		void add_to_registry( std::shared_ptr<Sequence> sequence ) { register_impl( sequence, m_sequence_registry, m_sequence_update_list ); }
 
 		std::shared_ptr<Project> find( const ProjectId& id ) const { return m_project_registry.find( id ); }
 		std::shared_ptr<Editor> find( const EditorId& id ) const { return m_editor_registry.find( id ); }
@@ -85,28 +126,37 @@ namespace backend {
 		friend class WorkspaceInternalAPI;
 
 		Workspace& m_workspace;
-
 		WorkQueue<void> m_work_queue;
-		std::atomic<unsigned long> m_update_request_count;
+		
+		flat_map< ProjectId, std::shared_ptr<Project> > m_open_projects;
 
 		WeakRegistry<Project>	m_project_registry;
 		WeakRegistry<Editor>	m_editor_registry;
 		WeakRegistry<Library>	m_library_registry;
 		WeakRegistry<Sequence>	m_sequence_registry;
 
-		
-		flat_map< ProjectId, std::shared_ptr<Project> > m_open_projects;
+		WeakUpdateList<Project> m_project_update_list;
+		WeakUpdateList<Editor> m_editor_update_list;
+		WeakUpdateList<Library> m_library_update_list;
+		WeakUpdateList<Sequence> m_sequence_update_list;
 
-		std::vector< future<void> > m_project_update_futures;
+		std::atomic<unsigned long> m_update_request_count;
+
 
 		void update_loop();
 		void update();
 
 		template< class T >
-		void register_impl( std::shared_ptr<T> object, WeakRegistry<T>& registry )
+		void update_all( WeakUpdateList<T>& list );
+
+		template< class T >
+		void register_impl( std::shared_ptr<T> object, WeakRegistry<T>& registry, WeakUpdateList<T>& update_list )
 		{
 			registry.add( object->id(), object );
+			schedule( [object,&update_list]{ update_list.add( object ); } );
 		}
+
+		void add_to_registry( std::shared_ptr<Project> project ) { register_impl( project, m_project_registry, m_project_update_list ); }
 
 	};
 
@@ -144,29 +194,32 @@ namespace backend {
 		{
 			const auto request_count_on_begin = m_update_request_count.load();
 			update();
-			m_update_request_count -= request_count_on_begin;			
+			m_update_request_count -= request_count_on_begin;
 		}
 	}
 
 	void Workspace::Impl::update()
 	{
 		m_work_queue.execute();
-		
-		m_project_update_futures.clear();
-		m_project_update_futures.reserve( m_open_projects.size() );
 
-		for( auto& project_slot : m_open_projects )
-		{
-			auto& project = project_slot.second;
-			m_project_update_futures.emplace_back( m_workspace.async( [project]{ project->update(); } ) );
-		}
-
-		wait_for_all( m_project_update_futures );
+		update_all( m_library_update_list );
+		update_all( m_sequence_update_list );
+		update_all( m_editor_update_list );
+		update_all( m_project_update_list );
 
 		if( !m_work_queue.empty() )
 			request_update();
-
 	}
+
+
+	template< class T >
+	void Workspace::Impl::update_all( WeakUpdateList<T>& list )
+	{
+		auto update_task = []( std::shared_ptr<T> object ){ object->update(); };
+		
+		list.parallel_for_all( m_workspace.m_executor, update_task );
+	}
+
 
 	future<ProjectId> Workspace::Impl::open_project( ProjectInfo info )
 	{
@@ -180,7 +233,7 @@ namespace backend {
 			UTILCPP_ASSERT( project->id() == info.id, "Project creation inconsistency!" );
 
 			m_open_projects.insert( std::make_pair( project->id(), project ) );
-			m_project_registry.add( project->id(), project );
+			add_to_registry( project );
 
 			event::ProjectOpen ev;
 			ev.project_info = info;
@@ -215,6 +268,16 @@ namespace backend {
 	void Workspace::InternalAPI::add_to_registry( std::shared_ptr<Sequence> sequence )
 	{
 		m_workspace_impl.add_to_registry( std::move(sequence) );
+	}
+
+	void Workspace::InternalAPI::add_to_registry( std::shared_ptr<Editor> editor )
+	{
+		m_workspace_impl.add_to_registry( std::move(editor) );
+	}
+
+	void Workspace::InternalAPI::add_to_registry( std::shared_ptr<Library> library )
+	{
+		m_workspace_impl.add_to_registry( std::move(library) );
 	}
 
 

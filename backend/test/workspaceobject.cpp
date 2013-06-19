@@ -13,7 +13,6 @@ class Object
 	: public WorkspaceObject<Object>
 {
 	int m_k;
-	void after_update(){}
 public:
 
 	explicit Object( Workspace& workspace ) 
@@ -50,17 +49,15 @@ public:
 		});
 	}
 
-	using WorkspaceObject::update;
-
-private:
-	void after_update()
+	void update()
 	{ 
+		WorkspaceObject::update();
 		for( const auto& object : m_objects )
 		{
 			async( [=]{ object->update(); } );
 		}
 	}
-	
+
 
 };
 
