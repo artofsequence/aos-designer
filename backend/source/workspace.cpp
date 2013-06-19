@@ -75,7 +75,7 @@ namespace backend {
 		template< class TaskType >
 		auto schedule( TaskType&& task ) -> future< decltype(task()) >;
 
-		future<Project&> open_project( ProjectInfo info );
+		future<ProjectId> open_project( ProjectInfo info );
 		future<void> close_project( ProjectId id );
 
 	private:
@@ -168,11 +168,11 @@ namespace backend {
 
 	}
 
-	future<Project&> Workspace::Impl::open_project( ProjectInfo info )
+	future<ProjectId> Workspace::Impl::open_project( ProjectInfo info )
 	{
 		UTILCPP_ASSERT( is_valid( info ), "Tried to open a project with invalid information!" );
 
-		return schedule( [this,info]()-> Project& {
+		return schedule( [this,info]()-> ProjectId {
 			// TODO: check that the project isn't already open
 
 			auto project = std::make_shared<Project>( m_workspace, info );
@@ -186,7 +186,7 @@ namespace backend {
 			ev.project_info = info;
 			m_workspace.m_event_dispatcher.publish( project->id(), ev );
 
-			return *project;
+			return project->id();
 		});
 	}
 
@@ -268,7 +268,7 @@ namespace backend {
 		return pimpl->find( id );
 	}
 
-	future<Project&> Workspace::open_project( ProjectInfo info )
+	future<ProjectId> Workspace::open_project( ProjectInfo info )
 	{
 		return pimpl->open_project( info );
 	}

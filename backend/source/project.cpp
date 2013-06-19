@@ -50,10 +50,10 @@ namespace backend {
 	{
 
 	}
-/*
+
 	aosd::backend::ProjectInfo Project::info() const
 	{
-
+		return ProjectInfo();
 	}
 
 
@@ -86,14 +86,10 @@ namespace backend {
 	{
 		return make_ready_future();
 	}
-*/
+
 	void Project::after_update()
 	{
 
 	}
-
-	
-
-	//////////////////////
 	
 }}

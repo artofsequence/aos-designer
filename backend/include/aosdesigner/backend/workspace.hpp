@@ -115,9 +115,9 @@ namespace backend {
 
 			@param info		Information of the project to open. Will be used to load the necessary data.
 							The information have to be valid and the id of the project have to be unique.
-			@return A reference to the project once it is open.
+			@return The id of the project once it is open.
 		*/
-		future<Project&> open_project( ProjectInfo info );
+		future<ProjectId> open_project( ProjectInfo info );
 
 		/** Close an open project (and all the related data).
 			@remark Event published on success once done: event::ProjectClosed
