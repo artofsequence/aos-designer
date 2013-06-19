@@ -48,12 +48,12 @@ namespace backend {
 		future<void> add_library( LibraryInfo info );
 		future<void> remove_library( LibraryId library_id );
 
-		future<EditorId> open_editor( SequenceId sequence_id );
+		future<EditorId> open_editor( EditorInfo info );
 		future<void> close_editor( EditorId editor_id );
 		
 	private:
 		class Impl;
-		std::unique_ptr<Impl> impl;
+		std::unique_ptr<Impl> pimpl;
 
 	};
 

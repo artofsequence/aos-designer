@@ -20,6 +20,9 @@ namespace backend {
 		explicit Impl( Project& project, ProjectInfo project_info );
 
 		void add( std::shared_ptr<Editor> editor );
+		void add( std::shared_ptr<Library> library );
+
+		EditorId open_editor( EditorInfo info );
 		
 	private:
 		Impl( const Impl& ); // = delete;
@@ -38,13 +41,19 @@ namespace backend {
 
 	}
 
+	EditorId Project::Impl::open_editor( EditorInfo info )
+	{
+
+	}
+
+
 
 	/////////////////////////////////////////////////////////
 
 
 	Project::Project( Workspace& workspace, ProjectInfo info )
 		: WorkspaceObject( workspace, info.id )
-		, impl( std::make_unique<Impl>( *this, info ) )
+		, m_impl( std::make_unique<Impl>( *this, info ) )
 	{
 
 	}
@@ -85,10 +94,9 @@ namespace backend {
 		return make_ready_future();
 	}
 
-	future<EditorId> Project::open_editor( SequenceId sequence_id )
+	future<EditorId> Project::open_editor( EditorInfo info )
 	{
-		UTILCPP_NOT_IMPLEMENTED_YET;
-		return make_ready_future( make_new_id<Editor>() );
+		return schedule( [this,info]{ return m_impl->open_editor( info ); } );
 	}
 
 	future<void> Project::close_editor( EditorId editor_id )

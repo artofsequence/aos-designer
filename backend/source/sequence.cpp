@@ -74,14 +74,14 @@ namespace backend {
 
 	Sequence::Sequence( Workspace& workspace, SequenceInfo info )
 		: WorkspaceObject( workspace, info.id )
-		, impl( std::make_unique<Impl>( *this, std::move(info) ) )
+		, m_impl( std::make_unique<Impl>( *this, std::move(info) ) )
 	{
 
 	}
 
 	Sequence::Sequence( Workspace& workspace, SequenceInfo info, aosl::Sequence aosl_data )
 		: WorkspaceObject( workspace, info.id )
-		, impl( std::make_unique<Impl>( *this, std::move(info), std::move(aosl_data) ) ) 
+		, m_impl( std::make_unique<Impl>( *this, std::move(info), std::move(aosl_data) ) ) 
 	{
 
 	}
@@ -93,12 +93,12 @@ namespace backend {
 
 	SequenceInfo Sequence::info() const
 	{
-		return impl->info();
+		return m_impl->info();
 	}
 
 	aosl::Sequence Sequence::aosl_source() const
 	{
-		return impl->aosl_source();
+		return m_impl->aosl_source();
 	}
 
 

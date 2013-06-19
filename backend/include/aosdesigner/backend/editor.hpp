@@ -15,13 +15,13 @@ namespace backend {
 		: public WorkspaceObject<Editor>
 	{
 	public:
+		explicit Editor( Workspace& workspace, EditorInfo info );
 		~Editor();
 
 		EditorInfo info() const;
 
 	private:
-		friend class Project;
-		explicit Editor( Project& project );
+		
 
 		class Impl;
 		std::unique_ptr<Impl> impl;
