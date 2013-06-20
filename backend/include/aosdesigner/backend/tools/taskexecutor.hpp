@@ -15,7 +15,7 @@ namespace backend {
 
 	struct TaskExecutor_Immediate
 	{
-		void operator()( Task task )
+		void operator()( Task& task ) const
 		{
 			task();
 		}
@@ -30,7 +30,7 @@ namespace backend {
 		TaskExecutor_WorkThread( TaskExecutor_WorkThread&& other ); 
 		TaskExecutor_WorkThread& operator=( TaskExecutor_WorkThread&& );
 
-		void operator()( Task task );
+		void operator()( Task task ) const;
 
 	private:
 		TaskExecutor_WorkThread( const TaskExecutor_WorkThread& ); // = delete;
