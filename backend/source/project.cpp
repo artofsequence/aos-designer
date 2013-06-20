@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <boost/container/flat_map.hpp>
+#include <boost/thread/synchronized_value.hpp>
 
 #include <utilcpp/assert.hpp>
 #include <utilcpp/make_unique.hpp>
@@ -24,12 +25,15 @@ namespace backend {
 		void add( std::shared_ptr<Library> library );
 
 		EditorId open_editor( EditorInfo info );
+
+		ProjectInfo info() const { return *m_info; }
 		
 	private:
 		Impl( const Impl& ); // = delete;
 		Impl& operator=( const Impl& ); // = delete;
 
 		Project& m_project;
+		boost::synchronized_value<ProjectInfo> m_info;
 
 		flat_map< Id<Library>, std::shared_ptr<Library> > m_library_index;
 		flat_map< Id<Editor>, std::shared_ptr<Editor> > m_editor_index;
@@ -38,6 +42,7 @@ namespace backend {
 
 	Project::Impl::Impl( Project& project, ProjectInfo project_info )
 		: m_project( project )
+		, m_info( project_info )
 	{
 
 	}
@@ -45,6 +50,7 @@ namespace backend {
 	EditorId Project::Impl::open_editor( EditorInfo info )
 	{
 		// TODO: add checks
+		info.project_id = m_project.id();
 
 		auto editor = std::make_shared<Editor>( m_project.workspace(), std::move(info) );
 		m_editor_index.insert( std::make_pair( editor->id(), editor ) );
@@ -76,8 +82,7 @@ namespace backend {
 
 	aosd::backend::ProjectInfo Project::info() const
 	{
-		UTILCPP_NOT_IMPLEMENTED_YET;
-		return ProjectInfo();
+		return m_impl->info();
 	}
 
 
