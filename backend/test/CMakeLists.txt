@@ -7,6 +7,8 @@ UTILCPP_MAKE_TEST_FOR( aosdesigner-backend
 		workspaceobject.cpp
 		workspace.cpp
 		sequence.cpp
+		project.cpp
+		editor.cpp
 	DEPENDENCIES
 		tbb
 )
