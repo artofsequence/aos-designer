@@ -50,7 +50,9 @@ namespace backend {
 		m_editor_index.insert( std::make_pair( editor->id(), editor ) );
 		m_project.workspace().internal_api().add_to_registry( editor );
 
-		// TODO: send event from editor
+		event::EditorOpen ev;
+		ev.editor_info = editor->info();
+		m_project.publish( ev );
 
 		return editor->id();
 	}
