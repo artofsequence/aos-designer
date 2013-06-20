@@ -10,13 +10,13 @@
 namespace aosd {
 namespace backend {
 
-	class Project;
+	class Sequence;
 
 	class AOSD_BACKEND_API Editor
 		: public WorkspaceObject<Editor>
 	{
 	public:
-		explicit Editor( Workspace& workspace, EditorInfo info );
+		explicit Editor( Workspace& workspace, EditorInfo info, std::shared_ptr<Sequence> sequence );
 		~Editor();
 
 		EditorInfo info() const;
