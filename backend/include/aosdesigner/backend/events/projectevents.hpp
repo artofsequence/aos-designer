@@ -2,9 +2,9 @@
 #define HGUARD_AOSD_BACKEND_PROJECTEVENTS_HPP__
 
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/projectinfo.hpp>
-#include <aosdesigner/backend/sequenceinfo.hpp>
-#include <aosdesigner/backend/libraryinfo.hpp>
+#include <aosdesigner/backend/info/projectinfo.hpp>
+#include <aosdesigner/backend/info/sequenceinfo.hpp>
+#include <aosdesigner/backend/info/libraryinfo.hpp>
 
 namespace aosd {
 namespace backend {

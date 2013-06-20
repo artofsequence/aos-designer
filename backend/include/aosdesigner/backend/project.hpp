@@ -5,10 +5,10 @@
 #include <memory>
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/workspaceobject.hpp>
-#include <aosdesigner/backend/projectinfo.hpp>
-#include <aosdesigner/backend/sequenceinfo.hpp>
-#include <aosdesigner/backend/editorinfo.hpp>
-#include <aosdesigner/backend/libraryinfo.hpp>
+#include <aosdesigner/backend/info/projectinfo.hpp>
+#include <aosdesigner/backend/info/sequenceinfo.hpp>
+#include <aosdesigner/backend/info/editorinfo.hpp>
+#include <aosdesigner/backend/info/libraryinfo.hpp>
 
 
 namespace aosd { 

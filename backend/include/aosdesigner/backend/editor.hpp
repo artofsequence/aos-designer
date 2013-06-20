@@ -4,7 +4,7 @@
 
 #include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/workspaceobject.hpp>
-#include <aosdesigner/backend/editorinfo.hpp>
+#include <aosdesigner/backend/info/editorinfo.hpp>
 #include <aosdesigner/backend/events/editorevents.hpp>
 
 namespace aosd {

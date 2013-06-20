@@ -12,7 +12,7 @@
 #include <aosdesigner/backend/tools/taskexecutor.hpp>
 #include <aosdesigner/backend/tools/eventdispatcher.hpp>
 #include <aosdesigner/backend/tools/async.hpp>
-#include <aosdesigner/backend/projectinfo.hpp>
+#include <aosdesigner/backend/info/projectinfo.hpp>
 
 namespace aosd {
 namespace backend {

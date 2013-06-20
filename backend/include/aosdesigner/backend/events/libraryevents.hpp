@@ -2,7 +2,7 @@
 #define HGUARD_AOSD_BACKEND_LIBRARYEVENTS_HPP__
 
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/libraryinfo.hpp>
+#include <aosdesigner/backend/info/libraryinfo.hpp>
 
 namespace aosd {
 namespace backend {

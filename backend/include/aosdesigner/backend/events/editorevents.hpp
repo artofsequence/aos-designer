@@ -2,7 +2,7 @@
 #define HGUARD_AOSD_BACKEND_EDITOREVENTS_HPP__
 
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/editorinfo.hpp>
+#include <aosdesigner/backend/info/editorinfo.hpp>
 
 namespace aosd {
 namespace backend {

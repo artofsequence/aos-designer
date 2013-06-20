@@ -8,7 +8,7 @@
 
 #include <aosdesigner/backend/api.hpp>
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/sequenceinfo.hpp>
+#include <aosdesigner/backend/info/sequenceinfo.hpp>
 #include <aosdesigner/backend/workspaceobject.hpp>
 
 

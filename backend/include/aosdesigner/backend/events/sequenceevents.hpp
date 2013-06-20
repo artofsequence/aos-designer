@@ -2,7 +2,7 @@
 #define HGUARD_AOSD_BACKEND_SEQUENCEEVENTS_HPP__
 
 #include <aosdesigner/backend/id.hpp>
-#include <aosdesigner/backend/sequenceinfo.hpp>
+#include <aosdesigner/backend/info/sequenceinfo.hpp>
 
 namespace aosd {
 namespace backend {
