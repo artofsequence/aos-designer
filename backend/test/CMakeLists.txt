@@ -1,6 +1,7 @@
 
 UTILCPP_MAKE_TEST_FOR( aosdesigner-backend 
 	SOURCES 
+		dataprovider.hpp
 		id.cpp
 		workqueue.cpp
 		eventdispatcher.cpp
