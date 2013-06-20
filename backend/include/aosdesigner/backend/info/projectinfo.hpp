@@ -5,7 +5,9 @@
 #include <string>
 #include <vector>
 #include <aosdesigner/backend/id.hpp>
-
+#include <aosdesigner/backend/info/editorinfo.hpp>
+#include <aosdesigner/backend/info/libraryinfo.hpp>
+#include <aosdesigner/backend/info/sequenceinfo.hpp>
 
 namespace aosd {
 namespace backend {
@@ -15,9 +17,9 @@ namespace backend {
 		ProjectId				id;
 		std::string				name;
 
-		std::vector<LibraryId>	library_list;
-		std::vector<SequenceId> sequence_list;
-		std::vector<EditorId>	editor_list;
+		std::vector<LibraryInfo>  library_list;
+		std::vector<SequenceInfo> sequence_list;
+		std::vector<EditorInfo>	  editor_list;
 
 	};
 	

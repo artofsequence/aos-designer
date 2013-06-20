@@ -12,16 +12,11 @@ namespace backend {
 	{
 		LibraryId		id;
 		std::string		name;
-		ProjectId		project_id;
-		SequenceId		sequence_id;
-		
-		bool is_shared() const { return !is_valid( sequence_id ); }
 	};
 
 	inline bool is_valid( const LibraryInfo& info )
 	{
 		return is_valid( info.id )
-			&& is_valid( info.project_id )
 			&& !info.name.empty()
 			;
 	}

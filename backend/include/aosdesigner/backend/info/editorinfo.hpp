@@ -12,14 +12,12 @@ namespace backend {
 	{
 		EditorId		id;
 		SequenceId		sequence_id;
-		ProjectId		project_id;
 	};
 
 	inline bool is_valid( const EditorInfo& info )
 	{
 		return is_valid( info.id )
 			&& is_valid( info.sequence_id )
-			&& is_valid( info.project_id )
 			;
 	}
 
