@@ -8,6 +8,7 @@
 #include <utilcpp/assert.hpp>
 #include <utilcpp/make_unique.hpp>
 #include <aosdesigner/backend/tools/workqueue.hpp>
+#include <aosdesigner/backend/dataprovider.hpp>
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/editor.hpp>
 #include <aosdesigner/backend/sequence.hpp>
@@ -97,7 +98,7 @@ namespace backend {
 	class Workspace::Impl
 	{
 	public:
-		Impl( Workspace& workspace );
+		Impl( Workspace& workspace, DataProvider& data_provider );
 
 		void request_update();
 
@@ -114,10 +115,10 @@ namespace backend {
 		auto schedule( TaskType&& task ) -> future< decltype(task()) >;
 
 		future<ProjectId> open_project( ProjectInfo info );
+		future<ProjectId> open_project( URI uri );
 		future<void> close_project( ProjectId id );
 
-		std::shared_ptr<Sequence> find_or_load( const SequenceId& id, const URI& location );
-		std::shared_ptr<Library> find_or_load( const LibraryId& id, const URI& location );
+		DataProvider& data_provider() { return m_data_provider; }
 
 	private:
 		Impl( const Impl& ); // = delete;
@@ -126,6 +127,7 @@ namespace backend {
 		friend class WorkspaceInternalAPI;
 
 		Workspace& m_workspace;
+		DataProvider& m_data_provider;
 		WorkQueue<void> m_work_queue;
 		
 		flat_map< ProjectId, std::shared_ptr<Project> > m_open_projects;
@@ -141,11 +143,7 @@ namespace backend {
 		WeakUpdateList<Sequence> m_sequence_update_list;
 
 		std::atomic<unsigned long> m_update_request_count;
-
-
-		boost::mutex m_load_library_mutex;
-		boost::mutex m_load_sequence_mutex;
-
+		
 		void update_loop();
 		void update();
 
@@ -161,18 +159,18 @@ namespace backend {
 
 		void add_to_registry( std::shared_ptr<Project> project ) { register_impl( project, m_project_registry, m_project_update_list ); }
 
-		SequenceInfo load_sequence_info( const URI& uri );
-		LibraryInfo load_library_info( const URI& uri );
+		ProjectId open_project_impl( const ProjectInfo& );
 
 	};
 
-	Workspace::Impl::Impl( Workspace& workspace ) 
+	Workspace::Impl::Impl( Workspace& workspace, DataProvider& data_provider ) 
 		: m_workspace( workspace )
+		, m_data_provider( data_provider )
 		, m_update_request_count( 0 )
 	{
 
 	}
-
+	
 	template< class TaskType >
 	auto Workspace::Impl::schedule( TaskType&& task ) -> future< decltype(task()) >
 	{
@@ -226,26 +224,38 @@ namespace backend {
 		list.parallel_for_all( m_workspace.m_executor, update_task );
 	}
 
+	ProjectId Workspace::Impl::open_project_impl( const ProjectInfo& project_info )
+	{
+		// TODO: check that the project isn't already open
+
+		auto project = std::make_shared<Project>( m_workspace, project_info );
+		UTILCPP_ASSERT_NOT_NULL( project );
+		UTILCPP_ASSERT( project->id() == project_info.id, "Project creation inconsistency!" );
+
+		m_open_projects.insert( std::make_pair( project->id(), project ) );
+		add_to_registry( project );
+
+		event::ProjectOpen ev;
+		ev.project_info = project_info;
+		m_workspace.m_event_dispatcher.publish( project->id(), ev );
+
+		return project->id();		
+	}
 
 	future<ProjectId> Workspace::Impl::open_project( ProjectInfo info )
 	{
 		UTILCPP_ASSERT( is_valid( info ), "Tried to open a project with invalid information!" );
 
-		return schedule( [this,info]()-> ProjectId {
-			// TODO: check that the project isn't already open
+		return schedule( [this,info]{ return open_project_impl( info ); } );
+	}
 
-			auto project = std::make_shared<Project>( m_workspace, info );
-			UTILCPP_ASSERT_NOT_NULL( project );
-			UTILCPP_ASSERT( project->id() == info.id, "Project creation inconsistency!" );
-
-			m_open_projects.insert( std::make_pair( project->id(), project ) );
-			add_to_registry( project );
-
-			event::ProjectOpen ev;
-			ev.project_info = info;
-			m_workspace.m_event_dispatcher.publish( project->id(), ev );
-
-			return project->id();
+	future<ProjectId> Workspace::Impl::open_project( URI uri )
+	{
+		return schedule( [this,uri]{
+			ProjectInfo info = m_data_provider.get_project_info( uri );
+			if( is_valid( info ) )
+				return open_project_impl( info );
+			return ProjectId(); // TODO: OR THROW AN EXCEPTION???
 		});
 	}
 
@@ -263,61 +273,7 @@ namespace backend {
 		});
 	}
 
-	std::shared_ptr<Sequence> Workspace::Impl::find_or_load( const SequenceId& id, const URI& location ) // TODO: refactor
-	{
-		boost::lock_guard<boost::mutex> lock( m_load_sequence_mutex );
-
-		if( auto sequence = find( id ) )
-			return sequence;
-
-		auto info = load_sequence_info( location );
-
-		if( is_valid( info ) )
-		{
-			auto sequence = std::make_shared<Sequence>( m_workspace, info );
-			add_to_registry( sequence );
-			return sequence;
-		}
-		
-		return nullptr;
-	}
-
-	std::shared_ptr<Library> Workspace::Impl::find_or_load( const LibraryId& id, const URI& location ) // TODO: refactor
-	{
-		/*boost::lock_guard<boost::mutex> lock( m_load_library_mutex );
-
-		if( auto sequence = find( id ) )
-			return sequence;
-
-		auto info = load_library_info( location );
-
-		if( is_valid( info ) )
-		{
-			auto library = std::make_shared<Library>( m_workspace, info );
-			add_to_registry( library );
-			return library;
-		}*/
-		UTILCPP_NOT_IMPLEMENTED_YET;
-		return nullptr;
-	}
-
-	SequenceInfo Workspace::Impl::load_sequence_info( const URI& uri )
-	{
-		// THIS IS TEMPORARY
-		SequenceInfo info;
-		info.id = make_new_id<Sequence>();
-		info.name = "Unnamed Sequence";
-		return info;
-	}
-
-	LibraryInfo Workspace::Impl::load_library_info( const URI& uri )
-	{
-		// THIS IS TEMPORARY
-		LibraryInfo info;
-		info.id = make_new_id<Library>();
-		info.name = "Unnamed Sequence";
-		return info;
-	}
+	
 
 
 	///////////////////////
@@ -343,23 +299,16 @@ namespace backend {
 		m_workspace_impl.add_to_registry( std::move(library) );
 	}
 
-	std::shared_ptr<Sequence> Workspace::InternalAPI::find_or_load( const SequenceId& id, const URI& location )
+	DataProvider& Workspace::InternalAPI::data_provider()
 	{
-		return m_workspace_impl.find_or_load( id, location );
+		return m_workspace_impl.data_provider();
 	}
-
-	std::shared_ptr<Library> Workspace::InternalAPI::find_or_load( const LibraryId& id, const URI& location )
-	{
-		return m_workspace_impl.find_or_load( id, location );
-	}
-
-
 
 	///////////////////////
 
-	Workspace::Workspace( TaskExecutor executor )
+	Workspace::Workspace( TaskExecutor executor, DataProvider& data_provider )
 		: m_executor( std::move(executor) )
-		, pimpl( std::make_unique<Impl>( *this ) )
+		, pimpl( std::make_unique<Impl>( *this, data_provider ) )
 	{
 
 	}
@@ -408,6 +357,11 @@ namespace backend {
 	future<ProjectId> Workspace::open_project( ProjectInfo info )
 	{
 		return pimpl->open_project( info );
+	}
+
+	future<ProjectId> Workspace::open_project( URI uri )
+	{
+		return pimpl->open_project( uri );
 	}
 
 	future<void> Workspace::close_project( ProjectId project_id )

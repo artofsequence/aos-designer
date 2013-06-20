@@ -17,6 +17,8 @@
 namespace aosd {
 namespace backend {
 
+	class DataProvider;
+
 	/** The Workspace is the environment in which operations on Projects can occur.
 		This is the root object necessary to work with he backend.
 		Workspace will keep Projects open until explicitly closed and will provide
@@ -35,9 +37,10 @@ namespace backend {
 	public:
 		
 		/** Construct a Workspace which will use the provided TaskExecutor to launch update loops.
-			@param executor		Task executor in which update tasks will be pushed in.
+			@param executor			Task executor in which update tasks will be pushed in.
+			@param data_provider	Data provider to use when in need to retrieve data from outside the backend.
 		*/
-		explicit Workspace( TaskExecutor executor );
+		explicit Workspace( TaskExecutor executor, DataProvider& data_provider );
 		~Workspace();
 
 		/** Read-only access to the event dispatcher.
@@ -110,7 +113,7 @@ namespace backend {
 		template< class ObjectType, class TaskType >
 		future<bool> work_on( const Id<ObjectType>& id, TaskType task );
 		
-		/** Open a project for edition.
+		/** Open a project for edition using the provided info.
 			@remark Event published on success once done: event::ProjectOpen 
 
 			@param info		Information of the project to open. Will be used to load the necessary data.
@@ -118,6 +121,15 @@ namespace backend {
 			@return The id of the project once it is open.
 		*/
 		future<ProjectId> open_project( ProjectInfo info );
+		
+		/** Open a project for edition using the provided uri to retrieve the project info.
+			@remark Event published on success once done: event::ProjectOpen 
+
+			@param uri		Locate where to retrieve the project's info.
+							The information have to be valid and the id of the project have to be unique.
+			@return The id of the project once it is open.
+		*/
+		future<ProjectId> Workspace::open_project( URI uri );
 
 		/** Close an open project (and all the related data).
 			@remark Event published on success once done: event::ProjectClosed
@@ -135,7 +147,7 @@ namespace backend {
 
 		TaskExecutor m_executor;
 		mutable EventQueueDispatcher m_event_dispatcher;
-				
+		
 		class Impl;
 		std::unique_ptr<Impl> pimpl;
 
