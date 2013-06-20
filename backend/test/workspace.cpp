@@ -2,7 +2,7 @@
 
 #include <aosdesigner/backend/workspace.hpp>
 #include <aosdesigner/backend/project.hpp>
-#include <aosdesigner/backend/event.hpp>
+#include <aosdesigner/backend/events.hpp>
 
 using namespace aosd::backend;
 
