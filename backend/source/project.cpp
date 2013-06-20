@@ -7,6 +7,7 @@
 #include <utilcpp/make_unique.hpp>
 
 #include <aosdesigner/backend/editor.hpp>
+#include "workspaceinternalapi.hpp"
 
 namespace aosd {
 namespace backend {
@@ -43,7 +44,15 @@ namespace backend {
 
 	EditorId Project::Impl::open_editor( EditorInfo info )
 	{
+		// TODO: add checks
 
+		auto editor = std::make_shared<Editor>( m_project.workspace(), std::move(info) );
+		m_editor_index.insert( std::make_pair( editor->id(), editor ) );
+		m_project.workspace().internal_api().add_to_registry( editor );
+
+		// TODO: send event from editor
+
+		return editor->id();
 	}
 
 
