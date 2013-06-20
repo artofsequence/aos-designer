@@ -12,7 +12,7 @@
 #include <aosdesigner/backend/editor.hpp>
 #include <aosdesigner/backend/sequence.hpp>
 #include <aosdesigner/backend/library.hpp>
-#include <aosdesigner/backend/event.hpp>
+#include <aosdesigner/backend/events.hpp>
 
 #include "workspaceinternalapi.hpp"
 
@@ -39,19 +39,17 @@ namespace backend {
 				if( auto object = find_it->second.lock() )
 				{
 					return object;
-				} // Unfortunately, tbb::concurrent_unordered_map can't erase elements safely in concurrent code, so we have to keep the pointer.
+				} 
+				// Unfortunately, tbb::concurrent_unordered_map can't erase elements safely in concurrent code, so we have to keep the null pointer.
 			}
 
 			return nullptr;
 		}
 
-		
-
 	private:
 		WeakRegistry( const WeakRegistry& ); // = delete;
 		WeakRegistry& operator=( const WeakRegistry& ); // = delete;
-
-
+		
 		tbb::concurrent_unordered_map< Id<T>, std::weak_ptr<T> > m_index; 
 
 	};
@@ -64,13 +62,13 @@ namespace backend {
 		void add( const std::shared_ptr<T>& object )
 		{
 			m_update_list.emplace_back( object );
+			m_update_futures.reserve( m_update_list.size() );
 		}
 
 		template< class ExecutorType, class TaskType >
 		void parallel_for_all( ExecutorType&& executor, TaskType&& task )
 		{
 			m_update_futures.clear();
-			m_update_futures.reserve( m_update_list.size() );
 			
 			for( auto it = begin(m_update_list); it != end(m_update_list); )
 			{
@@ -100,7 +98,6 @@ namespace backend {
 	{
 	public:
 		Impl( Workspace& workspace );
-		~Impl(){} // = default
 
 		void request_update();
 
@@ -118,6 +115,9 @@ namespace backend {
 
 		future<ProjectId> open_project( ProjectInfo info );
 		future<void> close_project( ProjectId id );
+
+		std::shared_ptr<Sequence> find_or_load( const SequenceId& id, const URI& location );
+		std::shared_ptr<Library> find_or_load( const LibraryId& id, const URI& location );
 
 	private:
 		Impl( const Impl& ); // = delete;
@@ -143,6 +143,9 @@ namespace backend {
 		std::atomic<unsigned long> m_update_request_count;
 
 
+		boost::mutex m_load_library_mutex;
+		boost::mutex m_load_sequence_mutex;
+
 		void update_loop();
 		void update();
 
@@ -157,6 +160,9 @@ namespace backend {
 		}
 
 		void add_to_registry( std::shared_ptr<Project> project ) { register_impl( project, m_project_registry, m_project_update_list ); }
+
+		SequenceInfo load_sequence_info( const URI& uri );
+		LibraryInfo load_library_info( const URI& uri );
 
 	};
 
@@ -257,6 +263,63 @@ namespace backend {
 		});
 	}
 
+	std::shared_ptr<Sequence> Workspace::Impl::find_or_load( const SequenceId& id, const URI& location ) // TODO: refactor
+	{
+		boost::lock_guard<boost::mutex> lock( m_load_sequence_mutex );
+
+		if( auto sequence = find( id ) )
+			return sequence;
+
+		auto info = load_sequence_info( location );
+
+		if( is_valid( info ) )
+		{
+			auto sequence = std::make_shared<Sequence>( m_workspace, info );
+			add_to_registry( sequence );
+			return sequence;
+		}
+		
+		return nullptr;
+	}
+
+	std::shared_ptr<Library> Workspace::Impl::find_or_load( const LibraryId& id, const URI& location ) // TODO: refactor
+	{
+		/*boost::lock_guard<boost::mutex> lock( m_load_library_mutex );
+
+		if( auto sequence = find( id ) )
+			return sequence;
+
+		auto info = load_library_info( location );
+
+		if( is_valid( info ) )
+		{
+			auto library = std::make_shared<Library>( m_workspace, info );
+			add_to_registry( library );
+			return library;
+		}*/
+		UTILCPP_NOT_IMPLEMENTED_YET;
+		return nullptr;
+	}
+
+	SequenceInfo Workspace::Impl::load_sequence_info( const URI& uri )
+	{
+		// THIS IS TEMPORARY
+		SequenceInfo info;
+		info.id = make_new_id<Sequence>();
+		info.name = "Unnamed Sequence";
+		return info;
+	}
+
+	LibraryInfo Workspace::Impl::load_library_info( const URI& uri )
+	{
+		// THIS IS TEMPORARY
+		LibraryInfo info;
+		info.id = make_new_id<Library>();
+		info.name = "Unnamed Sequence";
+		return info;
+	}
+
+
 	///////////////////////
 
 	Workspace::InternalAPI::InternalAPI( Workspace::Impl& workspace_impl )
@@ -279,6 +342,17 @@ namespace backend {
 	{
 		m_workspace_impl.add_to_registry( std::move(library) );
 	}
+
+	std::shared_ptr<Sequence> Workspace::InternalAPI::find_or_load( const SequenceId& id, const URI& location )
+	{
+		return m_workspace_impl.find_or_load( id, location );
+	}
+
+	std::shared_ptr<Library> Workspace::InternalAPI::find_or_load( const LibraryId& id, const URI& location )
+	{
+		return m_workspace_impl.find_or_load( id, location );
+	}
+
 
 
 	///////////////////////

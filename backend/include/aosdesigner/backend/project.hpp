@@ -53,7 +53,7 @@ namespace backend {
 		
 	private:
 		class Impl;
-		std::unique_ptr<Impl> pimpl;
+		std::unique_ptr<Impl> m_impl;
 
 	};
 

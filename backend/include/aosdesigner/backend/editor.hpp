@@ -5,6 +5,7 @@
 #include <aosdesigner/backend/id.hpp>
 #include <aosdesigner/backend/workspaceobject.hpp>
 #include <aosdesigner/backend/editorinfo.hpp>
+#include <aosdesigner/backend/events/editorevents.hpp>
 
 namespace aosd {
 namespace backend {
@@ -24,7 +25,7 @@ namespace backend {
 		
 
 		class Impl;
-		std::unique_ptr<Impl> impl;
+		std::unique_ptr<Impl> m_impl;
 
 	};
 
