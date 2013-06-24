@@ -3,13 +3,20 @@
 #include <aosdesigner/backend/workspace.hpp>
 #include <aosdesigner/backend/project.hpp>
 
+#include "dataprovider.hpp"
+
 using namespace aosd::backend;
+
+namespace {
+	DummyDataProvider data_provider;
+	TaskExecutor_Immediate executor;
+
+}
 
 
 TEST( Test_Project, basic_usage )
 {
-	TaskExecutor_Immediate executor;
-	Workspace workspace( executor );
+	Workspace workspace( executor, data_provider );
 
 	ProjectInfo project_info;
 	project_info.id = make_new_id<Project>();

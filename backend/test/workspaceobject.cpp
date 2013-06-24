@@ -4,8 +4,16 @@
 #include <memory>
 #include <aosdesigner/backend/workspaceobject.hpp>
 
+#include "dataprovider.hpp"
 
 using namespace aosd::backend;
+
+namespace {
+	DummyDataProvider data_provider;
+	TaskExecutor_Immediate executor;
+
+}
+
 
 struct DummyEvent {};
 
@@ -65,8 +73,7 @@ public:
 
 TEST( Test_WorkspaceObject, simple_use )
 {
-	TaskExecutor_Immediate executor;
-	Workspace workspace( executor );
+	Workspace workspace( executor, data_provider );
 	auto test = Object( workspace );
 
 	ASSERT_TRUE( is_valid( test.id() ) );
@@ -100,8 +107,7 @@ TEST( Test_WorkspaceObject, simple_use )
 
 TEST( Test_WorkspaceObject, object_group )
 {
-	TaskExecutor_Immediate executor;
-	Workspace workspace( executor );
+	Workspace workspace( executor, data_provider );
 
 	ObjectGroup group( workspace );
 

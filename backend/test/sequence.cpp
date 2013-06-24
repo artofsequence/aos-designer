@@ -5,17 +5,23 @@
 
 #include <aoslcpp/algorithm/edition.hpp>
 
+#include "dataprovider.hpp"
+
 using namespace aosd::backend;
 
+namespace {
+	DummyDataProvider data_provider;
+	TaskExecutor_Immediate executor;
+
+}
 
 TEST( Test_Sequence, basic_usage )
 {
-	Workspace workspace( (TaskExecutor_Immediate()) );
+	Workspace workspace( executor, data_provider );
 	
 	SequenceInfo info;
 	info.id = make_new_id<Sequence>();
 	info.name = "Test Sequence";
-	info.project_id = make_new_id<Project>();
 
 	auto check_basic_state = [&]( const Sequence& s )
 	{

@@ -4,12 +4,19 @@
 #include <aosdesigner/backend/project.hpp>
 #include <aosdesigner/backend/events.hpp>
 
+#include "dataprovider.hpp"
+
 using namespace aosd::backend;
+
+namespace {
+	DummyDataProvider data_provider;
+	TaskExecutor_Immediate executor;
+
+}
 
 TEST( Test_Workspace, access_project_failure )
 {
-	TaskExecutor_Immediate executor;
-	Workspace workspace( executor );
+	Workspace workspace( executor, data_provider );
 	
 	bool accessed_nonexisting_project = false;
 	auto access_done = workspace.work_on( make_new_id<Project>(), [&]( Project& project ){ accessed_nonexisting_project = true; } );
@@ -20,8 +27,7 @@ TEST( Test_Workspace, access_project_failure )
 
 TEST( Test_Workspace, open_close_project )
 {
-	TaskExecutor_Immediate executor;
-	Workspace workspace( executor );
+	Workspace workspace( executor, data_provider );
 
 	ProjectInfo project_info;
 	project_info.id = make_new_id<Project>();
