@@ -10,36 +10,38 @@ namespace aosd {
 namespace backend {
 namespace event {
 	
-	struct ProjectOpen
+	struct ProjectOpen						///< A Project have been opened for edition.
 	{
-		ProjectInfo project_info;
+		ProjectInfo		project_info;		///< Info of the open project.
 	};
 
-	struct ProjectClosed 
+	struct ProjectClosed					///< An open Project have been closed.
 	{
-		ProjectId project_id;
+		ProjectId		project_id;			///< Id of the Project that have been closed.
 	};
 
-	struct SequenceAdded
+	struct SequenceAdded					///< A Sequence have been added to a Project.
 	{
-		SequenceInfo sequence_info;
+		ProjectId		project_id;			///< Id of the Project in which the Sequence was added.
+		SequenceInfo	sequence_info;		///< Info of the added Sequence.
 	};
 
-	struct SequenceRemoved 
+	struct SequenceRemoved					///< A Sequence have been removed from a Project.
 	{
-		ProjectId project_id;
-		SequenceId sequence_id; 
+		ProjectId		project_id;			///< Id of the project from which the Sequence have been removed.
+		SequenceId		sequence_id;		///< Id of the Sequence removed from the Project.
 	};
 
-	struct LibraryAdded
+	struct ProjectLibraryAdded				///< A Library have been added to a Project, accessible to all it's Sequences.
 	{
-		LibraryInfo library_info;
+		ProjectId		project_id;			///< Id of the project in which the Library have been added.
+		LibraryInfo		library_info;		///< Info of the added Library.
 	};
 
-	struct LibraryRemoved
+	struct ProjectLibraryRemoved			///< A Library have been removed from a Project
 	{
-		ProjectId project_id;
-		LibraryId library_id;
+		ProjectId		project_id;			///< Id of the project from which the Library have been removed.
+		LibraryId		library_id;			///< Id of the Library removed from the project.
 	};
 
 }}}

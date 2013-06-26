@@ -8,14 +8,16 @@ namespace aosd {
 namespace backend {
 namespace event {
 	
-	struct EditorOpen
+	struct EditorOpen				///< An Editor have been opened and is ready to edit the associated Sequence.
 	{
-		EditorInfo editor_info;
+		ProjectId	project_id;		///< Project in which the Editor have been opened.
+		EditorInfo	editor_info;	///< Info of the open Editor.
 	};
 
-	struct EditorClosed
+	struct EditorClosed				///< An open Editor have been closed and is not available anymore for edition.
 	{
-		EditorId editor_id;
+		ProjectId	project_id;		///< Project in which the Editor was open.
+		EditorId	editor_id;		///< Id of the closed Editor.
 	};
 
 
