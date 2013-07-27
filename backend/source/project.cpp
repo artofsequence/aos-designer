@@ -10,6 +10,7 @@
 #include <aosl/sequence.hpp>
 #include <aosdesigner/backend/editor.hpp>
 #include <aosdesigner/backend/sequence.hpp>
+#include <aosdesigner/backend/events/projectevents.hpp>
 #include "workspaceinternalapi.hpp"
 
 namespace aosd {

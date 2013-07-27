@@ -157,7 +157,10 @@ namespace backend {
 			schedule( [object,&update_list]{ update_list.add( object ); } );
 		}
 
-		void add_to_registry( std::shared_ptr<Project> project ) { register_impl( project, m_project_registry, m_project_update_list ); }
+		void add_to_registry( std::shared_ptr<Project> project ) 
+		{ 
+			register_impl( std::move(project), m_project_registry, m_project_update_list ); 
+		}
 
 		ProjectId open_project_impl( const ProjectInfo& );
 

@@ -36,10 +36,18 @@ TEST( Test_Workspace, open_close_project )
 	{
 		bool got_the_open_project_message = false;
 		bool got_the_open_specific_project_message = false;
-		workspace.event_dispatcher().on<event::ProjectOpen>( [&]{ got_the_open_project_message = true; } );
-		workspace.event_dispatcher().on<event::ProjectOpen>( project_info.id, [&]{ got_the_open_specific_project_message = true; } );
+		workspace.event_dispatcher().on<event::ProjectOpen>( [&]( const event::ProjectOpen& ev ){ 
+			got_the_open_project_message = true; 
+			ASSERT_EQ( project_info.id, ev.project_info.id );
+		});
+		workspace.event_dispatcher().on<event::ProjectOpen>( project_info.id, [&]( const event::ProjectOpen& ev ){ 
+			got_the_open_specific_project_message = true;
+			ASSERT_EQ( project_info.id, ev.project_info.id );
+		});
 
-		workspace.open_project( project_info );
+		auto ft = workspace.open_project( project_info ); 
+		ASSERT_EQ( project_info.id, ft.get() );
+
 		workspace.dispatch_events();
 		ASSERT_TRUE( got_the_open_project_message );
 		ASSERT_TRUE( got_the_open_specific_project_message );
