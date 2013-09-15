@@ -2,6 +2,9 @@ cmake_minimum_required( VERSION 2.8.11 )
 
 project( AOS_Designer )
 
+# Setup dependencies.
+add_subdirectory( dependencies )
+
 #####################################################
 # Common configuration.
 
