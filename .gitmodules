@@ -1,0 +1,3 @@
+[submodule "dependencies/aoslcpp"]
+	path = dependencies/aoslcpp
+	url = https://github.com/artofsequence/aosl-cpp.git
