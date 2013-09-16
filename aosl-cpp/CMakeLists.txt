@@ -5,8 +5,6 @@ project( AOSL-CPP )
 
 # Dependencies:
 
-add_subdirectory( dependencies )
-
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${UTILCPP_CMAKE_DIR} )
 include( utilcpp_projects )
 
