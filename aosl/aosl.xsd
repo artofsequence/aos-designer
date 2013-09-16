@@ -1,0 +1,2004 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+	AOSL : Art Of Sequence Language 
+	Describe a digital sequence.
+	More infos : http://artofsequence.org
+	
+	Licence : M.I.T.
+	http://www.opensource.org/licenses/mit-license.php
+
+	Read the "documentation" tags for comments on object, attributes and types.
+-->
+
+<xs:schema xmlns:aos="artofsequence.org/aosl/1.0"
+			 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			 attributeFormDefault="unqualified"
+			 elementFormDefault="qualified"
+			 targetNamespace="artofsequence.org/aosl/1.0"
+			 version="1.0"
+			 >
+
+	<xs:element name="sequence" type="aos:sequence" abstract="false" nillable="false">
+		<xs:annotation>
+			<xs:documentation>
+				The root element for a Sequence.
+				In a full AOSL file, this should be the only root object.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<!--##### Basic types #############################################################-->
+
+	<xs:simpleType name="unit_space" >
+		<xs:annotation>
+			<xs:documentation>Type for graphic space units.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double" />
+	</xs:simpleType>
+
+	<xs:simpleType name="unit_time">
+		<xs:annotation>
+			<xs:documentation>Time value in seconds.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:double" />
+
+	</xs:simpleType>
+
+
+	<xs:simpleType name="unit_stream" >
+		<xs:annotation>
+			<xs:documentation>
+				Type of value defining a point or a length in the stream.
+				Might be a percentile value of the whole stream or an absolute time in seconds.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="aos:unit_time aos:value_percent" />
+	</xs:simpleType>
+
+
+	<xs:simpleType name="value_percent" >
+		<xs:annotation>
+			<xs:documentation>Relative percentile value.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d(.\d*)*%" />
+		</xs:restriction>
+
+	</xs:simpleType>
+
+
+	<xs:simpleType name="angle" >
+		<xs:annotation>
+			<xs:documentation>
+				Type for angles values, in Radian.
+				Positive value is counter-clock-wise, negative is clock-wise,
+				like on the trigonometric circle.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:double" />
+
+	</xs:simpleType>
+
+	<xs:complexType name="vector" >
+		<xs:annotation>
+			<xs:documentation>Vector of space units used for spatial representations.</xs:documentation>
+		</xs:annotation>
+
+		<xs:attribute name="x" type="aos:unit_space" default="0.0" />
+		<xs:attribute name="y" type="aos:unit_space" default="0.0" />
+		<xs:attribute name="z" type="aos:unit_space" default="0.0" />
+
+	</xs:complexType>
+
+	<xs:complexType name="rotation" >
+		<xs:annotation>
+			<xs:documentation>Rotation representation.</xs:documentation>
+		</xs:annotation>
+
+		<xs:attribute name="yaw" type="aos:angle" default="0.0">
+			<xs:annotation>
+				<xs:documentation>Rotation angle aroun the x-axis.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="pitch" type="aos:angle" default="0.0">
+			<xs:annotation>
+				<xs:documentation>Rotation angle aroun the y-axis.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="roll" type="aos:angle" default="0.0">
+			<xs:annotation>
+				<xs:documentation>Rotation angle aroun the z-axis.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+
+
+	<xs:complexType name="transformation">
+		<xs:annotation>
+			<xs:documentation>
+				Geometric transformation in graphic space.
+				A transformation can be used both for positionnement in space and for movement.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:all>
+
+			<xs:element name="translation" type="aos:vector" minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>Translation to apply to the object position.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="scale" type="aos:vector"  minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>Scale to apply to the object's size.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="rotation" type="aos:rotation"  minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>Rotation to apply to the object's orientation, relative to it's the center.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="origin" type="aos:vector" minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>Center point in object space to used to apply rotation.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+
+	</xs:complexType>
+
+
+	<xs:complexType name="box">
+		<xs:annotation>
+			<xs:documentation>Spatial representation of a box.</xs:documentation>
+		</xs:annotation>
+
+		<xs:all>
+
+			<xs:element name="size" type="aos:vector" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>
+						Size of the box.
+						Each one of the axes value gives the length of the corresponding edges of the box.
+						If not provided, the default size should be determined by the implementation.
+						In this case, if it is the ouput or input box of a graphic object, the default value is 100% of the resource size.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="transformation" type="aos:transformation" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>
+						Transformation defining the position, orientation and scale factor of this box,
+						relative to the parent object or the canvas origin if no parent.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+	</xs:complexType>
+
+	<xs:complexType name="spatial_area">
+		<xs:annotation>
+			<xs:documentation>
+				Configuration of a finite graphic space area.
+				The size given for each dimension is used to determine what's to be managed
+				in the space box. If it's a graphical space, it determines the view frustum.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:vector">
+
+				<xs:sequence>
+
+				</xs:sequence>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:simpleType name="source_uri">
+		<xs:annotation>
+			<xs:documentation>URI of a resource: local file, http accessed file, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI" />
+	</xs:simpleType>
+
+
+	<xs:complexType name="extension" mixed="true" >
+		<xs:annotation>
+			<xs:documentation>Free node that allow for extension to add interpreter-specific informations or new non-standard language features.</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+
+		<xs:anyAttribute />
+
+	</xs:complexType>
+
+	<xs:simpleType name="name">
+		<xs:annotation>
+			<xs:documentation>Type for allowed names' syntax.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([a-zA-Z0-9_-])+" />
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<xs:simpleType name="email">
+		<xs:annotation>
+			<xs:documentation>Valid email adress.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="version">
+		<xs:annotation>
+			<xs:documentation>Valid version name</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([a-zA-Z0-9_-])+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="property" mixed="true" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				Properties are key/value informations that can be organized in tree structures.
+				The value is the content of the element.
+				They are used to embedd hierarchical custom data in objects.
+				Properties can contain a value and other properties.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="property" type="aos:property" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>A child property of this property.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+
+		<xs:attribute name="name" type="aos:name"  use="required">
+			<xs:annotation>
+				<xs:documentation>Name of this property instance.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+	<xs:simpleType name="controller" final="#all" >
+		<xs:annotation>
+			<xs:documentation>Specification of the source of control of an object.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" >
+
+			<xs:enumeration value="user">
+				<xs:annotation>
+					<xs:documentation>The player's user will control the object. </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="none">
+				<xs:annotation>
+					<xs:documentation>No control will be given.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="activation" final="#all" >
+		<xs:annotation>
+			<xs:documentation>Define what should happen when an object get activated.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" >
+
+			<xs:enumeration value="reset">
+				<xs:annotation>
+					<xs:documentation>The object should reset to it's original state before activation.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="continue">
+				<xs:annotation>
+					<xs:documentation>The object should continue with it's current/last state on activation.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:complexType name="script" mixed="true" >
+		<xs:annotation>
+			<xs:documentation>
+				A script is a program that will be executed while the sequence is being played, when the script's owner get activated.
+				No specific language is required but if the player don't know the script's language it
+				will simply ignore it. That make scripts mostly player-specific.
+
+				That said, choice of a default language might occur in a future version of this language.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:attribute name="lang" type="aos:name" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Identifier of the programming language used.
+					If the player don't recognize this identifier, it should ignore the whole script.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="activation" type="aos:activation" default="reset">
+			<xs:annotation>
+				<xs:documentation>
+					Define what should happen when an object get activated :
+					- reset : all the script's environnement and variables will be reset to their initial values;
+					- continue : the script's environnement will be saved
+					and the execution process be paused on deactivation and resumed on future activation;
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="loop" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation>
+					A looping script will execute it's code to the end then come back to the first instruction,
+					with only the interval time between each whole script execution and without resetting the execution state.
+					Looping allow a script to be executed on a regular time frequency, making it non-blocking for the player.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="interval" type="aos:unit_time" default="0">
+			<xs:annotation>
+				<xs:documentation>
+					Time interval between each script execution.
+					This interval will be used only if the script is looping.
+					The first execution don't take account of the interval and should be immediate
+					on script activation.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="source" type="xs:anyURI" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					URI to a file containing the source code of the script.
+					The source code will be inserted before any source code written directly in this script element.
+					Therefore, if this script element don't have inner code but just a source,
+					only the source script code will be the executed.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+	<xs:simpleType name="special_color">
+		<xs:annotation>
+			<xs:documentation>
+				Named colors (defined in standard CSS).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="aqua"		/>
+			<xs:enumeration value="black"		/>
+			<xs:enumeration value="blue"		/>
+			<xs:enumeration value="fuchsia"	/>
+			<xs:enumeration value="gray"		/>
+			<xs:enumeration value="grey"		/>
+			<xs:enumeration value="green"		/>
+			<xs:enumeration value="lime"		/>
+			<xs:enumeration value="maroon"	/>
+			<xs:enumeration value="navy"		/>
+			<xs:enumeration value="olive"		/>
+			<xs:enumeration value="purple"	/>
+			<xs:enumeration value="red"			/>
+			<xs:enumeration value="silver"	/>
+			<xs:enumeration value="teal"		/>
+			<xs:enumeration value="white"		/>
+			<xs:enumeration value="yellow"	/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="color_value" >
+		<xs:annotation>
+			<xs:documentation>
+				Hexadecimal value of a color.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="#[0-9A-Fa-f]{6}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="color" >
+		<xs:annotation>
+			<xs:documentation>
+				Color value, as hexadecimal or named.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="aos:special_color aos:color_value" />
+	</xs:simpleType>
+
+
+	<!--##### Root Elements #############################################################-->
+
+	<xs:complexType name="sequence" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				Root object representing a sequence.
+				It hold everything that is required to describe the full sequence interpreted by the player.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:all minOccurs="1">
+
+			<xs:element name="meta" type="aos:meta" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Additional informations about the sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="library" type="aos:library" >
+				<xs:annotation>
+					<xs:documentation>Library of resources used in this sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="canvas" type="aos:canvas" >
+				<xs:annotation>
+					<xs:documentation>Canvas where the sequence plays and that gives the objects' organisation.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="story" type="aos:story" >
+				<xs:annotation>
+					<xs:documentation>Description of the structure of the sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+		<xs:attribute name="name" type="xs:string" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Name of the Sequence.
+					Can be used as a default title by the player.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="id" type="aos:unique_id" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Identifier of the Sequence.
+					Used by tools manipulating AOSL files to identify them.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="meta" final="#all" >
+		<xs:annotation>
+			<xs:documentation>Additional informations about the sequence.</xs:documentation>
+		</xs:annotation>
+
+		<xs:all minOccurs="0">
+
+			<xs:element name="version" type="aos:version" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Version name of the Sequence.
+						The format of the versionning scheme is free.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="authors" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Informations about the authors of the sequence.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="author" type="aos:author" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="description" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Description of the sequence's content.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="website" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Website associated with this sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="licence" type="xs:string" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Licence of the sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="targets" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Informations about the players originally targetted for this sequence and configuration data.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="target" type="aos:target" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="infos" type="aos:extension" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Additional informations.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="library" final="#all" >
+		<xs:annotation>
+			<xs:documentation>The Library contain informations about a set of Resources that can be used in a Sequence.</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+
+			<xs:element name="include" type="aos:library_include" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						External libraries to import.
+						Importing a library means getting the resources of the target library and
+						putting them in this one.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="resource" type="aos:resource" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Resource to load to play this Sequence.
+						Referenced by one or more objects.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+
+	</xs:complexType>
+
+	<xs:complexType name="canvas" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				Canvas where the sequence plays and that gives the objects' organisation.
+				The Canvas is a 3D graphical and audio space.
+				The depth dimension can be ignored by authors to focus on 2D but should still be
+				managed by players in a way or another to allow authors to exploit it where needed.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:all>
+
+			<xs:element name="area" type="aos:spatial_area" minOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>
+						Virtual dimensions of the canvas.
+						Each coordinate will be interpreted as the space to take on each axis, x and y being the surface of the screen.
+						The coordinate system is right-handed, like in OpenGL.
+						The origin of the canvas space is in bottom-left of the screen, so +x goes on the right, +y goes up.
+
+						The x and y informations will also allow the interpreter to understand:
+						- the original screen ratio for the sequence
+						- the original screen resolution the sequence targeted
+
+						Those informations will allow the player implementation to adapt the sequence to the
+						display in a more informed way.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="layers" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Layers available in this canvas.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+						<xs:element name="layer" type="aos:layer" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="objects" type="aos:object_list" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Objects in this canvas, organized in hierarchical tree.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+		<xs:attribute name="color" type="aos:color" default="black" >
+			<xs:annotation>
+				<xs:documentation>
+					Color used to fill the canvas (background color).
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+
+	<xs:complexType name="story" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				The Story describe the structure of the sequence : the relation between the different stages of the sequence.
+				It's made of Stages connected by Moves, describing what should happens when we get from one Stage to another.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:all minOccurs="1" >
+
+			<xs:element name="properties" type="aos:property" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Initial custom properties available through the playing of this Sequence.
+						Those properties are available to all scripts and can be used by the interpreter too.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="navigation" type="aos:navigation"  minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Navigation configuration used for the whole sequence. Can be overloaded at each Stage of the Sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="stages" >
+				<xs:annotation>
+					<xs:documentation>Stages of this Sequence.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence minOccurs="1" maxOccurs="unbounded">
+						<xs:element name="stage" type="aos:stage" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="moves" >
+				<xs:annotation>
+					<xs:documentation>Moves, containing Changes between Stages.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+						<xs:element name="move" type="aos:move" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+		</xs:all>
+
+		<xs:attribute name="begin" type="aos:stage_ref" use="required" >
+			<xs:annotation>
+				<xs:documentation>The Stage to begin the Sequence with.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+	<!--##### Meta Elements #############################################################-->
+
+	<xs:complexType name="author">
+		<xs:annotation>
+			<xs:documentation>Informations about an author.</xs:documentation>
+		</xs:annotation>
+
+		<xs:all>
+
+			<xs:element name="name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Name of the author.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="about" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Description of the author and/or what he/she did in the sequence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="comments" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Comments from the author.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="website" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Website of the author.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="email" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Email of the author.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="infos" type="aos:extension" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Additional arbitrary informations about the author.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="target">
+		<xs:annotation>
+			<xs:documentation>Informations about the target player/interpreter and platform.</xs:documentation>
+		</xs:annotation>
+
+		<xs:all>
+
+			<xs:element name="config" type="aos:extension" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Target-specific configuration informations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+		<xs:attribute name="player" type="xs:string" >
+			<xs:annotation>
+				<xs:documentation>
+					Name identifiying the player/interpreter that this sequence is made for.
+					Other players can read it too but somme player-specific extensions
+					will simply be ignored if the interpreter don't implement them.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="platform" type="xs:string" >
+			<xs:annotation>
+				<xs:documentation>
+					Name identifiying the platform that this sequence is made for.
+					This is to clearly make the difference between a player being available on
+					different platforms and performing differently while bieing having the same code/binary.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="website" type="xs:anyURI" use="optional">
+			<xs:annotation>
+				<xs:documentation>Website of the target provider.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+
+	<!--##### Library Objects #############################################################-->
+
+	<xs:simpleType name="resource_type">
+		<xs:annotation>
+			<xs:documentation>Type of resource, used to help the player/interpreter and tools to identify the way to use the resource.</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="aos:resource_type_generic aos:resource_type_specific" />
+	</xs:simpleType>
+
+	<xs:simpleType name="resource_type_generic">
+		<xs:annotation>
+			<xs:documentation>
+				Predefined generic type of resources that "should" be implemented by any player.
+				As generic types, they only describe a general model to manage the associated resource.
+				For some resources, a more specific resource type might be necessary to help the player
+				interpret more correctly the resource data.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+
+			<xs:enumeration value="image" >
+				<xs:annotation>
+					<xs:documentation>A static graphic image (no interaction, only graphics).</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="audio" >
+				<xs:annotation>
+					<xs:documentation>An audio stream resource.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="video" >
+				<xs:annotation>
+					<xs:documentation>An audio-visual stream resource.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="software" >
+				<xs:annotation>
+					<xs:documentation>An interactive application top embedd.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<xs:simpleType name="resource_type_specific">
+		<xs:annotation>
+			<xs:documentation>
+				Interpreter-specific types of resources.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[!]([a-zA-Z0-9_-])+" />
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<xs:complexType name="resource">
+		<xs:annotation>
+			<xs:documentation>
+				A Resource provide the address of a file or stream that contain the data to be used in the Sequence.
+				Each Object can be bound to a resource, using it as source data from wich a transformed interpretation (Objects) can be extracted from.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:simpleContent>
+			<xs:extension base="aos:source_uri" >
+
+				<xs:attribute name="id" type="aos:resource_id" use="required" >
+					<xs:annotation>
+						<xs:documentation>Identifier of the resource.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+				<xs:attribute name="type" type="aos:resource_type" use="required" >
+					<xs:annotation>
+						<xs:documentation>Type of the resource, automatically guessed by the interpreter by default.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+			</xs:extension>
+		</xs:simpleContent>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="library_include">
+		<xs:annotation>
+			<xs:documentation>
+				Include an external librarie's resources.
+				Including another library means importing each of it's Resources inside this library.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:simpleContent>
+			<xs:annotation>
+				<xs:documentation>URI where is located the file containing the external Library informations.</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="aos:source_uri" />
+		</xs:simpleContent>
+
+	</xs:complexType>
+
+
+
+
+	<!--##### Canvas Elements #############################################################-->
+
+	<xs:complexType name="layer" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				A Layer is a way to activate and deactivate a group of unrelated objects.
+				It is orthogonal to the hierarchical organisation of Objects.
+				An object bound to a layer will be active when both it's parent object and the layer are active,
+				but will be inactive if any one of them is deactivated.
+				It can be used for localization (one layer per language with texts in it).
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="extension" type="aos:extension" minOccurs="0" maxOccurs="1" />
+
+			<xs:element name="object" type="aos:object_ref_element"  minOccurs="0" maxOccurs="unbounded" >
+				<xs:annotation>
+					<xs:documentation>
+						Reference to an object to be part of this layer.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+
+		<xs:attribute name="id" type="aos:layer_id" use="required" >
+			<xs:annotation>
+				<xs:documentation>Id of the Layer, to be used by Objects that are bound to it.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="active" type="xs:boolean" default="true" use="optional" >
+			<xs:annotation>
+				<xs:documentation>
+					Is this Layer active or unactive?
+					When active all the bound Objects will be active if their parent is active too.
+					When unactive all the bound Objects will be unactive, without considering the parent's state.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+
+	<!--############## Object's components. ###########################"-->
+
+	<xs:complexType name="properties_stream_object">
+
+		<xs:annotation>
+			<xs:documentation>
+				Stream Object representation. Properties for objects with streaming behaviour.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:attribute name="begin" type="aos:unit_stream" default="0%" >
+			<xs:annotation>
+				<xs:documentation>
+					Begin position in the stream source.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="end" type="aos:unit_stream" default="100%" >
+			<xs:annotation>
+				<xs:documentation>
+					End position in the stream source.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="loop" type="xs:boolean" default="false" >
+			<xs:annotation>
+				<xs:documentation>
+					True if the stream have to loop, false to stop once the end is reached.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="interval" type="aos:unit_time" default="0">
+			<xs:annotation>
+				<xs:documentation>
+					Time interval between each stream play.
+					This interval will be used only if the stream is looping.
+					The first play don't take account of the interval and should be immediate
+					on object activation.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="controller" type="aos:controller" default="none" >
+			<xs:annotation>
+				<xs:documentation>
+					Tells if the stream should be controllable by the user,
+					involving some kind of player-defined interface if required.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="activation" type="aos:activation" default="reset" >
+			<xs:annotation>
+				<xs:documentation>
+					Tells if the stream will be reset at each activation,
+					or will just continue where it was when it was deactivated.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+
+	<xs:complexType name="properties_graphic_object">
+		<xs:annotation>
+			<xs:documentation>
+				Graphic object representation. Properties for Objects with graphic behaviour.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:all >
+			<xs:element name="output" type="aos:box" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Area in the Canvas where that the graphic output will occupy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="input" type="aos:box" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Area in the Resource (if applicable) from wich the graphic input will be extracted.
+						Useful to use only a part of a resource,
+						for example when having a sprite from a graphic texture.
+
+						A null-size input box (0,0,0) - the default value - means the whole resource have to be used.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+
+	<!--######################################################################-->
+
+
+	<xs:complexType name="object"  abstract="true" >
+		<xs:annotation>
+			<xs:documentation>An Object is a transformed instance of a Resource and can contain other Objects in a hierarchical way.</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+
+			<xs:element name="properties" type="aos:property" minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>
+						Custom properties bound to this Object.
+						The properties should be accessible from scripts.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="extension" type="aos:extension" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Interpreter-defined additional informations.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="script" type="aos:script" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Script attached to this object.
+						It will be activated when this object is activated and deactivated when this object is too.
+						The execution will not stop between stages.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="children" type="aos:object_list" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+						Objects contained in this one.
+						The child Objects will have their state relative to their parent :
+						- their spatial state if they have some
+						- if active, the child Object will not be perceived as active if it's parent isn't
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+
+		<xs:attribute name="id" type="aos:object_id" use="required" >
+			<xs:annotation>
+				<xs:documentation>Id of the Object.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="active" type="xs:boolean" default="false" use="optional" >
+			<xs:annotation>
+				<xs:documentation>Is this Object currently active or unactive?</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="resource" type="aos:resource_ref" use="optional" >
+			<xs:annotation>
+				<xs:documentation>
+					The Resource to use. If no resource is set, the object will not be perceptible even if it's a graphic object.
+					It still can contain children objects and behave like an invisible group.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+	<xs:complexType name="object_list">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="aos:object" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="object"						type="aos:object"               abstract="true" />
+	<xs:element name="group"            type="aos:object_group"         substitutionGroup="aos:object" />
+	<xs:element name="specialobject"    type="aos:object_special"       substitutionGroup="aos:object" />
+	<xs:element name="sprite"           type="aos:object_sprite"        substitutionGroup="aos:object" />
+	<xs:element name="video"            type="aos:object_video"         substitutionGroup="aos:object" />
+	<xs:element name="audio"            type="aos:object_audio"         substitutionGroup="aos:object" />
+
+	<xs:complexType name="object_group" >
+		<xs:annotation>
+			<xs:documentation>
+				A group of Objects, with no special properties.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:object">
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:complexType name="object_special" >
+		<xs:annotation>
+			<xs:documentation>A special or specialized Object is undefined but it's definition should be available to the target interpreter.</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:object">
+				<xs:attribute name="type" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+
+	<xs:complexType name="object_sprite" final="#all">
+		<xs:annotation>
+			<xs:documentation>
+				A Sprite is a simple graphic Object.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:object" >
+
+				<xs:sequence>
+					<xs:element name="graphic" type="aos:properties_graphic_object" minOccurs="0" />
+				</xs:sequence>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:complexType name="object_audio" final="#all">
+		<xs:annotation>
+			<xs:documentation>
+				An Audio object allows to play sounds, music and online audio streams.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:object" >
+
+				<xs:sequence>
+					<xs:element name="stream" type="aos:properties_stream_object" minOccurs="0" />
+				</xs:sequence>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="object_video" final="#all">
+		<xs:annotation>
+			<xs:documentation>
+				A Video is an audio and graphic Object that diplay a stream of both images and sound.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:object" >
+
+				<xs:sequence>
+					<xs:element name="graphic" type="aos:properties_graphic_object" minOccurs="0" />
+					<xs:element name="stream" type="aos:properties_stream_object" minOccurs="0" />
+				</xs:sequence>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+
+	<!--##### Story Elements #############################################################-->
+
+	<xs:complexType name="stage" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				A Stage describe a specific state in the path followed by the player/interpreter when playing the Sequence.
+				A Stage is to a Story what a vertex is to a graph.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:all>
+
+			<xs:element name="navigation" type="aos:navigation" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>
+						Navigation informations that will overload the Story navigation informations when we reach this stage.
+						Setting this stage-specific Navigation is useful for allowing special actions or choices on specific occasions.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="script" type="aos:script" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>
+						Script to execute when we reach this stage.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+
+			<xs:element name="extension" type="aos:extension" minOccurs="0" >
+				<xs:annotation>
+					<xs:documentation>Interpreter-defined additional informations.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:all>
+
+		<xs:attribute name="id" type="aos:stage_id" use="required" >
+			<xs:annotation>
+				<xs:documentation>Id of the stage.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="move" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				A Move is a set of Changes between two Stages applied to Objects in the Canvas.
+				A Move is to a Story what an edge is to an oriented graph.
+				There can be as many Moves in a Story as combinations possibles of a pair of different Stages in the Story, but no more.
+				Therefore, a Move will contain as many Changes necessaries to apply between two Stages and should be unique for this pair of Stages.
+				A move can reference several sources stages to move from, but only one unique target stage to go to.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+
+			<xs:element ref="aos:change" minOccurs="1" maxOccurs="unbounded" >
+				<xs:annotation>
+					<xs:documentation>Generic or specific type of change.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="extension" type="aos:extension" minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>Interpreter-related additional informations.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+
+		<xs:attribute name="from" type="aos:stage_ref_list" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Id of the Stage to move from.
+					Several stages can be referenced in the case this same move
+					should to be possible from several stages.
+					Automatic search of stage refs can be used too.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="to" type="aos:unique_stage_ref" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Id of the Stage to move to. 
+					Special search ids are forbidden.
+					Only one stage can be the target of a move.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="id" type="aos:move_id" use="required" >
+			<xs:annotation>
+				<xs:documentation>Id of this Move.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="default" type="xs:boolean" default="false" >
+			<xs:annotation>
+				<xs:documentation>
+					Define this move as the one the interpreter have to go through when it is deciding automatically
+					which move to take from the stage this move is attached to.
+					For example, if the interpreter is commanded to go "next" but there is several moves from which
+					the current stage can go through, the one marked "default" should be the one choosen.
+					Having more than one move being default is invalid.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+
+	</xs:complexType>
+
+
+
+	<xs:group name="group_change_extensions">
+		<xs:annotation>
+			<xs:documentation>Extension properties for Changes.</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+
+			<xs:element name="effects" minOccurs="0" maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>Interpreter-defined effects to apply to the Change interpretation.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="effect" type="aos:effect" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="script" type="aos:script" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Script to execute when this Change is applied.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+			<xs:element name="extension" type="aos:extension" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Interpreter-defined additional informations.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+
+		</xs:sequence>
+	</xs:group>
+
+	<xs:complexType name="change" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+				A Change describe a set of transformations (geometric or not) that will be applied to an Object.
+				Changes are contained in Moves that are applied when going from one Stage to another.
+				A Change can be a transform, activate, deactivate, switch or any other interpreter-specific change.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:group ref="aos:group_change_extensions" />
+
+		<xs:attribute name="object" type="aos:object_ref_list"  use="required">
+			<xs:annotation>
+				<xs:documentation>Object(s) to wich this change applies.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+
+	<xs:element name="change"           type="aos:change"               abstract="true" />
+	<xs:element name="specialchange"    type="aos:change_special"       substitutionGroup="aos:change" />
+	<xs:element name="activate"         type="aos:change_activate"      substitutionGroup="aos:change" />
+	<xs:element name="deactivate"       type="aos:change_deactivate"    substitutionGroup="aos:change" />
+	<xs:element name="switch"           type="aos:change_switch"        substitutionGroup="aos:change" />
+	<xs:element name="transform"        type="aos:change_transform"     substitutionGroup="aos:change" />
+
+
+
+	<xs:complexType name="change_special">
+		<xs:annotation>
+			<xs:documentation>Special or specialized change that is undefined but witch definition should be available to the target interpreter.</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:change">
+				<xs:attribute name="type" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="change_activate">
+		<xs:annotation>
+			<xs:documentation>Change that will activate the Object or do nothing if it's already activated.</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:change" />
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:complexType name="change_deactivate">
+		<xs:annotation>
+			<xs:documentation>Change that will deactivate an Object or do nothing if it's already deactivated.</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:change" />
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:complexType name="change_switch">
+		<xs:annotation>
+			<xs:documentation>Change that will activate the object if it's deactivated or deactivate it if it's activated.</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:change" />
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="change_transform">
+		<xs:annotation>
+			<xs:documentation>
+				Change that will modify the geometric state of the object
+				by applying one or several geometric transformations.
+				This change cannot be applied to Objects that don't have spatial properties.
+				Each transformation will be applied in the order of appearance in the file.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:change">
+
+				<xs:choice minOccurs="0" maxOccurs="unbounded" >
+
+					<xs:element name="relative" type="aos:transformation" >
+						<xs:annotation>
+							<xs:documentation>
+								Geometric transformation to apply to the Object graphic properties.
+								This imply that the object will be moved and/or scaled and/or rotated relatively to it's current graphic state.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+					<xs:element name="absolute" type="aos:transformation" >
+						<xs:annotation>
+							<xs:documentation>
+								Geometric transformation to set as the Object's graphic properties state.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+
+				</xs:choice>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:complexType name="effect">
+		<xs:annotation>
+			<xs:documentation>
+				An Effect is a interpreter-specific special interpretation of one of the Change types.
+				For example, a "fade" effect could be applied to activate, deactivate or switch changes (and even on transform).
+				Another example : a "slide" effect could be applied to any Transform.
+
+				We don't specify effects because of the lack of feedback on usage.
+				A future version might specify some standard effects that will be expected to be implemented by all standard-compliant interpreters.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence minOccurs="0" maxOccurs="unbounded" >
+			<xs:any processContents="lax" />
+		</xs:sequence>
+
+		<xs:attribute name="type" type="xs:string" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Name of the type of effect to apply.
+					This is used for the interpreter implementation to find
+					which effect to apply, so correct values are implementation specific.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+	<!--## Navigation Elements ########################-->
+
+	<xs:complexType name="navigation" final="#all" >
+		<xs:annotation>
+			<xs:documentation>
+				Navigation informations are used by the player/interpreter to know how to bind user actions to Moves.
+				It hold a set of Events that define responses to events from user input or player/interpreter informations.
+				It can be used for defining the global navigation or more precisely in the context of a specific Stage.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+
+				<xs:element ref="aos:event" />
+
+			</xs:choice>
+		</xs:sequence>
+
+	</xs:complexType>
+
+	<xs:complexType name="event" abstract="true" >
+		<xs:annotation>
+			<xs:documentation>An Event specify a response to inputs from the user or the player/intepreter.</xs:documentation>
+		</xs:annotation>
+
+		<xs:attribute name="move" type="aos:move_ref" use="required" >
+			<xs:annotation>
+				<xs:documentation>
+					Id of the move to go to if this Event is triggered,
+					or "auto_next" if there is only one next possibility
+					or "auto_previous" to get back in the path followed by the player.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+
+	</xs:complexType>
+
+	<xs:element name="event"        type="aos:event"            abstract="true" />
+	<xs:element name="input"        type="aos:event_input"      substitutionGroup="aos:event" />
+	<xs:element name="signal"       type="aos:event_signal"     substitutionGroup="aos:event" />
+	<xs:element name="selection"    type="aos:event_selection"  substitutionGroup="aos:event" />
+
+
+
+	<xs:complexType name="event_signal" >
+		<xs:annotation>
+			<xs:documentation>
+				A Signal is an Event is triggered by scripts or interpreter implementation.
+				It's totally interpreter's implementation defined.
+				It should be used to manage interpreter-specific events and script events.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:event">
+
+				<xs:attribute name="source" type="aos:signal_source" use="required" >
+					<xs:annotation>
+						<xs:documentation>
+							Name of the source of the event.
+							This information is used by the interpreter in an unspecified way.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="event_input" >
+		<xs:annotation>
+			<xs:documentation>
+				An Input is an Event that is triggered by the player/interpreter,
+				most of the time buttons pushed or other hardware or system related inputs.
+				It is useful to make keyboard keys goes to the next or the previous Move/Stage.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:event">
+
+				<xs:attribute name="key" type="aos:input_key" use="required" >
+					<xs:annotation>
+						<xs:documentation>
+							Key identifiying the input to listen to.
+							This information is used by the interpreter in an unspecified way.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+				<xs:attribute name="value" type="aos:input_value" use="required" >
+					<xs:annotation>
+						<xs:documentation>
+							Value of the input to reach to trigger this Event - or a range of values.
+							This information is used by the interpreter in an unspecified way.
+							It allows to fine-tune inputs for a specific intepreter or platform.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+
+
+	<xs:complexType name="event_selection" >
+		<xs:annotation>
+			<xs:documentation>
+				A Selection is an Event triggered when the user "select" an Object in the Sequence.
+				The ways a user can select an Object is defined by the interpreter.
+				On a classic computer, clicking with a mouse on an Object is often intepreted as a selection.
+				On some embedded devices, tapping on the screen on an Object might be a selection too.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexContent>
+			<xs:extension base="aos:event" >
+
+				<xs:attribute name="object" type="aos:object_ref_list" use="required" >
+					<xs:annotation>
+						<xs:documentation>Id of the Object(s) that have to be selected to trigger this Event.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+
+			</xs:extension>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:simpleType name="signal_source">
+		<xs:annotation>
+			<xs:documentation>Name of a signal source, interpreted by the player/interpreter in an undefined way.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="input_key">
+		<xs:annotation>
+			<xs:documentation>Key identifying an input source managed by the player/interpreter (like a keyboard or graphic interface buttons).</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="input_value">
+		<xs:annotation>
+			<xs:documentation>Value representing a state of an input source managed by the player/interpreter (like a keyboard or interface buttons).</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" />
+
+	</xs:simpleType>
+
+	<!--##### Id types #############################################################-->
+
+	<!--## Unique Identifiers ####-->
+
+	<xs:simpleType name="unique_id">
+		<xs:annotation>
+			<xs:documentation>
+				Unique identifier type.
+				It can be an URI, but don't allow spaces.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:ID">
+			<xs:pattern value="([a-zA-Z0-9:/._-])+" />
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<xs:simpleType name="stage_id">
+		<xs:annotation>
+			<xs:documentation>Stage Id type.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_id" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="move_id">
+		<xs:annotation>
+			<xs:documentation>Move Id type.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_id" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="layer_id">
+		<xs:annotation>
+			<xs:documentation>Layer Id type.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_id" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="resource_id">
+		<xs:annotation>
+			<xs:documentation>Resource Id type.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_id" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="object_id">
+		<xs:annotation>
+			<xs:documentation>Object Id type.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_id" />
+
+	</xs:simpleType>
+
+	<!--## References ####-->
+
+	<xs:simpleType name="unique_ref">
+		<xs:annotation>
+			<xs:documentation>Type for reference to an unique Id.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:IDREF" >
+			<xs:pattern value="([a-zA-Z0-9:/._-])+" />
+		</xs:restriction>
+
+	</xs:simpleType>
+
+
+	<!--# Stages ##-->
+
+	<xs:simpleType name="unique_stage_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to a Stage.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_ref" />
+	</xs:simpleType>
+	
+	<xs:simpleType name="stage_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to a Stage or to a special stage search.</xs:documentation>
+		</xs:annotation>
+
+		<xs:union memberTypes="aos:unique_stage_ref aos:special_stage_ref" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="stage_ref_list">
+		<xs:annotation>
+			<xs:documentation>List of references to a Stages.</xs:documentation>
+		</xs:annotation>
+
+		<xs:list itemType="aos:stage_ref" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="special_stage_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to one or more stages automatically found by using a search logic. </xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#all">
+				<xs:annotation>
+					<xs:documentation>
+						Represent all the stages.
+						Useful to allow a move to be available from all the stages.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<!--# Resources ##-->
+
+	<xs:simpleType name="resource_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to a Resource.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_ref" />
+
+	</xs:simpleType>
+
+	<!--# Moves ##-->
+
+	<xs:simpleType name="unique_move_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to a Move.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_ref" />
+
+	</xs:simpleType>
+
+	<xs:simpleType name="special_move_ref">
+		<xs:annotation>
+			<xs:documentation> Get automatically a move reference by using a search logic. </xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+
+			<xs:enumeration value="#next" >
+				<xs:annotation>
+					<xs:documentation>
+						Find the next logical move to go to.
+						Should be usable only if there is only one move possible to continue in the sequence.
+						If there is more than one move available, the one which is marked by the "default" attribute
+						should be referenced.
+						If there is several default, the sequence is invalid.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+			<xs:enumeration value="#previous" >
+				<xs:annotation>
+					<xs:documentation>Go back in the path followed by the player (or do nothing at the beginning Stage).</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<xs:simpleType name="move_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to a move or automatically find a move reference. (see special_move_ref)</xs:documentation>
+		</xs:annotation>
+
+		<xs:union memberTypes="aos:unique_move_ref aos:special_move_ref" />
+
+	</xs:simpleType>
+
+	<!--# Layers ##-->
+
+	<xs:simpleType name="unique_layer_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to a Layer.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_ref" />
+
+	</xs:simpleType>
+
+
+	<xs:simpleType name="special_layer_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to one or more layers automatically found by using a search logic. </xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="#all">
+				<xs:annotation>
+					<xs:documentation>Represent all the layers. Useful to activate or deactivate all the layers.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+
+	</xs:simpleType>
+
+
+	<xs:simpleType name="layer_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to one Layer or automatically find layers using a search logic.</xs:documentation>
+		</xs:annotation>
+
+		<xs:union memberTypes="aos:unique_layer_ref aos:special_layer_ref" />
+
+	</xs:simpleType>
+	
+	
+	<xs:simpleType name="layer_ref_list">
+		<xs:annotation>
+			<xs:documentation>
+				List of references to Layers.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:list itemType="aos:layer_ref" />
+
+	</xs:simpleType>
+
+
+	<!--# Objects ##-->
+
+	<xs:simpleType name="unique_object_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to an Object.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="aos:unique_ref" />
+
+	</xs:simpleType>
+
+
+	<xs:simpleType name="special_object_ref">
+		<xs:annotation>
+			<xs:documentation>Reference to one or more Objects automatically found using a search logic.</xs:documentation>
+		</xs:annotation>
+
+		<xs:restriction base="xs:string" >
+
+			<xs:enumeration value="#all" >
+				<xs:annotation>
+					<xs:documentation>#all : All objects in the canvas.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+
+		</xs:restriction>
+
+	</xs:simpleType>
+
+	<xs:simpleType name="object_ref">
+		<xs:annotation>
+			<xs:documentation>Reference an object or to an autmatic search of one or more objects.</xs:documentation>
+		</xs:annotation>
+
+		<xs:union memberTypes="aos:unique_object_ref aos:special_object_ref" />
+
+	</xs:simpleType>
+	
+	
+	<xs:simpleType name="object_ref_list">
+		<xs:annotation>
+			<xs:documentation>List of references to Objects.</xs:documentation>
+		</xs:annotation>
+
+		<xs:list itemType="aos:object_ref" />
+
+	</xs:simpleType>
+
+	<xs:complexType name="object_ref_element">
+		<xs:annotation>
+			<xs:documentation> Reference to a specific object or to an automatic find of one or more references. Used as an element.</xs:documentation>
+		</xs:annotation>
+
+		<xs:attribute name="id" type="aos:object_ref" use="required" >
+			<xs:annotation>
+				<xs:documentation>Id of the referred object or automatic find id.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+	</xs:complexType>
+
+
+</xs:schema>
+
+

@@ -42,10 +42,12 @@ if( AOS_FORCE_DISABLE_ALL_TESTS )
 	AOS_FORCE_ENABLE_TEST_ALL_PROJECTS( OFF )
 endif()
 
+
 #####################################################
 # Projects.
 
 add_subdirectory( dependencies )
+add_subdirectory( aosl )
 add_subdirectory( utilcpp )
 add_subdirectory( aosl-cpp )
 add_subdirectory( aos-designer )
