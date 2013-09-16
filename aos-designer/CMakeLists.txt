@@ -4,8 +4,6 @@ project( AOS_Designer )
 
 # Setup dependencies.
 add_subdirectory( dependencies )
-add_subdirectory( utilcpp )
-add_subdirectory( aosl-cpp )
 
 #####################################################
 # Common configuration.
@@ -27,5 +25,7 @@ option( AOSD_ENABLE_ALL_TESTS "Enable all AOS Designer projects tests." OFF )
 #####################################################
 # Projects.
 
-add_subdirectory( aos-designer )
+add_subdirectory( backend )
+add_subdirectory( frontend-qt ) # TODO: make it optional
+add_subdirectory( aosdesigner )
 

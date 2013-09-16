@@ -1,0 +1,3 @@
+
+#define AOSLCPP_SOURCE 
+

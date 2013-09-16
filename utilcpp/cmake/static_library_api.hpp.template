@@ -1,0 +1,7 @@
+#ifndef HGUARD_${BIG_PROJECT_NAME}_API_H__
+#define HGUARD_${BIG_PROJECT_NAME}_API_H__
+
+
+#define ${ARG_API_DEFINE}
+
+#endif
