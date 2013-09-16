@@ -26,13 +26,3 @@ The **default front-end** relies on Qt:
 
  * [Qt5](http://qt-project.org): used for GUI implementation;
  
-
-### Development Setup
-
-To develop this project, first you have to have installed:
-
- * [CMake](http://www.cmake.org/): We use CMake to define our projects and generate editor project files.
- * [Python]
- * [Boost](http://boost.org)
- * 
-
