@@ -1,5 +1,5 @@
 
-= AOS Designer: Vision
+= AOS Designer: Vision & Guidelines
 A. Joel Lamotte <klaim@artofsequence.org>
 
 **_WARNING: This document is a work in progress and will evolve a lot until it becomes definitely useful for the community to use. Also please discuss it on the developers mailing list if necessary._**
@@ -11,7 +11,7 @@ The purpose of this document is to be a reference for the community to understan
 == AOS Designer: Objectives
 
 AOS Designer is a mountage tool. It have practical and _demonstrative_ purposes.
-The main **demonstrative** purpose is to show that useful tools can be built around [AOSL](https://github.com/artofsequence/aosl), the language on which all the AOS toolset rely on. As most of AOS foundations, a company can build better tools and players over this technologies and is encouraged to do so.
+The main **demonstrative** purpose is to show that useful tools can be built around https://github.com/artofsequence/aosl[AOSL], the language on which all the AOS toolset rely on. As most of AOS foundations, a company can build better tools and players over this technologies and is encouraged to do so.
 
 The practical objectives of the project is to *unleash creators by allowing*:
 
