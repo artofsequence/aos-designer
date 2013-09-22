@@ -1,6 +1,7 @@
-
 = AOS Designer: Vision & Guidelines
 A. Joel Lamotte <klaim@artofsequence.org>
+
+= AOS Designer: Vision & Guidelines
 
 **_WARNING: This document is a work in progress and will evolve a lot until it becomes definitely useful for the community to use. Also please discuss it on the developers mailing list if necessary._**
 
