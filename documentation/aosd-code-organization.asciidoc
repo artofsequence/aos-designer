@@ -1,7 +1,9 @@
 = AOS Designer: Code Organisation
 
+= AOS Designer: Code Organisation
 
-:imagesdir: ../images
+
+:imagesdir: ./images
 
 
 **_WARNING: This document is a work in progress and will evolve a lot until it becomes definitely useful for the community to use. Also please discuss it on the developers mailing list if necessary._**
