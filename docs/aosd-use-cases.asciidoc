@@ -1,0 +1,122 @@
+= AOS Designer - Use Cases
+Joël Lamotte <klaim@artofsequence.org>
+
+List of use cases that should be enabled by  AOS Designer.
+
+[NOTE]
+===
+Notes:
+Some actions imply other actions which are referenced underneath.
+Some actions have pre-requirements.
+Current lexicon uses AOSL 2.0 (which don’t have a draft yet) semantic and lexicon.
+===
+
+TODO:
+ - add mockups pictures for Editor? It’s the most complex element.
+ - add mockups pictures for each use-case?
+ - add a diagram showing relationships between UX concepts?
+
+<<<
+
+== Concepts
+
+
+=== Workspace: 
+
+The work context in which the edition work happens, holding everything together. It contains Projects open for edition. [note: AOSD backend allows several workspace and several projects to be open at the same time, but we will assume that the GUI will only ever present one of these at the same time]
+The workspace hold a configuration specific to the current AOS Designer installation, to keep user’s preferences applied whatever the edited project is.
+
+=== Sequence: 
+
+A digital story being edited. There can be several Sequences being edited at the same time. See AOSL (2.0) documentation for elements that constitute a sequence. Here is a quick summary:
+
+ - *Resource*: a media file/data resource, like an image or an audio file or localized texts;
+ - *Canvas*: the virtual space where graphic objects are displayed, audio object are played, etc.;
+ - *Object*: a (modified) instance of a Resource (like a sprite from an image, or a sound from an audio file that might contain more than one sound);
+ - *ObjectGroup*: a group of object, to allow gathering objects as hierarchies;
+ - *StoryGraph*: a graph of Nodes linked through Transitions, defining how the story is constructed by the interpreter;
+ - *Navigation*: A configuration of possible input triggering associated Transitions --either global Navigation  (input “click” triggers “go to next default transition” in a linear story) or specific to a Node when there can be several possible Transitions from this Node (input “click on character” triggers “go to special branch”);
+ - *Node*: a point at which the navigation stop --the story is basically jumping from a Node to another Node using Transitions. The point is that Node can contain a specific Navigation input mapping or other information that help the interpreter generate the story;
+ - *Change*: a modification applied to an Object, triggered when the reader goes through a Transition (there are different kind of Changes);
+ - *Effect*: a special effect to apply when a Change is applied (like fade-out, fade-in, easing etc.)
+ - *Transition*: a group of Changes to apply when passing from a Node to another Node (basically an "edge" in the StoryGraph);
+
+=== Editor: 
+
+An Editor is an point-of-view of a Sequence used to edit that Sequence. There can be several Editors open at the same time for the same Sequence. Any modification to the Sequence will then be visible from the different open Editors for this Sequence. 
+The Editor is needed to help the author view different paths at the same time. To do this, each Editor have a Path in the sequence. As a Sequence generate the story using a graph of Transitions, the Path represent the passage taken in that graph, or more precisely, a sequence of Transitions applied to Objects in the Canvas (which is how you generate the story).
+So basically, one Editor could have a path which is empty, meaning it sees and can edit the state of the Canvas when the player just begin the reading. Another Editor of the same Sequence could be far in the story. If the first editor modify one Object which is visible from the second Editor point of view, both will see the change.
+To achieve this, an Editor have to contain an interpreter of AOSL so that it can generate the view of the current state of the Sequence’s Canvas.
+
+An Editor should expose two main views:
+ - *StoryGraph View*: a graphic editable view of the StoryGraph of the Sequence. It should allow to graphically modify the StoryGraph structure by adding/removing/modifying Nodes and Transitions. It should also allow to change the Path by navigating a cursor into the graph.
+ - *Canvas View* : an editable view of the content of the Canvas if a reader got through the same Path as the current one (visible in the StoryGraph View). It should allow to add/remove/modify Objects in the Canvas.
+
+=== Library: 
+An index of Resource objects which are used by Sequences. A Sequence have one or more Libraries. There can be Libraries associated to a whole Project so that all Sequences in that project can share these Libraries. Libraries associated with a Sequence can be used only by the Sequence.
+
+=== Project: 
+A gathering of several Sequences, Libraries and open Editor instances. Also contain properties common to all these objects. [note: as specified before, there should be only one Project being edited at a time, even if it is possible to do more in theory]
+
+
+
+<<<
+
+== Use Cases
+
+=== 1. Project
+
+==== 1.1. Create a new project.
+
+==== 1.2. Close an open project.
+
+==== 1.3. Open a project from a location.
+
+==== 1.4. Save a project’s current state...
+    1.4.1. to it’s default location.
+    1.4.1. to a new location.
+
+==== 1.5. Reset the current project state to the last saved state.
+
+==== 1.6. Create new Sequence.
+    -> open the Sequence
+    -> the Sequence have 1 default Library
+    -> optionally open an Editor for that sequence
+
+==== 1.7. Remove a Sequence.
+
+==== 1.8. Import a Sequence.
+    1.8.1. from an aosl file
+    1.8.2. from a xaosl file
+    1.8.3. from another Project
+
+==== 1.9. Create a new Library (for the Project)
+
+==== 1.10. Import a Library?
+
+==== 1.11. Remove a library.
+
+
+
+==== 3. Editor
+
+==== 3.1. Close the Editor.
+
+
+==== 3.2. StoryGraph
+
+==== 2.7. Edit Objects (and object groups) properties
+
+2.8. Edit an Object’s resource file/data
+this should either call an external editor (like Adobe Photoshop);
+or open an internal simplified editor (but not in the beginning);
+note that changing the resource file/data affects all Objects which refer to it;
+3.2. Edit Transitions/Changes properties
+3.3. Edit Layers propertie
+
+
+
+
+4. Library
+
+
