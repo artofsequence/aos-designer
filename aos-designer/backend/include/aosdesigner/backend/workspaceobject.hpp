@@ -86,7 +86,7 @@ namespace backend {
 			{
 				std::stringstream error_message;
 				error_message << "Tried to build a '" << typeid(T).name() << '\''
-				<< " (inheriting from WorkspaceObject<" << typeid(T).name() << '>'
+				<< " (inheriting from WorkspaceObject<" << typeid(T).name() << ">)"
 				<< " with an invalid ID : " << to_string(m_id);
 				throw std::invalid_argument( error_message.str() );
 			}
