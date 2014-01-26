@@ -240,7 +240,7 @@ namespace backend {
 
 		event::ProjectOpen ev;
 		ev.project_info = project_info;
-		m_workspace.m_event_dispatcher.publish( project->id(), ev );
+		m_workspace.m_event_dispatcher.publish( ev );
 
 		return project->id();		
 	}
@@ -271,7 +271,7 @@ namespace backend {
 			{
 				event::ProjectClosed ev;
 				ev.project_id = id;
-				m_workspace.m_event_dispatcher.publish( id, ev );
+				m_workspace.m_event_dispatcher.publish( ev );
 			}
 		});
 	}

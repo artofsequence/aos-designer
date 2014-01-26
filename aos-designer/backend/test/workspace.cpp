@@ -35,13 +35,8 @@ TEST( Test_Workspace, open_close_project )
 	
 	{
 		bool got_the_open_project_message = false;
-		bool got_the_open_specific_project_message = false;
 		workspace.event_dispatcher().on<event::ProjectOpen>( [&]( const event::ProjectOpen& ev ){ 
 			got_the_open_project_message = true; 
-			ASSERT_EQ( project_info.id, ev.project_info.id );
-		});
-		workspace.event_dispatcher().on<event::ProjectOpen>( project_info.id, [&]( const event::ProjectOpen& ev ){ 
-			got_the_open_specific_project_message = true;
 			ASSERT_EQ( project_info.id, ev.project_info.id );
 		});
 
@@ -50,7 +45,6 @@ TEST( Test_Workspace, open_close_project )
 
 		workspace.dispatch_events();
 		ASSERT_TRUE( got_the_open_project_message );
-		ASSERT_TRUE( got_the_open_specific_project_message );
 
 		bool accessed_project = false;
 		auto access_done = workspace.work_on( project_info.id, [&]( Project& project ){ 
@@ -63,14 +57,11 @@ TEST( Test_Workspace, open_close_project )
 	
 	{
 		bool got_the_closed_project_message = false;
-		bool got_the_closed_specific_project_message = false;
 		workspace.event_dispatcher().on<event::ProjectClosed>( [&]{ got_the_closed_project_message = true; } );
-		workspace.event_dispatcher().on<event::ProjectClosed>( project_info.id, [&]{ got_the_closed_specific_project_message = true; } );
 
 		workspace.close_project( project_info.id );
 		workspace.dispatch_events();
 		ASSERT_TRUE( got_the_closed_project_message );
-		ASSERT_TRUE( got_the_closed_specific_project_message );
 
 		bool accessed_project = false;
 		auto access_done = workspace.work_on( project_info.id, [&]( Project& project ){ 

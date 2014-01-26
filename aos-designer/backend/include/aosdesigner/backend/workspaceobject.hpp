@@ -131,7 +131,7 @@ namespace backend {
 	template< class EventType, class ObserverType >
 	EventDispatcher::Connection WorkspaceObject<T>::on( ObserverType&& observer )
 	{
-		return m_workspace.m_event_dispatcher.on<EventType>( id(), std::forward<ObserverType>(observer) );
+		return m_workspace.m_event_dispatcher.on<EventType>( std::forward<ObserverType>(observer) );
 	}
 
 	template< class T >
@@ -172,7 +172,7 @@ namespace backend {
 	template< class EventType >
 	void WorkspaceObject<T>::publish( EventType&& ev )
 	{
-		m_workspace.m_event_dispatcher.publish( id(), std::forward<EventType>(ev) );
+		m_workspace.m_event_dispatcher.publish( std::forward<EventType>(ev) );
 	}
 
 

@@ -14,7 +14,7 @@ TEST( Test_EventDispatcher, simple_use )
 	bool project_is_open = false;
 	bool editor_began = false;
 
-	EventDispatcher dispatcher;
+	EventDispatcher_Immediate dispatcher;
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
 	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
@@ -30,38 +30,13 @@ TEST( Test_EventDispatcher, simple_use )
 
 }
 
-TEST( Test_EventDispatcher, simple_use_observation_api )
-{
-	bool project_is_open = false;
-	bool editor_began = false;
-
-	EventDispatcher dispatcher;
-	auto obs_api = dispatcher.observation_api();
-	auto obs_api_2 = obs_api;
-
-	obs_api_2.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
-	obs_api_2.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
-	ASSERT_FALSE( project_is_open );
-	ASSERT_FALSE( editor_began );
-
-	dispatcher.dispatch( event::ProjectOpen() );
-	ASSERT_TRUE( project_is_open );
-	ASSERT_FALSE( editor_began );
-
-	dispatcher.dispatch( event::EditorOpen() );
-	ASSERT_TRUE( project_is_open );
-	ASSERT_TRUE( editor_began );
-
-}
-
-
 
 TEST( Test_EventDispatcher, simple_disconnections )
 {
 	bool project_is_open = false;
 	bool editor_began = false;
 
-	EventDispatcher dispatcher;
+	EventDispatcher_Immediate dispatcher;
 	auto connect_a = dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
 	auto connect_b = dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
@@ -92,31 +67,16 @@ TEST( Test_EventDispatcher, simple_disconnections )
 TEST( Test_EventDispatcher, simple_source_observation )
 {
 	int all_observations_count = 0;
-	int a_observation_count = 0;
-	int b_observation_count = 0;
-
-	SequenceId id_a = make_new_id<Sequence>();
-	SequenceId id_b = make_new_id<Sequence>();
-
-	EventDispatcher dispatcher;
+	
+	EventDispatcher_Immediate dispatcher;
 	dispatcher.on<event::SequenceAdded>( [&]{ ++all_observations_count; } );
-	dispatcher.on<event::SequenceAdded>( id_a, [&]{ ++a_observation_count; } );
-	dispatcher.on<event::SequenceAdded>( id_b, [&]{ ++b_observation_count; } );	
-
-	dispatcher.dispatch( id_a, event::SequenceAdded() );
-	ASSERT_EQ( all_observations_count, 1 );
-	ASSERT_EQ( a_observation_count, 1 );
-	ASSERT_EQ( b_observation_count, 0 );
-
-	dispatcher.dispatch( id_b, event::SequenceAdded() );
-	ASSERT_EQ( all_observations_count, 2 );
-	ASSERT_EQ( a_observation_count, 1 );
-	ASSERT_EQ( b_observation_count, 1 );
 
 	dispatcher.dispatch( event::SequenceAdded() );
-	ASSERT_EQ( all_observations_count, 3 );
-	ASSERT_EQ( a_observation_count, 1 );
-	ASSERT_EQ( b_observation_count, 1 );
+	ASSERT_EQ( all_observations_count, 1 );
+	
+    dispatcher.dispatch( event::SequenceAdded() );
+	ASSERT_EQ( all_observations_count, 2 );
+	
 }
 
 
@@ -126,7 +86,7 @@ TEST( Test_EventDispatcher, simple_use_2_threads )
 	bool editor_began = false;
 	std::atomic<bool> publishing_ended = false;
 
-	EventDispatcher dispatcher;
+	EventDispatcher_Immediate dispatcher;
 
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
 	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
@@ -156,7 +116,7 @@ TEST( Test_EventDispatcher, parrallel_connections )
 {
 	std::atomic<int> counter = 0;
 
-	EventDispatcher dispatcher;
+	EventDispatcher_Immediate dispatcher;
 
 	auto update_thread = boost::thread::thread( [&]{
 		while( counter < 100 )
@@ -208,7 +168,7 @@ TEST( Test_EventQueueDispatcher, simple_use )
 	bool project_is_open = false;
 	bool editor_began = false;
 
-	EventQueueDispatcher dispatcher;
+	EventDispatcher_Queued dispatcher;
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
 	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
@@ -238,7 +198,7 @@ TEST( Test_EventQueueDispatcher, simple_disconnections )
 	bool project_is_open = false;
 	bool editor_began = false;
 
-	EventQueueDispatcher dispatcher;
+	EventDispatcher_Queued dispatcher;
 	auto connect_a = dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
 	auto connect_b = dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
 	ASSERT_FALSE( project_is_open );
@@ -280,34 +240,25 @@ TEST( Test_EventQueueDispatcher, simple_disconnections )
 TEST( Test_EventQueueDispatcher, simple_source_observation )
 {
 	int all_observations_count = 0;
-	int a_observation_count = 0;
-	int b_observation_count = 0;
 
-	SequenceId id_a = make_new_id<Sequence>();
-	SequenceId id_b = make_new_id<Sequence>();
-
-	EventQueueDispatcher dispatcher;
+	EventDispatcher_Queued dispatcher;
 	dispatcher.on<event::SequenceAdded>( [&]{ ++all_observations_count; } );
-	dispatcher.on<event::SequenceAdded>( id_a, [&]{ ++a_observation_count; } );
-	dispatcher.on<event::SequenceAdded>( id_b, [&]{ ++b_observation_count; } );	
-
-	dispatcher.publish( id_a, event::SequenceAdded() );
-	dispatcher.dispatch();
-	ASSERT_EQ( all_observations_count, 1 );
-	ASSERT_EQ( a_observation_count, 1 );
-	ASSERT_EQ( b_observation_count, 0 );
-
-	dispatcher.publish( id_b, event::SequenceAdded() );
-	dispatcher.dispatch();
-	ASSERT_EQ( all_observations_count, 2 );
-	ASSERT_EQ( a_observation_count, 1 );
-	ASSERT_EQ( b_observation_count, 1 );
+    ASSERT_EQ( all_observations_count, 0 );
 
 	dispatcher.publish( event::SequenceAdded() );
+    ASSERT_EQ( all_observations_count, 0 );
+	dispatcher.dispatch();
+	ASSERT_EQ( all_observations_count, 1 );
+
+	dispatcher.publish( event::SequenceAdded() );
+    ASSERT_EQ( all_observations_count, 1 );
+	dispatcher.dispatch();
+	ASSERT_EQ( all_observations_count, 2 );
+
+	dispatcher.publish( event::SequenceAdded() );
+    ASSERT_EQ( all_observations_count, 2 );
 	dispatcher.dispatch();
 	ASSERT_EQ( all_observations_count, 3 );
-	ASSERT_EQ( a_observation_count, 1 );
-	ASSERT_EQ( b_observation_count, 1 );
 }
 
 TEST( Test_EventQueueDispatcher, simple_use_2_threads )
@@ -316,7 +267,7 @@ TEST( Test_EventQueueDispatcher, simple_use_2_threads )
 	bool editor_began = false;
 	std::atomic<bool> publishing_ended = false;
 
-	EventQueueDispatcher dispatcher;
+	EventDispatcher_Queued dispatcher;
 
 	dispatcher.on<event::ProjectOpen>( [&]{ project_is_open = !project_is_open; } );
 	dispatcher.on<event::EditorOpen>( [&]( const event::EditorOpen& ev ){ editor_began = !editor_began; } );
@@ -347,7 +298,7 @@ TEST( Test_EventQueueDispatcher, parrallel_connections )
 {
 	std::atomic<int> counter = 0;
 
-	EventQueueDispatcher dispatcher;
+	EventDispatcher_Queued dispatcher;
 
 	auto update_thread = boost::thread::thread( [&]{
 		while( counter < 100 )

@@ -133,14 +133,14 @@ TEST( Test_WorkspaceObject, object_group )
 	group.update();
 	ASSERT_EQ( 0, k );
 	workspace.dispatch_events();
-	ASSERT_EQ( 1, k );
+	ASSERT_EQ( 2, k );
 
 	a->dummy_action();
 	b->dummy_action();
-	ASSERT_EQ( 1, k );
+	ASSERT_EQ( 2, k );
 	group.update();
-	ASSERT_EQ( 1, k );
+	ASSERT_EQ( 2, k );
 	workspace.dispatch_events();
-	ASSERT_EQ( 3, k );
+	ASSERT_EQ( 6, k );
 
 }

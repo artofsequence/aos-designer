@@ -68,7 +68,7 @@ namespace backend {
 			@return A special reference object which expose only the functions necessary to connect observers 
 					( callable objects with the event type as attribute or no attribute ).
 		*/
-		EventDispatcher::ObservationAPI event_dispatcher() const { return m_event_dispatcher.observation_api(); }
+		EventDispatcher& event_dispatcher() const { return m_event_dispatcher; }
 
 		/** Dispatch queued events to observers using the calling thread.
 			Usually called in an event-loop so that work being done in the Workspace
@@ -146,7 +146,7 @@ namespace backend {
 		template<class T> friend class WorkspaceObject;
 
 		TaskExecutor m_executor;
-		mutable EventQueueDispatcher m_event_dispatcher;
+		mutable EventDispatcher_Queued m_event_dispatcher;
 		
 		class Impl;
 		std::unique_ptr<Impl> pimpl;
