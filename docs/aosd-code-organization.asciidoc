@@ -1,7 +1,5 @@
 = AOS Designer: Code Organisation
 
-= AOS Designer: Code Organisation
-
 
 :imagesdir: ./images
 
